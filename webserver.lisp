@@ -1,16 +1,20 @@
-(setf *default-pathname-defaults* #P"/home/rds/devel/lisp/skisite/")
-(setf *default-pathname-defaults* #P"/home/rds/devel/lisp/skisite/")
-(setf *tmp-directory* #P"tmp")
 (defpackage :webserver
-  (:use :common-lisp :hunchentoot :cl-who))
+  (:use :common-lisp :hunchentoot :cl-who :cl-mongo :trivial-shell cl-ppcre))
 
 (in-package :webserver)
+
+(defparameter *mconn* (mongo :db "skiing" :name :mconn))
 
 (setf *hunchentoot-default-external-format* hunchentoot::+utf-8+)
 ;(setf *default-content-type* "text/html;charset=utf-8")
 
 (defparameter *server-instance* (make-instance 'hunchentoot:acceptor :port 4242) "my web server")
 (hunchentoot:start *server-instance*)
+
+(setf *default-pathname-defaults* #P"/home/rds/devel/lisp/skisite/")
+(setf *tmp-directory* #P"tmp/")
+(push (namestring *default-pathname-defaults*) trivial-shell:*shell-search-paths*)
+(trivial-shell:shell-command (concatenate 'string "cd " (namestring *default-pathname-defaults*)))
 
 ;(setf *dispatch-table*
 ;      (list #'dispatch-easy-handlers
@@ -115,15 +119,54 @@
 (push (create-prefix-dispatcher "/auth" 'auth) *dispatch-table*)
 
 
+
+(defun file-content (filepath)
+  "Просто возращает строку с содержимым файла"
+  (let ((path (pathname filepath)))
+    (with-output-to-string (out) 
+      (with-open-file (stream path) 
+	(loop for line = (read-line stream nil)
+	   while line do (format out "~a<br>~%" line))))))
+
+;; Вычленяет из строки все подряд идущие ^, после этого тримит строку
+(defun non-empty-cells-list (line) "This function remove excess commas from line from csv"
+       (string-trim " " (regex-replace-all "\\^+" line "" :preserve-case t)))
+
+(defun analyse-competition (csvfilename)
+	     (let ((path (pathname csvfilename)) 
+		   (cc-title)) ;;current competition title
+	       (with-open-file (stream path)
+		 (loop named cc-walk for line = (read-line stream nil)
+		    for i from 0 to 100
+		    when (or (= i 0) (= i 1)) collect (non-empty-cells-list line) into  cc-title
+		    finally (return-from cc-walk (reduce #'(lambda (x y) (concatenate 'string x ". " y)) cc-title))  
+		 ))))
+
+
+
+
 (defun handlexls ()
   (no-cache)
   (setf (hunchentoot:content-type*) "text/html;charset=utf-8")
-  (with-html-output-to-string (*standard-output* nil :prologue nil :indent t)
-    (:html :XMLNS "http://www.w3.org/1999/xhtml" :|XML:LANG| "ru" :LANG "ru" 
-	   (:head (:title "Обработка xls"))
-	   (:body (:h1 "Обработка xls")
-		  (:h2 (cl-who:str (format nil "test message: ~A" (post-parameter "relatedxls"))))
-		  ))))
+  (let* ((relatedxls (post-parameter "relatedxls"))
+	 (path (pathname (first relatedxls)))
+	 (name (second relatedxls))
+	 (pfx (directory-namestring *default-pathname-defaults*))
+	 (newxlspath (concatenate 'string "tmp/" name ".csv"))
+	 (command  (concatenate 'string "cd " pfx  "; xls2csv -q0 -c^ -b\"__newsheet\" "  (namestring path) " 2>/dev/null | grep -vE \"^([0-9]+)?\\^+$\" >" newxlspath))
+	 )
+     
+	(trivial-shell:shell-command command)
+	(with-html-output-to-string (*standard-output* nil :prologue nil :indent t)
+	  (:html-file :XMLNS "http://www.w3.org/1999/xhtml" :|XML:LANG| "ru" :LANG "ru" 
+		      (:head (:title "Обработка xls"))
+		      (:body (:h1 "Обработка xls")
+			     (:h2 (cl-who:str (format nil "<br>PATH is ~a<br>Name is ~a<br>Comand is ~a<br>Title:~a" (namestring path)  name command
+						      (analyse-competition newxlspath)
+						      )))
+			     (:p (str  (file-content newxlspath)))
+			     )))))
 
 (push (create-prefix-dispatcher "/handlexls" 'handlexls) *dispatch-table*)
+
 

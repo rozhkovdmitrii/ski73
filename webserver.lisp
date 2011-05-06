@@ -139,34 +139,46 @@
 		    (if (> diff 0) (setf values (append values (make-list diff :initial-element 0))))
 		    (pairlis keys values)
 		    ))
-
 (defun analyse-competition (csvfilename) "Функция получает на вход специализированный csv файл с результами соревнований. На выходе получаем соотв. списочную структуру"
 	     (let ((path (pathname csvfilename)) 
-		   (judge-reg "^Главный судья[ _]+(.*)$")
-		   (secretary-reg "^Главный секретарь[ _]+(.*)$")
+		   
 		   ) ;;current competition title
 	       (with-open-file (stream path)
-		 (loop named cc-walk
-		    with cc-title = "" and group and begining-time and ending-time and round-type and captions and judge-scan-res and judge and secretary-scan-res and secretary and result = '()
-		    for line = (read-line stream nil)
-		    for i from 0 
-		    while (and (string/= line "!newsheet!") line)
-		    if (<= i 1) do (concatenate 'string cc-title (non-empty-cells-list line))
-		    if (= i 2) collect (non-empty-cells-list line) into cc-date
-		    if (= i 3) do (do-register-groups (gp bt) ("^\\^*([^^]+)\\^+([^^]+)$" line) (setf group (string-trim " " gp)) (setf begining-time (string-trim " " bt)))
-		    if (= i 4) do (do-register-groups (rt et) ("^\\^*([^^]+)\\^+([^^]+)$" line) (setf round-type (string-trim " " rt)) (setf ending-time (string-trim " " et)))
-		    if (= i 5) do (setf captions (split "\\^" line))
-		    if (and (> i 5) (> (length (split "\\^" line)) 1)) collect (mypairlis captions (split "\\^" line)) into results 
-		    if (first (setq judge-scan-res (multiple-value-list (scan-to-strings judge-reg line)))) do (setf judge (elt (second judge-scan-res) 0))
-		    if (first (setq secretary-scan-res (multiple-value-list (scan-to-strings secretary-reg line)))) do (setf secretary (elt (second secretary-scan-res) 0))
-		    finally (return-from cc-walk (list :cc-title cc-title 
-							      :group group :begining-time begining-time
-							      :ending-time ending-time :round-type round-type
-							      :captions captions
-							      :results results
-							      :judge judge
-							      :secretary secretary
-							      ))))))
+		 
+		   (loop named file-walk 
+		      for line = (multiple-value-bind (comp-round-result line) (read-till-break stream) 
+				   (print line) (push comp-round-result result) line)
+		      with result = '()
+		      while line
+		      finally (return-from file-walk result)
+		 ))))
+
+(defun read-till-break (istream)
+  (let ((judge-reg "^Главный судья[ _]+(.*)$")
+	(secretary-reg "^Главный секретарь[ _]+(.*)$"))
+    (loop named cc-walk
+       with cc-title = "" and group and begining-time and ending-time and round-type and captions and judge-scan-res and judge and secretary-scan-res and secretary 
+       for line = (read-line istream nil)
+       for i from 0 
+       while (and (string/= line "!newsheet!") line)
+       if (<= i 1) do (concatenate 'string cc-title (non-empty-cells-list line))
+       if (= i 2) collect (non-empty-cells-list line) into cc-date
+       if (= i 3) do (do-register-groups (gp bt) ("^\\^*([^^]+)\\^+([^^]+)$" line) (setf group (string-trim " " gp)) (setf begining-time (string-trim " " bt)))
+       if (= i 4) do (do-register-groups (rt et) ("^\\^*([^^]+)\\^+([^^]+)$" line) (setf round-type (string-trim " " rt)) (setf ending-time (string-trim " " et)))
+       if (= i 5) do (setf captions (split "\\^" line))
+       if (and (> i 5) (> (length (split "\\^" line)) 1)) collect (mypairlis captions (split "\\^" line)) into results 
+       if (first (setq judge-scan-res (multiple-value-list (scan-to-strings judge-reg line)))) do (setf judge (elt (second judge-scan-res) 0))
+       if (first (setq secretary-scan-res (multiple-value-list (scan-to-strings secretary-reg line)))) do (setf secretary (elt (second secretary-scan-res) 0))
+       finally (return-from cc-walk (list :cc-title cc-title 
+					  :group group :begining-time begining-time
+					  :ending-time ending-time :round-type round-type
+					  :captions captions
+					  :results results
+					  :judge judge
+					  :secretary secretary
+					  )) )
+    )
+  )
 
 (defun handlexls ()
   (no-cache)

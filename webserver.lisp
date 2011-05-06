@@ -40,18 +40,19 @@
 (define-easy-handler (easy-demo :uri "/lisp/hello" :default-request-type :get)
   ()
   (no-cache)
-  (setf (hunchentoot:header-out "Content-Type") "text/plain; charset=utf-8")
+  (setf (header-out "Content-Type") "text/plain; charset=utf-8")
   (with-html-output-to-string (*standard-output* nil :prologue t)
 			      (:html
 			       (:head (:meta :charset "UTF-8") (:title "HW!!!") )
 			       (:body
 				(:h1 "Привет мир!")
-				(:p "This is my вввввLisp web server, running on Hunchentoot,"
+				(:p "This is my Lisp web server, running on Hunchentoot,"
 				    " as described in "
 				    (:a :href
 					"http://newartisans.com/blog_files/hunchentoot.primer.php"
 					"this blog entry")
 				    " on Common Lisp and Hunchentoot.")))))
+
 
 
 (defmacro standard-page ((&key title) &body body)
@@ -132,18 +133,45 @@
 (defun non-empty-cells-list (line) "This function remove excess commas from line from csv"
        (string-trim " " (regex-replace-all "\\^+" line "" :preserve-case t)))
 
-(defun analyse-competition (csvfilename)
+
+(defun mypairlis (keys values) "Моя реализация pairlis, которая расширяет в случае необходимости список values"
+		  (let* ((kl (length keys)) (vl (length values)) (diff (- kl vl)))
+		    (if (> diff 0) (setf values (append values (make-list diff :initial-element 0))))
+		    (pairlis keys values)
+		    ))
+
+
+(defun analyse-competition (csvfilename) "Функция получает на вход специализированный csv файл с результами соревнований. На выходе получаем соотв. списочную структуру"
 	     (let ((path (pathname csvfilename)) 
-		   (cc-title)) ;;current competition title
+		   (judge-reg "^Главный судья[ _]+(.*)$")
+		   (secretary-reg "^Главный секретарь[ _]+(.*)$")
+		   ) ;;current competition title
 	       (with-open-file (stream path)
-		 (loop named cc-walk for line = (read-line stream nil)
-		    for i from 0 to 100
-		    when (or (= i 0) (= i 1)) collect (non-empty-cells-list line) into  cc-title
-		    finally (return-from cc-walk (reduce #'(lambda (x y) (concatenate 'string x ". " y)) cc-title))  
+		 (loop named cc-walk
+		    with group and begining-time and ending-time and round-type and captions and judge-scan-res and judge and secretary-scan-res and secretary and result = '()
+		    for line = (read-line stream nil)
+		    for i from 0 
+		    while line
+		    if (<= i 1) collect (non-empty-cells-list line) into  cc-title
+		    if (= i 2) collect (non-empty-cells-list line) into cc-date
+		    if (= i 3) do (do-register-groups (gp bt) ("^\\^*([^^]+)\\^+([^^]+)$" line) (setf group (string-trim " " gp)) (setf begining-time (string-trim " " bt)))
+		    if (= i 4) do (do-register-groups (rt et) ("^\\^*([^^]+)\\^+([^^]+)$" line) (setf round-type (string-trim " " rt)) (setf ending-time (string-trim " " et)))
+		    if (= i 5) do (setf captions (split "\\^" line))
+		    if (and (> i 5) (> (length (split "\\^" line)) 1)) collect (mypairlis captions (split "\\^" line)) into results 
+		    if (first (setq judge-scan-res (multiple-value-list (scan-to-strings judge-reg line)))) do (setf judge (elt (second judge-scan-res) 0))
+		    if (first (setq secretary-scan-res (multiple-value-list (scan-to-strings secretary-reg line)))) do (setf secretary (elt (second secretary-scan-res) 0))
+		    if (or (eql line nil) (string= line "!newsheet!")) do (progn (setf i -1) (push (list :cc-title cc-title 
+							      :group group :begining-time begining-time
+							      :ending-time ending-time :round-type round-type
+							      :captions captions
+							      :results results
+							      :judge judge
+							      :secretary secretary
+							      :break "<br><br><br>") result) (setf results nil) ) 
+		      
+		    finally (progn (setf cc-title  (reduce #'(lambda (x y) (concatenate 'string x ". " y)) cc-title))
+				   (return-from cc-walk  result))
 		 ))))
-
-
-
 
 (defun handlexls ()
   (no-cache)
@@ -153,7 +181,7 @@
 	 (name (second relatedxls))
 	 (pfx (directory-namestring *default-pathname-defaults*))
 	 (newxlspath (concatenate 'string "tmp/" name ".csv"))
-	 (command  (concatenate 'string "cd " pfx  "; xls2csv -q0 -c^ -b\"__newsheet\" "  (namestring path) " 2>/dev/null | grep -vE \"^([0-9]+)?\\^+$\" >" newxlspath))
+	 (command  (concatenate 'string "cd " pfx  "; xls2csv -q0 -c^ -b\"!newsheet!" '(#\Newline ) "\" "  (namestring path) " 2>/dev/null | grep -vE \"^([0-9]+)?\\^+$\" >" newxlspath))
 	 )
      
 	(trivial-shell:shell-command command)
@@ -161,12 +189,11 @@
 	  (:html-file :XMLNS "http://www.w3.org/1999/xhtml" :|XML:LANG| "ru" :LANG "ru" 
 		      (:head (:title "Обработка xls"))
 		      (:body (:h1 "Обработка xls")
-			     (:h2 (cl-who:str (format nil "<br>PATH is ~a<br>Name is ~a<br>Comand is ~a<br>Title:~a" (namestring path)  name command
+			     (:p (cl-who:str (format nil "<br>PATH is ~a<br>Name is ~a<br>Comand is ~a<br>Parse result is:~a" (namestring path)  name command
 						      (analyse-competition newxlspath)
 						      )))
 			     (:p (str  (file-content newxlspath)))
 			     )))))
-
 (push (create-prefix-dispatcher "/handlexls" 'handlexls) *dispatch-table*)
 
 

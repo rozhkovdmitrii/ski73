@@ -140,7 +140,6 @@
 		    (pairlis keys values)
 		    ))
 
-
 (defun analyse-competition (csvfilename) "Функция получает на вход специализированный csv файл с результами соревнований. На выходе получаем соотв. списочную структуру"
 	     (let ((path (pathname csvfilename)) 
 		   (judge-reg "^Главный судья[ _]+(.*)$")
@@ -148,11 +147,11 @@
 		   ) ;;current competition title
 	       (with-open-file (stream path)
 		 (loop named cc-walk
-		    with group and begining-time and ending-time and round-type and captions and judge-scan-res and judge and secretary-scan-res and secretary and result = '()
+		    with cc-title = "" and group and begining-time and ending-time and round-type and captions and judge-scan-res and judge and secretary-scan-res and secretary and result = '()
 		    for line = (read-line stream nil)
 		    for i from 0 
-		    while line
-		    if (<= i 1) collect (non-empty-cells-list line) into  cc-title
+		    while (and (string/= line "!newsheet!") line)
+		    if (<= i 1) do (concatenate 'string cc-title (non-empty-cells-list line))
 		    if (= i 2) collect (non-empty-cells-list line) into cc-date
 		    if (= i 3) do (do-register-groups (gp bt) ("^\\^*([^^]+)\\^+([^^]+)$" line) (setf group (string-trim " " gp)) (setf begining-time (string-trim " " bt)))
 		    if (= i 4) do (do-register-groups (rt et) ("^\\^*([^^]+)\\^+([^^]+)$" line) (setf round-type (string-trim " " rt)) (setf ending-time (string-trim " " et)))
@@ -160,18 +159,14 @@
 		    if (and (> i 5) (> (length (split "\\^" line)) 1)) collect (mypairlis captions (split "\\^" line)) into results 
 		    if (first (setq judge-scan-res (multiple-value-list (scan-to-strings judge-reg line)))) do (setf judge (elt (second judge-scan-res) 0))
 		    if (first (setq secretary-scan-res (multiple-value-list (scan-to-strings secretary-reg line)))) do (setf secretary (elt (second secretary-scan-res) 0))
-		    if (or (eql line nil) (string= line "!newsheet!")) do (progn (setf i -1) (push (list :cc-title cc-title 
+		    finally (return-from cc-walk (list :cc-title cc-title 
 							      :group group :begining-time begining-time
 							      :ending-time ending-time :round-type round-type
 							      :captions captions
 							      :results results
 							      :judge judge
 							      :secretary secretary
-							      :break "<br><br><br>") result) (setf results nil) ) 
-		      
-		    finally (progn (setf cc-title  (reduce #'(lambda (x y) (concatenate 'string x ". " y)) cc-title))
-				   (return-from cc-walk  result))
-		 ))))
+							      ))))))
 
 (defun handlexls ()
   (no-cache)

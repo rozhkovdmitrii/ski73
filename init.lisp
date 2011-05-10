@@ -3,4 +3,6 @@
 (require 'cl-mongo)
 (require 'trivial-shell)
 (require 'cl-ppcre)
+(require 'cl-json)
+;(require 'yason)
 *;(require 'hunchentoot-test)

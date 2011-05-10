@@ -1,5 +1,5 @@
 (defpackage :webserver
-  (:use :common-lisp :hunchentoot :cl-who :cl-mongo :trivial-shell cl-ppcre))
+  (:use :common-lisp :hunchentoot :cl-who :cl-mongo :trivial-shell :cl-ppcre :json))
 
 (in-package :webserver)
 
@@ -131,7 +131,9 @@
 
 ;; Вычленяет из строки все подряд идущие ^, после этого тримит строку
 (defun non-empty-cells-list (line) "This function remove excess commas from line from csv"
-       (string-trim " " (regex-replace-all "\\^+" line "" :preserve-case t)))
+       (let ((result (concatenate 'string (string-trim " " (regex-replace-all "\\^+" line "" :preserve-case t)) ". ")))
+	 result
+	 ))
 
 
 (defun mypairlis (keys values) "Моя реализация pairlis, которая расширяет в случае необходимости список values"
@@ -140,26 +142,11 @@
 		    (pairlis keys values)
 		    ))
 
-(defun analyse-competition (csvfilename) "Функция получает на вход специализированный csv файл с результами соревнований. На выходе получаем соотв. списочную структуру"
-	     (let ((path (pathname csvfilename)) 
-		   
-		   ) ;;current competition title
-	       (with-open-file (stream path)
-		 
-		   (loop named file-walk 
-		      for line = (multiple-value-bind (comp-round-result line) (read-till-break stream) 
-				   (push comp-round-result result) (push "<br><br><br>" result) line)
-		      with result = '()
-		      while line
-		      finally (return-from file-walk result)
-		 ))))
-
-
 (defun read-till-break (istream)
   (let ((judge-reg "^Главный судья[ _]+(.*)$") (secretary-reg "^Главный секретарь[ _]+(.*)$"))
     (loop named cc-walk
        for line = (read-line istream nil) and i from 0 
-       with cc-date and cc-title = "" and group and begining-time and ending-time and round-type and captions and judge-scan-res and judge and secretary-scan-res and secretary 
+       with cc-date and cc-title and group and begining-time and ending-time and round-type and captions and judge-scan-res and judge and secretary-scan-res and secretary 
        while (and (string/= line "!newsheet!") line)
        if (<= i 1) do (setf cc-title (concatenate 'string cc-title (non-empty-cells-list line)))
        if (= i 2) do (setf cc-date (non-empty-cells-list line))
@@ -172,16 +159,33 @@
        if (and (> i 5) (> (length (split "\\^" line)) 1)) collect (mypairlis captions (split "\\^" line)) into results 
        if (first (setq judge-scan-res (multiple-value-list (scan-to-strings judge-reg line)))) do (setf judge (elt (second judge-scan-res) 0))
        if (first (setq secretary-scan-res (multiple-value-list (scan-to-strings secretary-reg line)))) do (setf secretary (elt (second secretary-scan-res) 0))
-       finally (return-from cc-walk (values (list :cc-title cc-title 
-					  :date cc-date
-					  :group group 
-					  :begining-time begining-time
-					  :ending-time ending-time :round-type round-type
-					  :captions captions
-					  :results results
-					  :judge judge
-					  :secretary secretary
-					  ) line)) )
+       finally (return-from cc-walk (values `((cc-title . ,cc-title)
+					      (date . ,cc-date)
+					      (group . ,group) 
+					      ;(begining-time . ,begining-time)
+					      ;(ending-time . ,ending-time)
+					      ;(round-type . ,round-type)
+					      ;(captions . ,captions)
+					      (results . ,results)
+					      ;(judge . ,judge)
+					      ;(secretary . ,secretary)
+					      ) line)) )))
+
+(defun analyse-competition (csvfilename) "Функция получает на вход специализированный csv файл с результами соревнований. На выходе получаем соотв. списочную структуру"
+	     (let ((path (pathname csvfilename)) 
+		   
+		   ) ;;current competition title
+	       (with-open-file (stream path)
+		 
+		   (loop named file-walk 
+		      for line = (multiple-value-bind (comp-round-result line) (read-till-break stream) 
+				   (push comp-round-result result) line)
+		      with result = '()
+		      while line
+		      finally (return-from file-walk result)
+		 ))))
+
+
 
 (defun handlexls ()
   (no-cache)
@@ -199,11 +203,19 @@
 	  (:html-file :XMLNS "http://www.w3.org/1999/xhtml" :|XML:LANG| "ru" :LANG "ru" 
 		      (:head (:title "Обработка xls"))
 		      (:body (:h1 "Обработка xls")
-			     (:p (cl-who:str (format nil "<br>PATH is ~a<br>Name is ~a<br>Comand is ~a<br>Parse result is:~a" (namestring path)  name command
-						      (analyse-competition newxlspath)
+			     (:p (cl-who:str (format nil "~a" (encode-json-alist-to-string (third (analyse-competition newxlspath) ))
+
 						      )))
-			     (:p (str  (file-content newxlspath)))
+			     (:p )
 			     )))))
 (push (create-prefix-dispatcher "/handlexls" 'handlexls) *dispatch-table*)
 
 
+;(json:encode 
+;          (list (alexandria:plist-hash-table
+;                 `("foo" 1 "bar" (7 8 9) "nested" ,(alexandria:plist-hash-table '("foo" 1 ";Клево, с вложенными хэштаблицами все пашет" (7 8 9)) :test #'equal))
+;                 :test #'equal)
+;                2 3 4
+;                '(5 6 7)
+;                t nil)
+;          *standard-output*)

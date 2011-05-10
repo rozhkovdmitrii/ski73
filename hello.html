@@ -4,7 +4,14 @@
   <head>
     <script type="text/javascript" src="http://code.jquery.com/jquery-1.5.2.js"></script>
     <script type="text/javascript" src="/js/jquery.form.js"></script>
-    
+
+    <script type="text/javascript">
+     $(document).ready(function(){
+	   $("#myForm").ajaxForm(function() {
+	     alert("Спасибо за комментарий!");
+	   });
+	});
+    </script>
     <style type="text/css">
       #mainframe {
 	-moz-border-radius: 100px 20px / 20px 100px;
@@ -28,6 +35,11 @@
       padding: 20;
       left:160;
       width:900;
+      }
+      a {
+      color: #0066cc;
+      text-size:12pt;
+      margin-left:50;
       }
     </style>
   <title>ulskiing</title>
@@ -54,21 +66,16 @@
 
     <p>Процедура пересчета возрастных групп - всегда существуют актуальные таблицы участников возрастных групп</p>
     
-    <p>This is a <a href="another-page.html">link</a> to another page.</p>
-    <a href="/auth-form.html">Авторизация</a>
-    <a href="http://vkontakte.ru/club4376301"> Группа</a>
-  <a href="http://fx.yandex.ru/?adwru&gclid=CIeLk7zQpqgCFdSHzAodEF--HA">
-    <h2>Страничку желательно открывать под firefox 4 не ниже, ибо тока он поддерживает новый стандарт html5</h2>
-  </a>
-  
-  </div>
+    <a href="http://vkontakte.ru/club4376301"> Группа</a><br>
+    <a href="http://localhost:4242/xls-parsing-order.html">Требования к составлению xls</a><br>
+<br>
   <form id="myForm" action="/handlexls" method="post" enctype="multipart/form-data"> 
     <b>XLS UPLOAD</b><br>
-    Фамилия:
-    <input type="text" name="surname"/><br>
     <input name="relatedxls" type="file"/><br>
     <input type="submit" value="Submit Comment" /> 
   </form>
-</body>
+</body>  
+  </div>
+
 
 </html>

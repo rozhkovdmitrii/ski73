@@ -4,12 +4,17 @@
   <head>
     <script type="text/javascript" src="http://code.jquery.com/jquery-1.5.2.js"></script>
     <script type="text/javascript" src="/js/jquery.form.js"></script>
+    <script type="text/javascript" src="/js/pure/libs/pure.js"></script>
 
     <script type="text/javascript">
-     $(document).ready(function(){
-	   $("#myForm").ajaxForm(function() {
-	     alert("Спасибо за комментарий!");
-	   });
+      function onHandlexlsSuccess(response) {
+	//var gg = eval('(' + response + ')');
+	$('#s-expression').html(response);
+	//$('#handlexlsjson').html(gg.toString());
+      
+      }
+      $(document).ready(function(){
+	   $("#myForm").ajaxForm({url: "/handlexls", success:onHandlexlsSuccess});
 	});
     </script>
     <style type="text/css">
@@ -34,7 +39,6 @@
       opacity: 0.95;
       padding: 20;
       left:160;
-      width:900;
       }
       a {
       color: #0066cc;
@@ -46,7 +50,7 @@
 
   </head>
 
-  <body style="background-image:url('/skitrack.jpg');background-repeat:no-repeat;background-position:center bottom;width:1024;height:800;background-color:#c5d8e9;">
+  <body style="background-image:url('/skitrack.jpg');background-repeat:no-repeat;background-position:center bottom;height:800;background-color:#c5d8e9;">
   <h1 style="text-align:center;">Ресурс лыжного сообщества ульяновской области</h1>
   <div id="mainframe">
     <p>Данный ресурс задумывается как источник информации для всех лыжников нашего региона. На нем вы можете найти:</p>
@@ -68,12 +72,15 @@
     
     <a href="http://vkontakte.ru/club4376301"> Группа</a><br>
     <a href="http://localhost:4242/xls-parsing-order.html">Требования к составлению xls</a><br>
+    <a href="http://localhost:4242/webserver.lisp">Исходники, если кому интересно</a>
 <br>
   <form id="myForm" action="/handlexls" method="post" enctype="multipart/form-data"> 
     <b>XLS UPLOAD</b><br>
     <input name="relatedxls" type="file"/><br>
     <input type="submit" value="Submit Comment" /> 
   </form>
+  <p id="s-expression" style="color:green;"></p>
+  <p id="handlexlsjson"></p>
 </body>  
   </div>
 

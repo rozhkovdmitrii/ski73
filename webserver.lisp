@@ -162,13 +162,13 @@
        finally (return-from cc-walk (values `((cc-title . ,cc-title)
 					      (date . ,cc-date)
 					      (group . ,group) 
-					      ;(begining-time . ,begining-time)
-					      ;(ending-time . ,ending-time)
-					      ;(round-type . ,round-type)
-					      ;(captions . ,captions)
+					      (begining-time . ,begining-time)
+					      (ending-time . ,ending-time)
+					      (round-type . ,round-type)
+					      (captions . ,captions)
 					      (results . ,results)
-					      ;(judge . ,judge)
-					      ;(secretary . ,secretary)
+					      (judge . ,judge)
+					      (secretary . ,secretary)
 					      ) line)) )))
 
 (defun analyse-competition (csvfilename) "Функция получает на вход специализированный csv файл с результами соревнований. На выходе получаем соотв. списочную структуру"
@@ -179,7 +179,7 @@
 		 
 		   (loop named file-walk 
 		      for line = (multiple-value-bind (comp-round-result line) (read-till-break stream) 
-				   (push comp-round-result result) line)
+				   (when line (push comp-round-result result)) line)
 		      with result = '()
 		      while line
 		      finally (return-from file-walk result)
@@ -200,14 +200,14 @@
      
 	(trivial-shell:shell-command command)
 	(with-html-output-to-string (*standard-output* nil :prologue nil :indent t)
-	  (:html-file :XMLNS "http://www.w3.org/1999/xhtml" :|XML:LANG| "ru" :LANG "ru" 
-		      (:head (:title "Обработка xls"))
-		      (:body (:h1 "Обработка xls")
-			     (:p (cl-who:str (format nil "~a" (encode-json-alist-to-string (third (analyse-competition newxlspath) ))
+	  (cl-who:str (format nil "~a"
+					(encode-json-to-string
+					 (analyse-competition newxlspath)
+					)
+			      ;(encode-json-to-string '(1 2 3 4 ((a . 1))))
+	  )))))
 
-						      )))
-			     (:p )
-			     )))))
+(defun secondary-analyse (rounds) "Вторичная обработка данных полученных при чтении xls файла с результатми соревнований на этом этапе должна производиться запись в БД, создание объектов CLOS" (format t "Поехали"))
 (push (create-prefix-dispatcher "/handlexls" 'handlexls) *dispatch-table*)
 
 

@@ -8,9 +8,10 @@
 
     <script type="text/javascript">
       function onHandlexlsSuccess(response) {
-	//var gg = eval('(' + response + ')');
+	//var gg = eval(response);
 	$('#s-expression').html(response);
-	//$('#handlexlsjson').html(gg.toString());
+      
+      //$('#handlexlsjson').html(gg[0].toString());
       
       }
       $(document).ready(function(){

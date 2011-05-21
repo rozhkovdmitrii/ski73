@@ -4,5 +4,6 @@
 (require 'trivial-shell)
 (require 'cl-ppcre)
 (require 'cl-json)
+(require 'alexandria)
 ;(require 'yason)
 *;(require 'hunchentoot-test)

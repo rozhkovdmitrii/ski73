@@ -1,15 +1,27 @@
 (defpackage :webserver
-  (:use :common-lisp :hunchentoot :cl-who :cl-mongo :trivial-shell :cl-ppcre :json))
+  (:use :common-lisp :hunchentoot :cl-who :cl-mongo :trivial-shell :cl-ppcre :json :alexandria))
 
 (in-package :webserver)
 
-(defparameter *mconn* (mongo :db "skiing" :name :mconn))
+;(defparameter *mconn* (mongo :db "ski73" :name :mconn))
 
 (setf *hunchentoot-default-external-format* hunchentoot::+utf-8+)
 ;(setf *default-content-type* "text/html;charset=utf-8")
 
+;;Инициализируем web сервис
 (defparameter *server-instance* (make-instance 'hunchentoot:acceptor :port 4242) "my web server")
 (hunchentoot:start *server-instance*)
+
+;;Создаем подключение к БД
+(defparameter  *mongo-ski73-conn* (cl-mongo:mongo :name :default :db "ski73") "Подключение к mongo-db базе ski73" )
+
+;; Карта трансляции имен из xls в имена БД
+(defparameter namesmap nil)
+
+
+(load "/home/rds/devel/lisp/skisite/competition.lisp")
+
+
 
 (setf *default-pathname-defaults* #P"/home/rds/devel/lisp/skisite/")
 (setf *tmp-directory* #P"tmp/")
@@ -146,29 +158,29 @@
   (let ((judge-reg "^Главный судья[ _]+(.*)$") (secretary-reg "^Главный секретарь[ _]+(.*)$"))
     (loop named cc-walk
        for line = (read-line istream nil) and i from 0 
-       with cc-date and cc-title and group and begining-time and ending-time and round-type and captions and judge-scan-res and judge and secretary-scan-res and secretary 
+       with cc-date and cc-title and group and begining-time and end-time and round-type and captions and judge-scan-res and judge and secretary-scan-res and secretary 
        while (and (string/= line "!newsheet!") line)
        if (<= i 1) do (setf cc-title (concatenate 'string cc-title (non-empty-cells-list line)))
        if (= i 2) do (setf cc-date (non-empty-cells-list line))
-       if (= i 3) do (progn 
-		       (do-register-groups (gp bt) ("^\\^*([^^]+)\\^+([^^]+)\\^*$" line) 
+       if (= i 3) do (do-register-groups (gp bt) ("^\\^*([^^]+)\\^+([^^]+)\\^*$" line) 
 			 (setf group (string-trim " " gp)) (setf begining-time (string-trim " " bt))) 
-		       )
-       if (= i 4) do (do-register-groups (rt et) ("^\\^*([^^]+)\\^+([^^]+)$" line) (setf round-type (string-trim " " rt)) (setf ending-time (string-trim " " et)))
+		       
+       if (= i 4) do (do-register-groups (rt et) ("^\\^*([^^]+)\\^+([^^]+)\\^*$" line)
+		       (setf round-type (string-trim " " rt)) (setf end-time (string-trim " " et)))
        if (= i 5) do (setf captions (split "\\^" line))
        if (and (> i 5) (> (length (split "\\^" line)) 1)) collect (mypairlis captions (split "\\^" line)) into results 
        if (first (setq judge-scan-res (multiple-value-list (scan-to-strings judge-reg line)))) do (setf judge (elt (second judge-scan-res) 0))
        if (first (setq secretary-scan-res (multiple-value-list (scan-to-strings secretary-reg line)))) do (setf secretary (elt (second secretary-scan-res) 0))
-       finally (return-from cc-walk (values `((cc-title . ,cc-title)
-					      (date . ,cc-date)
-					      (group . ,group) 
-					      (begining-time . ,begining-time)
-					      (ending-time . ,ending-time)
-					      (round-type . ,round-type)
-					      (captions . ,captions)
-					      (results . ,results)
-					      (judge . ,judge)
-					      (secretary . ,secretary)
+       finally (return-from cc-walk (values `(("cc-title" . ,cc-title)
+					      ("date" . ,cc-date)
+					      ("group" . ,group) 
+					      ("begining-time" . ,begining-time)
+					      ("end-time" . ,end-time)
+					      ("round-type" . ,round-type)
+					      ("captions" . ,captions)
+					      ("results" . ,results)
+					      ("judge" . ,judge)
+					      ("secretary" . ,secretary)
 					      ) line)) )))
 
 (defun analyse-competition (csvfilename) "Функция получает на вход специализированный csv файл с результами соревнований. На выходе получаем соотв. списочную структуру"
@@ -187,6 +199,26 @@
 
 
 
+(defun secondary-analyse (rounds) "Вторичная обработка данных полученных при чтении xls файла с результатми соревнований на этом этапе должна производиться запись в БД, создание объектов CLOS"
+       (loop for round in rounds
+	  and cmpt = (make-instance 'competition
+				    :title (cdr (assoc "cc-title" round :test #'string=))
+				    :date (cdr (assoc "date" round  :test #'string=))
+				    :begin-time (cdr (assoc "begining-time" round  :test #'string=))
+				    :end-time (cdr (assoc "end-time" round  :test #'string=))
+				    )
+	  and roundcls = (make-instance 'roundc :group (cdr (assoc "group" round  :test #'string=))
+					:round-type (cdr (assoc "round-type" round :test #'string=))
+					:results  (cdr (assoc "results" round :test #'string=)))
+	    
+	  if (= (ret (db.count "competitions" (kv "title" (title cmpt)))) 0) do (db.insert "competitions" (mongo-doc cmpt))
+	  do (db.update "competitions" (kv "title" (title cmpt)) (kv "$push" (kv "rounds" (mongo-doc roundcls))))
+	    )
+       (pp (iter (db.find "competitions" :all :skip 0)) :stream nil)
+       )
+
+
+
 (defun handlexls ()
   (no-cache)
   (setf (hunchentoot:content-type*) "text/html;charset=utf-8")
@@ -201,21 +233,7 @@
 	(trivial-shell:shell-command command)
 	(with-html-output-to-string (*standard-output* nil :prologue nil :indent t)
 	  (cl-who:str (format nil "~a"
-					(encode-json-to-string
-					 (analyse-competition newxlspath)
-					)
-			      ;(encode-json-to-string '(1 2 3 4 ((a . 1))))
+			      (secondary-analyse (analyse-competition newxlspath))
 	  )))))
-
-(defun secondary-analyse (rounds) "Вторичная обработка данных полученных при чтении xls файла с результатми соревнований на этом этапе должна производиться запись в БД, создание объектов CLOS" (format t "Поехали"))
 (push (create-prefix-dispatcher "/handlexls" 'handlexls) *dispatch-table*)
 
-
-;(json:encode 
-;          (list (alexandria:plist-hash-table
-;                 `("foo" 1 "bar" (7 8 9) "nested" ,(alexandria:plist-hash-table '("foo" 1 ";Клево, с вложенными хэштаблицами все пашет" (7 8 9)) :test #'equal))
-;                 :test #'equal)
-;                2 3 4
-;                '(5 6 7)
-;                t nil)
-;          *standard-output*)

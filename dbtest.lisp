@@ -1,0 +1,5 @@
+(let ((doc (make-document)))
+			   (add-element "name" "Бажановские соревнования" doc)
+			   (add-element "datetime" (date-time 0 0 0 12 12 2011) doc)
+			   (add-element "judge" "..." doc)
+			   (db.insert "competitions" doc :mongo *mconn*))

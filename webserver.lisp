@@ -1,5 +1,7 @@
 (defpackage :webserver
-  (:use :common-lisp :hunchentoot :cl-who :cl-mongo :trivial-shell :cl-ppcre :json :alexandria))
+  (:use :common-lisp :hunchentoot :cl-who
+	:mongo :mongo-cl-driver.son-sugar
+	:trivial-shell :cl-ppcre :json :alexandria))
 
 (in-package :webserver)
 
@@ -13,7 +15,9 @@
 (hunchentoot:start *server-instance*)
 
 ;;Создаем подключение к БД
-(defparameter  *mongo-ski73-conn* (cl-mongo:mongo :name :default :db "ski73") "Подключение к mongo-db базе ski73" )
+
+;;Коллекция competitions - соревнования
+(defparameter *competitions* (mongo:collection (make-instance 'mongo:database :name "ski73") "competitions"))
 
 ;; Карта трансляции имен из xls в имена БД
 (defparameter namesmap nil)
@@ -211,13 +215,11 @@
 					:round-type (cdr (assoc "round-type" round :test #'string=))
 					:results  (cdr (assoc "results" round :test #'string=)))
 	    
-	  if (= (ret (db.count "competitions" (kv "title" (title cmpt)))) 0) do (db.insert "competitions" (mongo-doc cmpt))
-	  do (db.update "competitions" (kv "title" (title cmpt)) (kv "$push" (kv "rounds" (mongo-doc roundcls))))
-	    )
-       (pp (iter (db.find "competitions" :all :skip 0)) :stream nil)
-       )
-
-
+	  if (= (collection-count *competitions* (son "title" (title cmpt))) 0)
+		do (insert-op *competitions* (mongo-doc cmpt))
+	  do (update-op *competitions* (son "title" (title cmpt)) (son "$push" (son "rounds" (mongo-doc roundcls))))
+	 )
+)
 
 (defun handlexls ()
   (no-cache)
@@ -231,9 +233,11 @@
 	 )
      
 	(trivial-shell:shell-command command)
+	(secondary-analyse (analyse-competition newxlspath))
 	(with-html-output-to-string (*standard-output* nil :prologue nil :indent t)
-	  (cl-who:str (format nil "~a"
-			      (secondary-analyse (analyse-competition newxlspath))
+	  (cl-who:str (format nil "~a" (encode-json (find-list *competitions*  :query (son) :fields (son "title" 1)))
+			      
 	  )))))
+
 (push (create-prefix-dispatcher "/handlexls" 'handlexls) *dispatch-table*)
 

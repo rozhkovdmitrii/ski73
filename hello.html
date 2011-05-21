@@ -8,10 +8,9 @@
 
     <script type="text/javascript">
       function onHandlexlsSuccess(response) {
-	//var gg = eval(response);
+	var gg = eval(response);
 	$('#s-expression').html(response);
-      
-      //$('#handlexlsjson').html(gg[0].toString());
+	$('#handlexlsjson').html(gg[0].toString());
       
       }
       $(document).ready(function(){
@@ -73,7 +72,7 @@
     
     <a href="http://vkontakte.ru/club4376301"> Группа</a><br>
     <a href="http://localhost:4242/xls-parsing-order.html">Требования к составлению xls</a><br>
-    <a href="http://localhost:4242/webserver.lisp">Исходники, если кому интересно</a>
+    <a href="https://github.com/rozhkovdmitriy/ski73">Исходники, если кому интересно</a>
 <br>
   <form id="myForm" action="/handlexls" method="post" enctype="multipart/form-data"> 
     <b>XLS UPLOAD</b><br>

@@ -32,31 +32,22 @@
 (push (namestring *default-pathname-defaults*) trivial-shell:*shell-search-paths*)
 (trivial-shell:shell-command (concatenate 'string "cd " (namestring *default-pathname-defaults*)))
 
-;(setf *dispatch-table*
-;      (list #'dispatch-easy-handlers
-;            #'default-dispatcher))
-
 (setf *show-lisp-errors-p* t
-);
-;(setf *show-lisp-backtraces-p* t)
-
+)
 
 (hunchentoot:define-easy-handler (say-yo :uri "/yo") (name patronimic)
-  (setf (hunchentoot:content-type*) "text/plain;charset=utf-8")
+  (setf (hunchentoot:content-type*) "text/html;charset=utf-8")
   (format nil "<h1>Привет~@[ ~A~]! ~a</h1>" name patronimic))
-
-;(setf *dispatch-table*
-;      (list (create-static-file-dispatcher-and-handler
-;             "/hello.html" "/home/rds/devel/lisp/skisite/hello.html")))
 
 (setf *dispatch-table*
       (list (create-folder-dispatcher-and-handler
              "/" "/home/rds/devel/lisp/skisite/")))
 
+
 (define-easy-handler (easy-demo :uri "/lisp/hello" :default-request-type :get)
   ()
   (no-cache)
-  (setf (header-out "Content-Type") "text/plain; charset=utf-8")
+  (setf (header-out "Content-Type") "text/html; charset=utf-8")
   (with-html-output-to-string (*standard-output* nil :prologue t)
 			      (:html
 			       (:head (:meta :charset "UTF-8") (:title "HW!!!") )
@@ -69,36 +60,6 @@
 					"this blog entry")
 				    " on Common Lisp and Hunchentoot.")))))
 
-
-
-(defmacro standard-page ((&key title) &body body)
-	 `(with-html-output-to-string (*standard-output* nil :prologue t :indent t)
-	   (:html :xmlns "http://www.w3.org/1999/xhtml"
-		  :xml\:lang "en" 
-		  :lang "en"
-		  (:head 
-		   (:meta :http-equiv "Content-Type" 
-			  :content    "text/html;charset=utf-8")
-		   (:title ,title)
-		   (:link :type "text/css" 
-			  :rel "stylesheet"
-			  :href "/retro.css"))
-		  (:body 
-		   (:div :id "header" ; Retro games header
-			 (:img :src "/logo.jpg" 
-			       :alt "Commodore 64" 
-			       :class "logo")
-			 (:span :class "strapline" 
-				"Vote on your favourite Retro Game"))
-		   ,@body))))
-
-(defun retro-games ()
-	 (standard-page (:title "Retro Games")
-			(:h1 "Top Retro Games")
-			(:p "We'll write the code later...")))
-
-(push (create-prefix-dispatcher "/retro-games.htm" 'retro-games) *dispatch-table*)
-
 ;;Создание и регистрация функции обработчика в диспатчер
 (defmacro define-url-fn ((name) &body body)
   `(progn (defun ,name ()
@@ -109,32 +70,15 @@
 	  (create-prefix-dispatcher ,(format nil "/~(~a~)" name) ',name) *dispatch-table*)))
 
 
+
+
+
 (define-url-fn (auth-form)
   (:html (:head (:title "Авторизация") (:META :HTTP-EQUIV "Content-Type" :CONTENT "text/html;charset=utf-8"))
 	 (:body
 	  (:div "Здесь будет авторизация")
 	  (:ul (:li "Первый пункт") (:li "Пункт два"))
 	  )))
-
-;;+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-(defun trial-page ()
-	     (with-html-output-to-string (*standard-output* nil :prologue t)
-	       (:html (:head (:title "This a trial"))
-		      (:body (:h1 "Combine Parenscript with cl-who")
-			     (:p "Please click the link below." ))))) 
-(push (create-prefix-dispatcher "/trial-page" 'trial-page) *dispatch-table*)
-
-(defun auth ()
-  (no-cache)
-  (setf (hunchentoot:content-type*) "text/plain;charset=utf-8")
-  (with-html-output (*standard-output* nil :prologue nil :indent t)
-    (:html :XMLNS "http://www.w3.org/1999/xhtml" :|XML:LANG| "ru" :LANG "ru" 
-	   (:head (:title "Привет лисперы!!!"))
-	   (:body (:h1 "Привет лисперы!!!")))
-))
-
-(push (create-prefix-dispatcher "/auth" 'auth) *dispatch-table*)
-
 
 
 (defun file-content (filepath)
@@ -155,7 +99,7 @@
 (defun mypairlis (keys values) "Моя реализация pairlis, которая расширяет в случае необходимости список values"
 		  (let* ((kl (length keys)) (vl (length values)) (diff (- kl vl)))
 		    (if (> diff 0) (setf values (append values (make-list diff :initial-element 0))))
-		    (pairlis keys values)
+		    (reverse (pairlis keys values))
 		    ))
 
 (defun read-till-break (istream)
@@ -195,12 +139,12 @@
 		 
 		   (loop named file-walk 
 		      for line = (multiple-value-bind (comp-round-result line) (read-till-break stream) 
-				   (when line (push comp-round-result result)) line)
+				   (when line (setf result comp-round-result ) ) line)
 		      with result = '()
 		      while line
-		      finally (return-from file-walk result)
-		 ))))
-
+		      collect result into results
+		      finally (return-from file-walk results)
+		 )))
 
 
 (defun secondary-analyse (rounds) "Вторичная обработка данных полученных при чтении xls файла с результатми соревнований на этом этапе должна производиться запись в БД, создание объектов CLOS"
@@ -210,6 +154,7 @@
 				    :date (cdr (assoc "date" round  :test #'string=))
 				    :begin-time (cdr (assoc "begining-time" round  :test #'string=))
 				    :end-time (cdr (assoc "end-time" round  :test #'string=))
+				    :captions (cdr (assoc "captions" round :test #'string=))
 				    )
 	  and roundcls = (make-instance 'roundc :group (cdr (assoc "group" round  :test #'string=))
 					:round-type (cdr (assoc "round-type" round :test #'string=))
@@ -235,9 +180,22 @@
 	(trivial-shell:shell-command command)
 	(secondary-analyse (analyse-competition newxlspath))
 	(with-html-output-to-string (*standard-output* nil :prologue nil :indent t)
-	  (cl-who:str (format nil "~a" (encode-json (find-list *competitions*  :query (son) :fields (son "title" 1)))
-			      
-	  )))))
+	  (cl-who:str (encode-json-to-string (find-list *competitions*  :query (son) :fields (son "title" 1)))
+		      )
+	  )))
 
 (push (create-prefix-dispatcher "/handlexls" 'handlexls) *dispatch-table*)
 
+;Список троек {id, title, date} для передачи списка соревнований
+(define-url-fn (competitions-list)
+  (str (encode-json-to-string (find-list *competitions* :query (son) :fields (son "title" 1 "date" 1))))
+  )
+
+(define-url-fn (competition-info)
+  (let ((id (post-parameter "id")) )
+    (str
+     (encode-json-to-string (find-one *competitions* 
+				      (son "_id" (make-instance 'object-id :raw (flexi-streams:string-to-octets id))) 
+				      (son "rounds" 1 "captions" 1)))
+     )))
+    

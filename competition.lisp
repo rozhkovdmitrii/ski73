@@ -7,8 +7,9 @@
 
 	      (judge :initarg :judje :initform "undefined" :accessor judje)
 	      (secretary :initarg :secretary :initform "undefined" :accessor secretary)
+	      (captions :initarg :captions :initform "undefined" :accessor captions)
 	      )
-	     )
+  )
 
 
 (defclass roundc ()
@@ -21,6 +22,16 @@
 )
 
 
+(defun floatstr2time (floatstr)
+  
+  ) 
+
+;(defmethod initialize-instance :after ((cmptt competition) &key) );
+	
+;  (when opening-bonus-percentage
+;    (incf (slot-value account 'balance)
+;          (* (slot-value account 'balance) (/ opening-bonus-percentage 100)))))
+
 
 
 
@@ -31,10 +42,11 @@
 
 (defmethod mongo-doc ((object competition))
   (son "title" (title object)
-	    "date" (date object)
-	    "begin-time" (begin-time object)
-	    "end-time" (end-time object)
-	    )
+       "date" (date object)
+       "begin-time" (begin-time object)
+       "end-time" (end-time object)
+       "captions" (captions object)
+       )
   )
 
 
@@ -44,8 +56,8 @@
       "results" (map 'list #'(lambda (res) (alist-hash-table res)) (results object))
   ))
 
-(defmethod mongo-doc ((reshash hash-table))
-  (apply #'son (loop for k being the hash-keys in reshash using (hash-value v)
-	 collect (son k v))
-    )
-  )
+;(defmethod mongo-doc ((reshash hash-table))
+;  (apply #'son (loop for k being the hash-keys in reshash using (hash-value v)
+;	 collect (son k v))
+;    )
+;  )

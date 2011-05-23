@@ -5,12 +5,15 @@
     <script type="text/javascript" src="http://code.jquery.com/jquery-1.5.2.js"></script>
     <script type="text/javascript" src="/js/jquery.form.js"></script>
     <script type="text/javascript" src="/js/pure/libs/pure.js"></script>
+    <script type="text/javascript" src="/js/ArrayReduce.js"></script>
+    <script type='text/javascript' src='js/roundsView.js'></script>
 
+    <script type="text/javascript" src="/js/requests.js"></script>
     <script type="text/javascript">
       function onHandlexlsSuccess(response) {
-	var gg = eval(response);
+	//var gg = eval(response);
 	$('#s-expression').html(response);
-	$('#handlexlsjson').html(gg[0].toString());
+	//$('#handlexlsjson').html(gg[0].toString());
       
       }
       $(document).ready(function(){
@@ -81,8 +84,24 @@
   </form>
   <p id="s-expression" style="color:green;"></p>
   <p id="handlexlsjson"></p>
-</body>  
+    <div id="competitionsList">
+    <!--<li><a class="competitionLink" href=""></a></li>-->
+    </div>
+  <div id="commandsRow"><button onClick="getCompetitions();">Список соревнований</button></div>
+  <div id="rounds"></div>
+  </body>  
   </div>
-
+  <table>
+    <tbody title="first">
+      <tr><td>1</td></tr>
+      <tr><td>2</td></tr>
+      <tr><td>3</td></tr>
+    </tbody>
+    <tbody title="second">
+      <tr><td>1</td></tr>
+      <tr><td>2</td></tr>
+      <tr><td>3</td></tr>
+    </tbody>
+  </table>
 
 </html>

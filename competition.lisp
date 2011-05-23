@@ -22,9 +22,12 @@
 )
 
 
-(defun floatstr2time (floatstr)
-  
-  ) 
+(defun exeltime2timestr (floatstr)
+  (let ( (float (read-from-string floatstr)))
+    (multiple-value-bind (h r) (floor (* float 24)) (cons h 
+	(multiple-value-bind (m r1) (floor (* r 60)) (cons m 
+		(let ((s (floor (* r1 60)))) (cons s nil))
+		))))))
 
 ;(defmethod initialize-instance :after ((cmptt competition) &key) );
 	

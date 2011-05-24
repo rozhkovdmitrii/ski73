@@ -16,7 +16,7 @@
   (
    (group :initarg :group :initform "undefined" :accessor group)
    (round-type :initarg :round-type :initform "undefined" :accessor round-type)
-   (results :initarg :results :initform nil :accessor results)
+   (results :initarg :results :initform '() :accessor results)
    )
   
 )
@@ -26,20 +26,25 @@
   (let ( (float (read-from-string floatstr)))
     (multiple-value-bind (h r) (floor (* float 24)) (cons h 
 	(multiple-value-bind (m r1) (floor (* r 60)) (cons m 
-		(let ((s (floor (* r1 60)))) (cons s nil))
+		(let ((s (floor (* r1 60)))) (cons s nil)
+		     (return-from exeltime2timestr
+		       (format nil "~2,'0d:~2,'0d:~2,'0d" h m s)
+		       )
+		     )
 		))))))
 
-;(defmethod initialize-instance :after ((cmptt competition) &key) );
-	
-;  (when opening-bonus-percentage
-;    (incf (slot-value account 'balance)
-;          (* (slot-value account 'balance) (/ opening-bonus-percentage 100)))))
+(defmethod initialize-instance :after ((round roundc) &key) 
+  (loop for result in (results round)
+     do (loop for cell in result
+	   if (and (stringp  (cdr cell)) (scan "^\\d+\\.\\d+$"  (cdr cell)))
+		   do (setf (cdr cell) (exeltime2timestr  (cdr cell)))
+	     )
+       )
+)
 
 
 
 
-(defparameter *comp* (make-instance 'competition :title "test-title of test competition"))
-(defparameter *round* (make-instance 'roundc :group "Юноши 5 лет" :round-type "100 км марафон" :results '(1 2 3)))
 
 (defgeneric mongo-doc (object) (:documentation "Генерирует kv структуру для записи в БД mongo"))
 

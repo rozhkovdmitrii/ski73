@@ -1,4 +1,5 @@
 (in-package :webserver)
+
 (defun read-till-break (istream)
   (let ((judge-reg "^Главный судья[ _]+(.*)$") (secretary-reg "^Главный секретарь[ _]+(.*)$"))
     (loop named cc-walk

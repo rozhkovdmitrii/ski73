@@ -144,7 +144,7 @@
 		      while line
 		      collect result into results
 		      finally (return-from file-walk results)
-		 )))
+		 ))))
 
 
 (defun secondary-analyse (rounds) "Вторичная обработка данных полученных при чтении xls файла с результатми соревнований на этом этапе должна производиться запись в БД, создание объектов CLOS"

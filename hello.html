@@ -2,13 +2,14 @@
   <meta charset="utf-8">
 
   <head>
-    <script type="text/javascript" src="http://code.jquery.com/jquery-1.5.2.js"></script>
+    <script type="text/javascript" src="/js/jquery-1.5.2.js"></script>
     <script type="text/javascript" src="/js/jquery.form.js"></script>
     <script type="text/javascript" src="/js/pure/libs/pure.js"></script>
     <script type="text/javascript" src="/js/ArrayReduce.js"></script>
     <script type='text/javascript' src='js/roundsView.js'></script>
 
     <script type="text/javascript" src="/js/requests.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/title.css"/>
     <script type="text/javascript">
       function onHandlexlsSuccess(response) {
 	//var gg = eval(response);
@@ -20,11 +21,14 @@
 	   $("#myForm").ajaxForm({url: "/handlexls", success:onHandlexlsSuccess});
 	});
     </script>
+    <link rel="icon" 
+      type="image/ico" 
+      href="favicon">
     <style type="text/css">
       #mainframe {
-	-moz-border-radius: 100px 20px / 20px 100px;
-	border-radius: 100px 20px / 20px 100px;
-	   background-image: -webkit-gradient(
+	//-moz-border-radius: 100px 20px / 20px 100px;
+	border-radius: 50px 50px / 50px 50px;
+	background-image: -webkit-gradient(
 	   linear,
 	   right 2%,
 	   left 50%,
@@ -38,7 +42,7 @@
 	   #E3E4FA 52%,
 	   #DDF0F0 100%
 	);
-      
+      min-height : 450px;
       opacity: 0.95;
       padding: 20;
       left:160;
@@ -50,46 +54,24 @@
       }
     </style>
   <title>ulskiing</title>
-
+  <script type="text/javascript">
+    $(document).ready(getMain);
+  </script>
   </head>
 
-  <body style="background-image:url('/skitrack.jpg');background-repeat:no-repeat;background-position:center bottom;height:800;background-color:#c5d8e9;">
+  <body style="height:800;background-color:#c5d8e9;">
   <h1 style="text-align:center;">Ресурс лыжного сообщества ульяновской области</h1>
-  <div id="mainframe">
-    <p>Данный ресурс задумывается как источник информации для всех лыжников нашего региона. На нем вы можете найти:</p>
-    <ul>
-      <li>Результаты соревнований с удобной навигацией по группам, времени, возможностью печати и преобразования в различные форматы; <b>Загрузка из xls, csv</b></li>
-      <li>Поддержка online заявок, распределение номеров. </li>
-      <li>Уппрощенная схема регистрации на соревнованиях, влоть до получения стартового номера online</li>
-      <li>Кубковые таблицы, рейтинги спортсменов, графики роста результатов, объемы тренировок и другая аналитика для спортсменов и тренеров</li>
-      <li>Групповой заказ спортивного инвентаря</li>
-      <li>Online дневник спортсмена, экспорт дневника в различные форматы, автоматический подсчет объемов</li>
-      <li>Фотоотчеты</li>
-      <li>Подписаться на рассылку по электронной почте или sms рассылку о соревнованиях, контрольных тренировках и др.</li>
-      <li>Получить подробную информацию о местах катания - описание, фотографии, сложность, дистанции, комментарии и др.</li>
-      
-    </ul>
-    <p>Один из эффектов, от применения системы может стать следующий. Детектирование ситуации когда атлет проходит соревнования в группе, которой он не принадлежит. Так, например, спортсмен вышедший из младшей группы по возрасту не может бороться за высокие места в ней. Система, все отследит и сообщит кому надо о подлоге.</p>
-
-    <p>Процедура пересчета возрастных групп - всегда существуют актуальные таблицы участников возрастных групп</p>
+  <div id="headpoints">
+    <span id="cometitionsLink" class="headerLink" onClick="getMain();">На старт</span>
+    <span id="cometitionsLink" class="headerLink" onClick="getCompetitions();">Соревнования</span>
+    <span id="cometitionsLink" class="headerLink" onClick="getAdminPage();">Администраторам</span>
+    <span id="cometitionsLink" class="headerLink" onClick="getMain();">Клубы</span>
+    <span id="cometitionsLink" class="headerLink" onClick="getMain();">Фоты</span>
+    <span id="cometitionsLink" class="headerLink" onClick="getMain();">Видео</span>
     
-    <a href="http://vkontakte.ru/club4376301"> Группа</a><br>
-    <a href="http://localhost:4242/xls-parsing-order.html">Требования к составлению xls</a><br>
-    <a href="https://github.com/rozhkovdmitriy/ski73">Исходники, если кому интересно</a>
-<br>
-  <form id="myForm" action="/handlexls" method="post" enctype="multipart/form-data"> 
-    <b>XLS UPLOAD</b><br>
-    <input name="relatedxls" type="file"/><br>
-    <input type="submit" value="Submit Comment" /> 
-  </form>
-  <p id="s-expression" style="color:green;"></p>
-  <p id="handlexlsjson"></p>
-    <div id="competitionsList">
-    <!--<li><a class="competitionLink" href=""></a></li>-->
-    </div>
-  <div id="commandsRow"><button onClick="getCompetitions();">Список соревнований</button></div>
-  <div id="rounds"></div>
-  </body>  
   </div>
+  <div id="mainframe">
+  </div>
+
 
 </html>

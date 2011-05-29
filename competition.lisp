@@ -36,7 +36,7 @@
 (defmethod initialize-instance :after ((round roundc) &key) 
   (loop for result in (results round)
      do (loop for cell in result
-	   if (and (stringp  (cdr cell)) (scan "^\\d+\\.\\d+$"  (cdr cell)))
+	   if (and (stringp  (cdr cell)) (scan "^\\d+\\.\\d+(e[+-]?\\d*)?$"  (cdr cell)))
 		   do (setf (cdr cell) (exeltime2timestr  (cdr cell)))
 	     )
        )

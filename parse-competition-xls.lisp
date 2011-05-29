@@ -46,19 +46,19 @@
 
 (defun secondary-analyse (rounds) "Вторичная обработка данных полученных при чтении xls файла с результатми соревнований на этом этапе должна производиться запись в БД, создание объектов CLOS"
        (loop for round in rounds
-	  and cmpt = (make-instance 'competition
+	  for cmpt = (make-instance 'competition
 				    :title (cdr (assoc "cc-title" round :test #'string=))
 				    :date (cdr (assoc "date" round  :test #'string=))
 				    :begin-time (cdr (assoc "begining-time" round  :test #'string=))
 				    :end-time (cdr (assoc "end-time" round  :test #'string=))
 				    :captions (cdr (assoc "captions" round :test #'string=))
 				    )
-	  and roundcls = (make-instance 'roundc :group (cdr (assoc "group" round  :test #'string=))
+	  for roundcls = (make-instance 'roundc :group (cdr (assoc "group" round  :test #'string=))
 					:round-type (cdr (assoc "round-type" round :test #'string=))
 					:results  (cdr (assoc "results" round :test #'string=)))
 	    
 	  if (= (collection-count *competitions* (son "title" (title cmpt))) 0)
-		do (insert-op *competitions* (mongo-doc cmpt))
+	  do (insert-op *competitions* (mongo-doc cmpt))
 	  do (update-op *competitions* (son "title" (title cmpt)) (son "$push" (son "rounds" (mongo-doc roundcls))))
 	 )
 )

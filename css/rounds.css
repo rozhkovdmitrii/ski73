@@ -1,0 +1,64 @@
+.group-toggle {
+    margin-left : 10%;
+    padding: 10px 5px 10px 5px;
+    color : #333300;
+    cursor : pointer;
+    font-size : 13pt;
+    font-weight : bold;
+}
+
+.group-toggle img {
+    margin-left : 10px
+}
+
+.tool-img {
+    margin-left : 20px;
+    margin-right : 20px;
+    cursor : pointer;
+}
+
+.cmpTitle {
+    text-align : center;
+    font-size : 14pt;
+    font-weight : bold;
+    color : 171545;
+    padding-top : 10px;
+    padding-bottom : 30px;
+}
+
+.round-table {
+    border-style : outset;
+    border-color : gray;
+    margin-left : 3%;
+    margin-right : auto;
+    margin-bottom : 20px;
+    border-collapse : collapse;
+    font-size : 10pt;
+}
+
+.dataRow td, .capRow th {
+    border-width : 1px;
+    border-style : inset;
+    border-color : gray;
+    padding : 5px 10px 5px 10px;
+}
+
+.dataRow:nth-child(odd) {
+    background :   #88aadd;
+}
+.dataRow:nth-child(even) {
+    background : #99ccff; 
+}
+
+.dataRow:nth-child(2) {
+    background : #ffff55; 
+}
+
+.dataRow:nth-child(3) {
+    background : #ffffcc; 
+}
+
+.dataRow:nth-child(4) {
+    background : #ffcc99; 
+}
+

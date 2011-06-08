@@ -1,0 +1,20 @@
+@media print {
+    #headpoints, .notPrint {
+	display : none;
+    }
+    
+}
+
+#headpoints {
+    //border : 1px solid gray;
+    margin-left : 10px;
+    margin-right : 10px;
+    padding : 30 30 15 30;
+}
+
+.headerLink {
+    cursor : pointer;
+    font-weight : 600;
+    margin : 10px;
+    color : #0066cc;
+}

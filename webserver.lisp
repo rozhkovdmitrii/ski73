@@ -25,8 +25,6 @@
 
 (load "/home/rds/devel/lisp/skisite/competition.lisp")
 
-
-
 (setf *default-pathname-defaults* #P"/home/rds/devel/lisp/skisite/")
 (setf *tmp-directory* #P"tmp/")
 (push (namestring *default-pathname-defaults*) trivial-shell:*shell-search-paths*)
@@ -110,11 +108,12 @@
   (str (encode-json-to-string (find-list *competitions* :query (son) :fields (son "title" 1 "date" 1))))
   )
 
+;Более подробная информацию по соревнованию
 (define-url-fn (competition-info)
   (let ((id (post-parameter "id")) )
     (str
      (encode-json-to-string (find-one *competitions* 
 				      (son "_id" (make-instance 'object-id :raw (flexi-streams:string-to-octets id))) 
-				      (son "rounds" 1 "captions" 1)))
+				      (son "rounds" 1 "captions" 1 "title" 1)))
      )))
     

@@ -1,0 +1,422 @@
+document.write('<link rel="stylesheet" type="text/css" href="scripts/model/model.css"/>');
+
+//URL к php-скрипту для обработки фотографий
+scriptURL = "core/imageResize.php";
+
+if (document.URL.indexOf("mode=local") != -1)
+{
+    scriptURL = "http://proxy.mercury/imageResize.php";
+}
+
+function PhotoViewer(images, modelName) {
+    this.minWidth = 500;
+    this.minThumbWidth = 85;
+    this.minWidthStr = this.minWidth.toString() + "px";
+    this.rowCellWidth = 60;
+    this.rowCellWidthStr = this.rowCellWidth.toString() + "px";
+    
+    this.tableWidth = this.minWidth + this.rowCellWidth;
+    this.tableWidthstr = (this.minWidth + this.rowCellWidth).toString() + "px";
+    this.currentPhotoFileName = 'photoIsAbsent.jpg';
+    this.images = images;
+    this.current = 0
+    modelName = 'Стиральная машина'; 
+    this.modelName = modelName;
+    
+   this.setNext = function() {
+	this.current = this.current + 1;
+	this.update();
+    };
+    
+    this.setPrev = function() {
+	this.current = this.current -1;
+	this.update();
+    };
+    window.photoViewer = this;
+    this.reinit = function(imagesSet, modelName) {
+	this.images = imagesSet;
+	this.current = 0;
+	this.modelName = modelName;
+	this.update();
+	return this;
+    }
+    this.update = function() {
+	$('#photosViewerTable #currentPhoto').attr('src', scriptURL + '?file=upload/'
+						  + this.images[this.current].file_name + '&hLimit=500&vLimit=450');
+	$('#photosViewerTable #prevLnkBtn').attr('disabled', !this.current);
+	$('#nextLnkBtn').attr('disabled', this.current >= this.images.length -1);
+	
+	return this;
+    }
+    
+    this.getImagePath = function(imageIndex) {
+        return scriptURL + '?file=upload/'
+               + this.images[imageIndex].file_name + '&hLimit='+this.minThumbWidth+'&vLimit=85';
+    }
+
+    this.getImagePathBig = function(imageIndex) {
+        return scriptURL + '?file=upload/'
+               + this.images[imageIndex].file_name + '&hLimit='+this.minWidth+'&vLimit=450';
+    }
+
+    this.getAbsoluteImagePath = function(imageIndex) {
+        return 'upload/' + this.images[imageIndex].file_name;
+    }
+
+    this.panel = function() {
+        var tpl;
+        var directive;
+        
+        if (this.images.length > 1) {
+            tpl =
+            "<div id='gallery' class='content'>"
+            + "<div id='controls' class='controls'></div>"
+            + "<div class='slideshow-container'>"
+            + "<div id='loading' class='loader'></div>"
+            + "<div id='slideshow' class='slideshow'></div>"
+            + "</div>"
+            + "<div id='caption' class='caption-container'></div>"
+            + "</div>"
+            + "</div>"
+            + "<div id='thumbs' class='navigation'>"
+            + "<ul class='thumbs noscript'>";
+
+            for(var i = 0; i < this.images.length; i++) {
+                tpl += "<li>"
+                    + "<a class='thumb' name='leaf' href='"
+                    + this.getImagePathBig(i)
+                    + "' title='"+this.modelName+"'>"
+                    + "<img src='"
+                    + this.getImagePath(i)
+                    + "' alt='"+this.modelName+"'/>"
+                    + "</a>"
+                    + "<div class='caption'>"
+                    + "<div class='download'>"
+                    + "<a target='_blank' href='"
+                    + this.getAbsoluteImagePath(i)
+                    + "'>Скачать оригинал</a>"
+                    + "</div>"
+                    + "<div class='image-title'>Изображение "+ (i+1) +" из "+this.images.length+"</div>"
+                    + "</div>"
+                    + "</li>";
+            }
+            tpl += "</ul></div>";
+            tpl += "<div class='colorPanel'><table width='100%' border='0' cellpadding='0' cellspacing='5' height='45px'>"
+                + "<thead>"
+                + "<tr><td colspan='5' class='colorCellHeader'>Цвет фона</td></tr>"
+                + "</thead>"
+                    + "<tr>"
+                + "<td class='colorCell' style='background-color:#FFF;'>&nbsp;</td>"
+                + "<td class='colorCell' style='background-color:#000;'>&nbsp;</td>"
+                + "<td class='colorCell' style='background-color:#82B4ED;'>&nbsp;</td>"
+                + "<td class='colorCell' style='background-color:#F28D8D;'>&nbsp;</td>"
+                + "<td class='colorCell' style='background-color:#CCCCCC;'>&nbsp;</td>"
+                + "</tr></table></div>";
+        } else {
+            tpl =
+            "<div id='gallery' class='content'>"
+            + "<div class='slideshow-container'>"
+            + "<div id='loading' class='loader'></div>"
+            + "<div id='slideshow' class='slideshow'></div>"
+            + "</div>"
+            + "<div id='caption' class='caption-container'></div>"
+            + "</div>"
+            + "</div>"
+            + "<div id='thumbs' class='navigation'>"
+            + "<ul class='thumbs noscript'>";
+
+            for(var i = 0; i < this.images.length; i++) {
+                tpl += "<li>"
+                    + "<a class='thumb' name='leaf' href='"
+                    + this.getImagePathBig(i)
+                    + "' title='"+this.modelName+"'>"
+                    + "<img src='"
+                    + this.getImagePath(i)
+                    + "' alt='"+this.modelName+"'/>"
+                    + "</a>"
+                    + "<div class='caption'>"
+                    + "<div class='download'>"
+                    + "<a target='_blank' href='"
+                    + this.getAbsoluteImagePath(i)
+                    + "'>Скачать оригинал</a>"
+                    + "</div>"
+                    + "<div class='image-title'>Изображение "+ (i+1) +" из "+this.images.length+"</div>"
+                    + "</div>"
+                    + "</li>";
+            }
+            tpl += "</ul></div>";
+            tpl += "<div class='colorPanel'><table width='100%' border='0' cellpadding='0' cellspacing='5' height='45px'>"
+                + "<thead>"
+                + "<tr><td colspan='5' class='colorCellHeader'>Цвет фона</td></tr>"
+                + "</thead>"
+                    + "<tr>"
+                + "<td class='colorCell' style='background-color:#FFF;'>&nbsp;</td>"
+                + "<td class='colorCell' style='background-color:#000;'>&nbsp;</td>"
+                + "<td class='colorCell' style='background-color:#82B4ED;'>&nbsp;</td>"
+                + "<td class='colorCell' style='background-color:#F28D8D;'>&nbsp;</td>"
+                + "<td class='colorCell' style='background-color:#CCCCCC;'>&nbsp;</td>"
+                + "</tr></table></div>";
+        }
+        var content = tpl;
+	var pvbf = new BaseFunctions();
+	pvbf.message(content, 'Фотографии модели: \'' + this.modelName + "'.   Количество фотографий: " + this.images.length, '80%');
+	return this;
+    };
+}
+
+function Model(struct) {
+    this.struct = struct;
+    this.message = function() {
+    	alert('message');
+    }
+    this.struct.photos = 0;
+    eval('window.model' + this.struct.id + " = this;");
+   
+
+    this.photosPanel = function() {
+	var modelName = this.struct.name;
+	$.ajax({
+		type:'post',
+		url:'core/class/rdsClasses/models/Photos.php',
+		data: [{name:'func', value:'getPhotos'}, {name:'mid', value:this.struct.id}],
+		timeout:4000,
+		success: function(data) {
+		    var datastr = eval('(' + data + ')');
+		    if (datastr.state == 'exception') {
+			bf.message(data.message);
+		    } else if (datastr.state == 'ok') {
+			if (!datastr.photos.length)
+			    return false;
+			window.photoViewer.reinit(datastr.photos, modelName).panel();
+		    }
+		},
+		error: function() {
+		    alert('Ошибка загрузки фотографий модели');
+		}
+		
+	    });
+    }
+
+    var rowTemplate = "<div class='modelRowDiv'><table cellspacing='10' class='modelRow'>"+
+	      "<tr>"+
+		 "<td colspan=2 class='modelLabelHeader'></td>"+
+	      "</tr>"+
+	      "<tr>"+
+		 "<td class='photoCell link'><a><img class='photo'>"
+                 +'<p class="allPhotosLink">Просмотреть все фотографии</p>'
+                 +"</a></td>"+
+		 "<td style='padding-left:40px;width:100%;'>"+
+		    "<div class='description'><span class='smallCaption'></span><p class='modelDescription'></p></div>"+
+		    "<table class='valuesTable'><tr><td class='header smallCaption'></td></tr><tr class='valuesRow'><td class='valueDes'></td><td class='valuevalue'></td></tr></table>"+
+		 "</td>"+
+	      "</tr>"+
+	      "<tr><td colspan='2'>"+
+		 "<table cellspacing='0' class='costTable nonMargin nonPadding'>"+
+		    "<tr>"+
+		       "<td>"+
+                       "<div class='modelCostLabel' style='padding: 5px; background-color: #6B9DCE;'><span class='costLabel'></span>&nbsp;руб.</div>"+
+                       "</td>"+
+		       "<td rowspan='2' class='purchaseLinkCartImage link'><img src='images/addToCart.png' alt='Купить'/></td>"+
+		    "</tr>"+
+            "<tr class='bonusesRow'><td align='center' style='padding-top:2px; color:black; font-family:verdana; font-size:10px; font-weight:bold'>бонус&nbsp;<span class='bonusLabel'></span>&nbsp;<span class='bonusesCase'></span></td></tr>" +
+		 "</table>"+
+
+	      "</tr><td>"+
+	      "<tr><td colspan='2' id='discounts' class='link'>Купить со скидкой</td></tr>"+
+	"</table></div>";
+    var rowDirective = {'@class+':function(){return (this.num % 2 == 0)?" odd ":" even";},
+			 '.modelLabelHeader':'struct.name',
+			 '.modelRow@modelId':'struct.id',
+			 '@modelId':'struct.id',
+			 '.photo@src':function(arg) {return scriptURL + "?file=upload/" + this.struct.file_name + "&vLimit=150&hLimit=150";},
+			 '+.description span': function () {return this.struct.des?"Описание":""},
+			 '.description .modelDescription':'struct.des',
+			 '.valuesTable td.header': function() {return obj_count(this.struct.values) > 0?"Характеристики":"";},
+			 '.valuesTable tr.valuesRow': {'value<-struct.values':
+					       {'.valueDes': function(arg)
+						  {
+						      return arg.item.name + (arg.item.unit?" ("+arg.item.unit+")":"");
+						  },
+						'.valuevalue':'value.val'
+					       }},
+			 '.costLabel': 'struct.cost',
+             '.bonusLabel': 'struct.bonusAddon',
+             '.bonusesCase': 'struct.bonusesCase',
+             '.bonusesRow@class+':function() {return this.struct.bonusAddon == 0?' hidden':'';} ,
+			 '.purchaseLinkCartImage@onclick':function(arg) {
+			     return "$('.modelRow[modelId="+this.struct.id+"]').parent().effect('highlight', { color: '#1251A4' }, 500);newCartItem("
+			     + this.struct.id + ", -1);"
+			 },
+			 'td#discounts@class+':function() {return this.struct.defects == 0?' hidden':'';} ,
+			 'td#discounts@onclick':function()  {return 'showDiscountTable(' + this.struct.id + ');'},
+			 'td.photoCell@onclick': 'window.model#{struct.id}.photosPanel();' 
+			 
+	};
+
+
+    var rowAbsoluteTemplate = "<div class='popupModelFull'><div class='modelRowDiv'><table cellspacing='10' class='modelRow'>"+
+    "<tr>"+
+	 "<td colspan='2' class='modelLabelHeader'></td>"+
+    "</tr>"+
+    "<tr>"+
+	 "<td class='photoCell'><img class='photo'></td>"+
+	 "<td style='padding-left:40px;width:100%;'>"+
+	    "<div class='description'><span class='smallCaption'></span><p class='modelDescription'></p></div>"+
+	    "<table class='valuesTable'><tr><td class='header smallCaption'></td></tr><tr class='valuesRow'><td class='valueDes'></td><td class='valuevalue'></td></tr></table>"+
+	 "</td>"+
+    "</tr>"+
+    "<tr><td colspan='2'>"+
+	 "<table cellspacing='0' class='costTable nonMargin nonPadding'>"+
+	    "<tr>"+
+	       "<td>"+
+               "<div class='modelCostLabel' style='padding: 5px; background-color: #6B9DCE;'><span class='costLabel'></span>&nbsp;руб.</div>"+
+               "</td>"+
+	       "<td class='purchaseLinkCartImage link'><img src='images/addToCart.png' alt='Купить'/></td>"+
+	    "</tr>"+
+        "<tr class='bonusesRow'><td align='center' style='padding-top:2px; color:black; font-family:verdana; font-size:10px; font-weight:bold'>бонус&nbsp;<span class='bonusLabel'></span>&nbsp;<span class='bonusesCase'></span></td></tr>" +
+	 "</table>"+
+
+    "</tr><td>"+
+    "<tr><td colspan='2' id='discounts' class='link'>Купить со скидкой</td></tr>"+
+"</table></div></div>";
+var rowAbsoluteDirective = {'@class+':function(){return (this.num % 2 == 0)?" odd ":" even";},
+		 '.modelLabelHeader':function(arg) {
+			return this.struct.name + "<img style='float:right;cursor:pointer;' src='images/kan/b_cancel.png' onClick='$(\"#shareContent\").hide();$(\"#shareContent\").html(\"\");_finish();' alt='Закрыть'/>"; 
+			},
+		 '.modelRow@modelId':'struct.id',
+		 '@modelId':'struct.id',
+		 '.photo@src':function(arg) {return scriptURL + "?file=upload/" + this.struct.file_name + "&vLimit=150&hLimit=150";},
+		 '+.description span': function () {return this.struct.des?"Описание":""},
+		 '.description .modelDescription':'struct.des',
+		 '.valuesTable td.header': function() {return obj_count(this.struct.values) > 0?"Характеристики":"";},
+		 '.valuesTable tr.valuesRow': {'value<-struct.values':
+				       {'.valueDes': function(arg)
+					  {
+					      return arg.item.name + (arg.item.unit?" ("+arg.item.unit+")":"");
+					  },
+					'.valuevalue':'value.val'
+				       }},
+		 '.costLabel': 'struct.cost',
+         '.bonusLabel': 'struct.bonusAddon',
+         '.bonusesCase': 'struct.bonusesCase',
+         '.bonusesRow@class+':function() {return this.struct.bonusAddon == 0?' hidden':'';} ,
+		 '.purchaseLinkCartImage@onclick':function(arg) {
+		     return "$('.modelRow[modelId="+this.struct.id+"]').parent().parent().effect('highlight', { color: '#1251A4' }, 500);newCartItem("
+		     + this.struct.id + ", -1);"
+		 },
+		 'td#discounts@class+':function() {return this.struct.defects == 0?' hidden':'';} ,
+		 'td#discounts@onclick':function()  {return 'showDiscountTable(' + this.struct.id + ');'}	 
+};
+
+
+    var labelTemplate = "<div class='modelLabelDiv'>" +
+	"<table class='modelLabel'>"+
+	   "<tr><td class='modelLabelHeader  nonMargin nonPadding' style='cursor:pointer;' title='Кликните мышкой для просмотра полного описания'></td></tr>"+
+	   "<tr><td class='photoCell link'><a><img class='photo'/></a></td></tr>"+
+	   "<tr><td style='text-align:center;padding-top:20px;'>"+
+	      "<table cellspacing='0' class='costTable nonMargin nonPadding'>"+
+		 "<tr>"+
+		    "<td>"+
+                    "<div class='modelCostLabel' style='padding: 5px; background-color: #6B9DCE;'><span class='costLabel'></span>&nbsp;руб.</div>"+
+                    "</td>"+
+		    "<td class='purchaseLinkCartImage link'><img src='images/addToCart.png' alt='Купить'/></td>"+
+		 "</tr>"+
+         "<tr class='bonusesRow'><td align='center' style='padding-top:2px; color:black; font-family:verdana; font-size:10px; font-weight:bold'>бонус&nbsp;<span class='bonusLabel'></span>&nbsp;<span class='bonusesCase'></span></td></tr>" +
+	      "</table>"+
+	   "</td></tr>"+
+	   "<tr><td id='discounts' class='link'>Купить со скидкой</td></tr>"+
+	"</table></div>";
+    var labelDirectives = {
+	'.modelLabelHeader':'struct.name',
+	'@modelId':'struct.id',
+	'.modelLabel@modelId':'struct.id',
+	'@modelId':'struct.id',
+	'.modelLabelHeader@onClick':function(arg) {
+	     return 'showModelFull('+ this.struct.id +');';
+    },
+	'.photo@src':function(arg) {return scriptURL + "?file=upload/" + this.struct.file_name + "&vLimit=150&hLimit=150";},
+	'.costLabel': 'struct.cost',
+    '.bonusLabel': 'struct.bonusAddon',
+    '.bonusesCase': 'struct.bonusesCase',
+    '.bonusesRow@class+':function() {return this.struct.bonusAddon == 0?' hidden':'';} ,
+	'.purchaseLinkCartImage@onclick':function(arg) {
+			      return "$('.modelLabel[modelId="+this.struct.id+"]').parent().effect('highlight', { color: '#1251A4' }, 500);"+
+			      "newCartItem(" + this.struct.id + ", -1);"
+	},
+	'td#discounts@class+':function() {return this.struct.defects == 0?' hidden':'';},
+	'td#discounts@onclick':function()  {return 'showDiscountTable(' + this.struct.id + ');'},
+	'td.photoCell@onclick': 'window.model#{struct.id}.photosPanel();' 
+	};
+    
+       this.lr = $(rowTemplate).compile(rowDirective);
+       this.listRow = function(num) {
+	   this.num = num;
+	   return this.lr(this);
+       }
+       
+       this.lra = $(rowAbsoluteTemplate).compile(rowAbsoluteDirective);
+       this.listRowAbsolute = function(num) {
+    	   this.num = num;
+    	   return this.lra(this);
+       }
+
+       this.lbl = $(labelTemplate).compile(labelDirectives);
+       this.label = function(num) {
+	   if (num)
+	       this.num = num;
+	   return this.lbl(this);
+       }
+
+       this.haveDescription = function(description) {
+	   //alert('haveDescription' + description);
+	   for(var i in this.struct.values) {
+	       if (this.struct.values[i].id == description) {
+		   //alert('haveDescription' + description+"\nИстина");
+		   return true;
+	       }
+	   }
+	   return false;
+       }
+       this.filter = function(masks) {
+		   //alert('filter');
+		   for (var i in masks) {
+		       var condition = masks[i].cmp == 'eq'?'==':masks[i].cmp=='ls'?'<':'>';
+		       var comparation = "";
+		       if (this.haveDescription(masks[i].description)) {
+				   //alert('haveDescription');
+		       	   //alert("comparation is " + masks[i].cmp+ "\nvalue is " + masks[i].value);
+		       	   //alert(this.struct.values[masks[i].description].val +"___"+masks[i].value);
+				   if (/\d+(,\d+)*/.test(masks[i].value) && /\d+(,\d+)*/.test(this.struct.values[masks[i].description].val)) {
+				       comparation = comaValueToDotValue(this.struct.values[masks[i].description].val)
+					   + condition
+					   + comaValueToDotValue(masks[i].value);
+				   } else {
+				       comparation = "'"+ this.struct.values[masks[i].description].val+"'" + condition +"'"+ masks[i].value+"'";
+				   }
+				   //alert("result comparation:'" +comparation+"' is " + (eval(comparation)?'true':'false'));
+				   if (!eval(comparation)) {
+			       	       return false;
+			       	   }
+		       } else if(masks[i].description == 'price') {
+				   comparation = this.struct.cost + condition + masks[i].value;
+				   if (!eval(comparation)) {
+				       return false;
+				       
+				   }
+		       } else if(masks[i].description == 'producer') {
+		       	   //alert('producer comparation');
+		       	   comparation = this.struct.id_produce + condition + masks[i].value;
+				   if (!eval(comparation))
+			       	       return false;
+			       } else {
+				   //alert('test3');
+				   return false;
+			       }
+		       }
+		   return true;
+       	}
+	};
+	
+function comaValueToDotValue(value) {
+    return parseFloat(str_replace(',', '.', value));
+}

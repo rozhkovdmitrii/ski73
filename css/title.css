@@ -12,9 +12,18 @@
     padding : 30 30 15 30;
 }
 
+
 .headerLink {
     cursor : pointer;
     font-weight : 600;
     margin : 10px;
     color : #0066cc;
+}
+
+
+#authPanel {
+    position: fixed;
+    top:50px;
+    left:50px;
+    //z-index:1000;
 }

@@ -1,0 +1,40 @@
+<!-- BEGIN DOCK 2 ============================================================ -->
+
+
+<div id="dockContainer">
+  <ul id="jqDock">
+    <li>
+      <a class="dockItem"  onClick="getMain()">
+	<img src="images/dock/start-sm.png" alt="Home" title="На&nbsp;старт" /></a></li>
+    <li>
+      <a class="dockItem" onClick="getCompetitions()">
+	<img src="images/dock/competitions-sm.png" alt="Contact" title="Соревнования" /></a></li>
+    <li id="adminMenuItem" style="display:none">
+      <a class="dockItem" onClick="getAdminPage()">
+	<img src="images/dock/admin-sm.png" alt="portfolio" title="Админка" /></a></li>
+
+    <li>
+      <a class="dockItem" onClick="getClubs()">
+	<img src="images/dock/music-sm.png" alt="music" title="Клубы" /></a></li>
+    <li>
+      <a class="dockItem" onClick="getPhotos()">
+	<img src="images/dock/video-sm.png" alt="video" title="Фоты" /></a></li>
+    <li>
+      <a class="dockItem" onClick="getVideo()">
+	<img src="images/dock/video-sm.png" alt="history" title="Видео" /></a></li>
+    <!--<li><a class="dockItem" href="#"><img src="images/dock/calendar-sm.png" alt="calendar" title="Calendar" /></a></li>
+    <li><a class="dockItem" href="#"><img src="images/dock/link-sm.png" alt="links" title="Links" /></a></li>
+    <li><a class="dockItem" href="#"><img src="images/dock/rss-sm.png" alt="rss" title="RSS" /></a></li>
+    <li><a class="dockItem" href="#"><img src="images/dock/rss2-sm.png" alt="rss" title="RSS" /></a></li>-->
+  </ul>
+</div>
+
+<!-- end div #dockContainer -->
+
+<!-- END DOCK 2 ============================================================ -->
+<script type="text/javascript">
+//$(function(){
+	var jqDockOpts = {align: 'left', duration: 200, labels: 'tc', size: 48, distance: 85};
+	$('#jqDock').jqDock(jqDockOpts);
+//});
+</script>

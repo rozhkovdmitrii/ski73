@@ -1,5 +1,26 @@
-  <form id="myForm" action="/handlexls" method="post" enctype="multipart/form-data"> 
+<style type="text/css">
+  #upload {
+	margin: 40px 40px;
+  }
+</style>
+<script type="text/javascript">
+  function onHandlexlsSuccess(response) {
+	
+	getCompetitions();
+  }
+
+  $(document).ready(function(){
+	$("#upload").ajaxForm({url: "/handlexls", success:onHandlexlsSuccess});
+  });
+
+</script>
+
+<div id="admin-div">
+  <h3>Загрузка результатов</h3>
+  <p>При помощи формы загрузки вы можете выбрать xls файл, содеражщий результаты соревнования в соответствующем формате. Если все пройдет хорошо, то информация будет занесена в базу данных с возможностью последующего их использования в системе. Будте осторожны, не допускайте дублирования данных.</p>
+  <form id="upload" action="/handlexls" method="post" enctype="multipart/form-data">
     <b>XLS UPLOAD</b><br>
     <input name="relatedxls" type="file"/><br>
     <input type="submit" value="Submit Comment" /> 
   </form>
+</div>

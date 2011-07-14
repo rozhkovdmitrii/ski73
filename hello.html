@@ -7,72 +7,58 @@
     <script type="text/javascript" src="/js/pure/libs/pure.js"></script>
     <script type="text/javascript" src="/js/ArrayReduce.js"></script>
     <script type='text/javascript' src='js/roundsView.js'></script>
-
+    
     <script type="text/javascript" src="/js/requests.js"></script>
+    <script type="text/javascript" src="/js/jquery.jqDock.min.js"></script>
+    <link rel="stylesheet" type="text/css" media="screen" href="css/layout2.css"/>
+    <link rel="stylesheet" type="text/css" media="screen" href="css/dock-example2.css"/>
+
+
     <link rel="stylesheet" type="text/css" href="css/title.css"/>
-    <script type="text/javascript">
-      function onHandlexlsSuccess(response) {
-	//var gg = eval(response);
-	$('#s-expression').html(response);
-	//$('#handlexlsjson').html(gg[0].toString());
-      
-      }
-      $(document).ready(function(){
-	   $("#myForm").ajaxForm({url: "/handlexls", success:onHandlexlsSuccess});
-	});
-    </script>
     <link rel="icon" 
       type="image/ico" 
-      href="favicon">
+      href="favicon"/>
     <style type="text/css">
       #mainframe {
-	//-moz-border-radius: 100px 20px / 20px 100px;
 	border-radius: 50px 50px / 50px 50px;
-	/*background-image: -webkit-gradient(
-	   linear,
-	   right 2%,
-	   left 50%,
-	   color-stop(0, #4E88B5),
-	   color-stop(0.52, #E3E4FA),
-	   color-stop(1, #DDF0F0)
-	);
-	background-image: -moz-linear-gradient(
-	   right 2%,
-	   #4E88B5 0%,
-	   #E3E4FA 52%,
-	   #DDF0F0 100%
-	);*/
-      background-color : #E3E4FA;
-      min-height : 450px;
-      opacity: 0.95;
-      padding: 20;
-      left:160;
+	color: #222222;
+	background-color : #E3E4FA;
+	min-height : 450px;
+	//opacity: 0.95;
+	padding: 20;
+	left:160;
+	margin-left:50px;
+	margin-right:30px;
       }
       a {
-      color: #0066cc;
-      text-size:12pt;
-      margin-left:50;
+	color: #0066cc;
+	text-size:12pt;
+	margin-left:50;
       }
     </style>
   <title>ulskiing</title>
-  <script type="text/javascript">
-    $(document).ready(getMain);
+    <script type="text/javascript">
+    $(document).ready(function() {
+	getMain();
+	getMenu();
+	getAuthPanel();
+    });
   </script>
   </head>
 
   <body style="height:800;background-color:#c5d8e9;">
-  <h1 style="text-align:center;" class="notPrint"><a href="http://www.ski73.ru">Ресурс лыжного сообщества ульяновской области. Ski73.ru </a></h1>
-  <div id="headpoints">
-    <span id="cometitionsLink" class="headerLink" onClick="getMain();">На старт</span>
-    <span id="cometitionsLink" class="headerLink" onClick="getCompetitions();">Соревнования</span>
-    <span id="cometitionsLink" class="headerLink" onClick="getAdminPage();">Администраторам</span>
-    <span id="cometitionsLink" class="headerLink" onClick="getMain();">Клубы</span>
-    <span id="cometitionsLink" class="headerLink" onClick="getMain();">Фоты</span>
-    <span id="cometitionsLink" class="headerLink" onClick="getMain();">Видео</span>
-    
-  </div>
+  <table width="100%" heigth="50px">
+    <tr>
+      <td>    <h1 style="text-align:center;" class="notPrint"><a href="http://www.ski73.ru">
+	    Ресурс лыжного сообщества ульяновской области. Ski73.ru </a></h1>
+      <td>
+	<div id="authPanel" ></div>
+    </tr>  
+  </table>
+  
+
+<div id="dock-menu"></div>
+  
   <div id="mainframe">
   </div>
-
-
 </html>

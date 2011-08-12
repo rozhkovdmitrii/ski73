@@ -87,6 +87,7 @@
 				      (son "_id" (make-instance 'object-id :raw (flexi-streams:string-to-octets id))) 
 				      (son "rounds" 1 "captions" 1 "title" 1)))
      )))
+
     
 (define-url-fn (process-auth)
   (let* ((login (post-parameter "login")) (password (post-parameter "password"))
@@ -94,7 +95,6 @@
 
     (when (and user-in-db (string= password (gethash "password" user-in-db)))
       (setf (session-value 'user) user-in-db)
-      
+      (str (encode-json-to-string user-in-db))
       )
-    (format nil "name ~a" (gethash "name" (session-value 'user)))
     ))

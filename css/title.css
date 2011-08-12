@@ -26,13 +26,12 @@ body {
 
 #authPanel {
     position: fixed;
-    top:0px;
-    left:0px;
+    top : 0px;
+    left : 0px;
     background-color : #aaaaaa;
     width : 100%;
     text-align : center;
     padding-top : 10px;
-    padding-bottom : 3px;
     //z-index:1000;
 }
 
@@ -41,6 +40,14 @@ body {
 div#toggleAuth img {
     margin-left : 10px;
     margin-right : 10px;
-    margin-top : 10px;
 }
 
+#toggleAuth {
+    cursor : pointer;
+    width : 100%;
+    padding-top : 3px;
+}
+
+#toggleAuth:hover {
+    background-color : #ccccdd;
+}

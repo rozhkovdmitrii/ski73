@@ -1,0 +1,1 @@
+(push (truename #P"/home/rozhkovdmitriy/lisp-packets/mongo-cl-driver/") asdf:*central-registry*)  

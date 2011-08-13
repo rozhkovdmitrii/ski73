@@ -19,9 +19,11 @@
 ;; Карта трансляции имен из xls в имена БД
 (defparameter namesmap nil)
 
-(load (merge-pathnames #p"competition.lisp" +root-path+))
 
 (setf *default-pathname-defaults* +root-path+)
+
+;;(load (merge-pathnames #p"competition.lisp" +root-path+))
+(load "competition.lisp")
 
 (setf *tmp-directory* #P"tmp/")
 

@@ -38,9 +38,8 @@
   (setf (hunchentoot:content-type*) "text/html;charset=utf-8")
   (format nil "<h1>Привет~@[ ~A~]! ~a</h1>" name patronimic))
 
-(setf *dispatch-table*
-      (list (create-folder-dispatcher-and-handler
-             "/" +root-path+)))
+(push (create-static-file-dispatcher-and-handler "/" "static/hello.html") *dispatch-table*)
+(push (create-folder-dispatcher-and-handler "/static/" #p"static/") *dispatch-table*)
 
 
 ;;Создание и регистрация функции обработчика в диспатчер

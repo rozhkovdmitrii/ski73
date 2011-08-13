@@ -13,26 +13,26 @@ function mongoId(mid) {
 
 /** Запрашиваем главную страничку */
 function getMain() {
-    $('#mainframe').load("main.html");
+    $('#mainframe').load("static/main.html");
 }
 
 /** Запрашиваем меню */
 function getMenu() {
-    $('#dock-menu').load("doc-menu.html");
+    $('#dock-menu').load("static/doc-menu.html");
 }
 
 /** Запрашиваем админку */
 function getAdminPage() {
-    $('#mainframe').load('competitionUpload.html');
+    $('#mainframe').load('static/competitionUpload.html');
 }
 
 /** Запрос панельки авторизации */
 function getAuthPanel() {
-    $("#authPanel").load("auth-form.html");
+    $("#authPanel").load("static/auth-form.html");
 }
 /** Запрос формы регистрации */
 function getRegistrationForm() {
-    $("#mainframe").load("registration-form.html");
+    $("#mainframe").load("static/registration-form.html");
 }
 
 /** Запрашиваем список соревнований */

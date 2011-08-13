@@ -20,7 +20,7 @@ function toggleAuthPanel() {
     $("#authPanel").animate({ top: (authPanelVisible?"-=44px":"+=44px"), }, 'slow' );
     authPanelVisible = !authPanelVisible;
     $("body").css("padding-top", authPanelVisible?"55px":"10px");
-    $("div#toggleAuth img").attr("src", authPanelVisible?"img/up.png":"img/down.png");
+    $("div#toggleAuth img").attr("src", authPanelVisible?"static/img/up.png":"static/img/down.png");
     
 }
 

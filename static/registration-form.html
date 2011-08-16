@@ -1,6 +1,43 @@
-<h1>Форма регистрации нового пользователя</h1>
+<style type="text/css">
+  #user-registration-form {
+    margin-left : 25%;
+    margin-top : 40;
+  }
+
+  #user-registration-form div {
+    width:170px;
+    line-height:23px;
+    padding-left:5px;
+    margin:5px;
+    display : inline-block;
+  }
+</style >
+
+<script type="text/javascript">
+    function handleFirstReg(data) {
+	alert("Временно недоступно. Приносим извинения");
+    }
+  
+    $(document).ready(function() {
+	var firstRegRequestOpt = {
+	    url: "/first-registration"
+	    , type:"POST"
+	    , success:handleFirstReg
+	};
+	$("#user-registration-form").ajaxForm(firstRegRequestOpt);
+  });
+
+</script>
 
 <form id="user-registration-form">
-  Имя
-  <input type="text" id="user-name"/>
+    <h3 class="header" style="width:300px;">Форма регистрации нового пользователя</h3><br>
+    <!--<div class="form-label">Логин</div>
+    <input type="text" name="login"/><br>-->
+    <div class="form-label">Адрес электронной почты</div>
+    <input type="text" name="email"/><br>
+    <div class="form-label">Пароль</div>
+    <input type="password" name="pass"/><br>
+    <div class="form-label">Подтверждение пароля</div>
+    <input type="password" name="passConfirm"/><br>
+    <button type="submit" name="submitFirstReg" style="margin-left:30px;margin-top:20px">Зарегестрировать</button>
 </form>

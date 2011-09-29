@@ -118,7 +118,7 @@
 	(error 'request-processing-error :text "Авторизация не удалась. Возможно вы что-то напутали"))
    ))
 
-(define-url-fn (logout)
+(define-url-fn (logout-from-site)
   "Обработчик запроса логаута"
   (delete-session-value 'user)
   (str "null")

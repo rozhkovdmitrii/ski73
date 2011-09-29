@@ -13,6 +13,6 @@
 
 (in-package :webserver)
 
-(defparameter +root-path+ #p"/home/rds/devel/lisp/skisite/")
+(defparameter +root-path+ #p"/home/rozhkovdmitriy/ski73/")
 (defparameter +tmp-relative-path+ #p"tmp")
 (defparameter +tmp-path+ (merge-pathnames +tmp-relative-path+ +root-path+))

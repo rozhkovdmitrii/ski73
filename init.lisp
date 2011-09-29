@@ -5,6 +5,8 @@
 (require 'cl-json)
 (require 'alexandria)
 (require 'mongo-cl-driver)
+(require 'cl-mime)
+(require 'cl-smtp)
 
 (defpackage :webserver
   (:use :common-lisp :hunchentoot :cl-who

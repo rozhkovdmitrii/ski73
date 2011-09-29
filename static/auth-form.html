@@ -1,11 +1,9 @@
 
 <div class="notPrint"> 
 
-<script type="text/javascript">
+<div id=""><script type="text/javascript">
   $(document).ready(function() {
 	$("#auth-form").ajaxForm({url: "/process-auth", type:"POST", success:handleAuth});
-	$("#toggleAuth").click(toggleAuthPanel);
-	toggleAuthPanel();
   
   });
 
@@ -15,17 +13,7 @@
   <span style="display: inline-block; width : 300px;">Пароль <input id="pass" name="password" type="password"/></span>
   <input type="submit" value="Войти"/>
 </form>
-
 <a onClick="getRegistrationForm()">Зарегистрироваться</a>
 </div>
-<div id="toggleAuth"  class="notPrint">
-  <img src="static/img/down.png"/><img src="static/img/down.png"/><img src="static/img/down.png"/>
-  <img src="static/img/down.png"/><img src="static/img/down.png"/><img src="static/img/down.png"/>
-  <img src="static/img/down.png"/><img src="static/img/down.png"/><img src="static/img/down.png"/>
-  <img src="static/img/down.png"/><img src="static/img/down.png"/><img src="static/img/down.png"/>
-  <img src="static/img/down.png"/><img src="static/img/down.png"/><img src="static/img/down.png"/>
-  <img src="static/img/down.png"/><img src="static/img/down.png"/><img src="static/img/down.png"/>
-  <img src="static/img/down.png"/><img src="static/img/down.png"/><img src="static/img/down.png"/>
-  <img src="static/img/down.png"/><img src="static/img/down.png"/><img src="static/img/down.png"/>
-</div>
+
 

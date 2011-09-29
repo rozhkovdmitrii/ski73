@@ -5,10 +5,13 @@
     <script type="text/javascript" src="static/js/jquery-1.5.2.js"></script>
     <script type="text/javascript" src="static/js/jquery.form.js"></script>
     <script type="text/javascript" src="static/js/pure/libs/pure.js"></script>
+    <script type="text/javascript" src="static/js/QueryData.js"></script>
     <script type="text/javascript" src="static/js/ArrayReduce.js"></script>
     <script type='text/javascript' src="static/js/roundsView.js"></script>
     
     <script type="text/javascript" src="static/js/requests.js"></script>
+    <script type="text/javascript" src="static/js/op-analyzer.js"></script>
+    <script type="text/javascript" src="static/js/registration.js"></script>
     <script type="text/javascript" src="static/js/jquery.jqDock.min.js"></script>
     <script type="text/javascript" src="static/js/auth.js"></script>
     <link rel="stylesheet" type="text/css" media="screen" href="static/css/layout2.css"/>
@@ -43,6 +46,9 @@
 	getMain();
 	getMenu();
 	getAuthPanel();
+	analyzeGET();
+    	$("#toggleAuth").click(toggleAuthPanel);
+	toggleAuthPanel();
     });
   </script>
   </head>
@@ -53,7 +59,20 @@
       <td>    <h1 style="text-align:center;" class="notPrint"><a href="http://www.ski73.ru">
 	    Ресурс лыжного сообщества ульяновской области. Ski73.ru - test branch </a></h1>
       <td>
-	<div id="authPanel" ></div>
+	<div id="topPanel" class="notPrint">
+	  <div id="topPanelContent" style="min-height:25"></div>
+	  <div id="toggleAuth"  class="notPrint">
+	    <img src="static/img/down.png"/><img src="static/img/down.png"/><img src="static/img/down.png"/>
+	    <img src="static/img/down.png"/><img src="static/img/down.png"/><img src="static/img/down.png"/>
+	    <img src="static/img/down.png"/><img src="static/img/down.png"/><img src="static/img/down.png"/>
+	    <img src="static/img/down.png"/><img src="static/img/down.png"/><img src="static/img/down.png"/>
+	    <img src="static/img/down.png"/><img src="static/img/down.png"/><img src="static/img/down.png"/>
+	    <img src="static/img/down.png"/><img src="static/img/down.png"/><img src="static/img/down.png"/>
+	    <img src="static/img/down.png"/><img src="static/img/down.png"/><img src="static/img/down.png"/>
+	    <img src="static/img/down.png"/><img src="static/img/down.png"/><img src="static/img/down.png"/>
+	  </div>
+
+	</div>
     </tr>  
   </table>
   

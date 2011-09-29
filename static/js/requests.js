@@ -1,6 +1,7 @@
 
 var cmpttList = new Array();
 
+
 /** Получаем строку из в которой хранятся 12 байт mongo id-шника для передачи в запросе */
 function mongoId(mid) {
     var strId = new String();
@@ -26,10 +27,6 @@ function getAdminPage() {
     $('#mainframe').load('static/competitionUpload.html');
 }
 
-/** Запрос панельки авторизации */
-function getAuthPanel() {
-    $("#authPanel").load("static/auth-form.html");
-}
 /** Запрос формы регистрации */
 function getRegistrationForm() {
     $("#mainframe").load("static/registration-form.html");

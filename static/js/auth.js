@@ -61,7 +61,7 @@ function toggleAuthPanel() {
 
 function logout() {
     $.ajax({
-	    url : "logout",
+	    url : "logout-from-site",
 	    type : "POST",
 	    success: function(data) {
 		getCurrentUser();

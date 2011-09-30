@@ -61,20 +61,3 @@
     (str "{status : 'done'}")
     ))
     
-;(cl-smtp:with-smtp-mail (smtpout "smtp.gmail.com" "rozhkovdmitriy@gmail.com" '("hvoy85@mail.ru") :ssl :tls :authentication '("rozhkovdmitriy@gmail.com" "75veUs34")) (cl-mime:print-mime smtpout +email-encoded-text+ t t))
-
-
-;(defparameter +email+ (make-instance 'cl-mime:text-mime 
-;			:encoding :base64
-;			:charset "UTF-8"
-;			:content (flexi-streams::string-to-octets  "привет мир, давно не писал тебе!!!" :external-format :utf-8)))
-
-;(defun send-email (text &rest reciepients)
-;	     "Generic send SMTP mail with some TEXT to RECIEPIENTS"
-;	       (cl-smtp:with-smtp-mail (out "smtp.gmail.com" "rozhkovdmitriy@gmail.com" '("hvoy85@mail.ru") :ssl :tls :authentication '("rozhkovdmitriy@gmail.com" "75veUs34")) 
-;		 (cl-mime:print-mime out +email+ t t)
-;		 ))
-	 
-      
-;;WORKINg
-;(cl-smtp::send-email "smtp.gmail.com" "rozhkovdmitriy@gmail.com" "hvoy85@mail.ru" "test test" "test test" :ssl :tls :authentication '("rozhkovdmitriy@gmail.com" "75veUs34"))

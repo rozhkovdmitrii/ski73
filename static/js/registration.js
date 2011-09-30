@@ -1,4 +1,13 @@
 
+/** Дизяблит форму регистрации туда и обратно */
+function toggleRegForm(jqXHR, settings) {
+    var elements = $("#submitReg, #email, #pwdinput, #confirminput");
+    var disabled = elements.attr("disabled");
+    $("#regwait").css("display", disabled?"none":"block");
+    $("#regstatic").css("display", disabled?"block":"none");
+    elements.attr("disabled", !disabled);
+}
+
 /** Запрос на создание нового юзера по ключу */
 function setNewUser(key) {
     $.ajax({
@@ -18,6 +27,7 @@ function processRegistrationResult(data, textStatus) {
 
 
 function handleFirstReg(data) {
+    toggleRegForm();
     data = eval ( '(' + data + ')' );
     alert (data.status == "done"?data.message:"Регистрация не прошла. " + data.error);
 }

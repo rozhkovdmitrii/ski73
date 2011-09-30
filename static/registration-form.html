@@ -11,19 +11,22 @@
     margin:5px;
     display : inline-block;
   }
+
+
 </style >
 
 <script type="text/javascript">
+    
     $(document).ready(function() {
 	var firstRegRequestOpt = {
 	    url: "/process-registration"
 	    , type:"POST"
 	    , success:handleFirstReg
+	    , beforeSend : toggleRegForm
 	};
 	$("#user-registration-form").ajaxForm(firstRegRequestOpt);
 	$.get("static/pass.html", function(data) { $("user-register-form").html(data)});
   });
-
 </script>
 
 
@@ -41,7 +44,15 @@
     <span id="confirmMessage" class="confirmMessage"></span>
     <br>
     
-    <button id="submitReg" type="submit" name="submitFirstReg" style="margin-left:30px;margin-top:20px">Зарегестрировать</button>
+    <button id="submitReg" class="inprocess" type="submit" name="submitFirstReg" disabled="true"
+	    style="margin-left:30px;margin-top:20px; width: 200px;">
+      <span id="regstatic">Зарегистрировать</span>
+      <span id="regwait" style=" display:none;">
+	В процессе&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	<img  src="static/img/ajax-loader.gif" style="width: 16; height: 16;">
+      </span>
+    </button>
+
 
 
 

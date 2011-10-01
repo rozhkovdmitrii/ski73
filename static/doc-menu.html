@@ -1,4 +1,9 @@
 <!-- BEGIN DOCK 2 ============================================================ -->
+<style type="text/css">
+  a.dockItem {
+    margin-left:50;
+  }
+</style>
 
 <div id="dockContainer" class="notPrint">
   <ul id="jqDock">
@@ -11,7 +16,9 @@
     <li id="adminMenuItem" style="display:none">
       <a class="dockItem" onClick="getAdminPage()">
 	<img src="static/images/dock/admin-sm.png" alt="portfolio" title="Админка" /></a></li>
-
+    <li id="profileMenuItem">
+      <a class="dockItem" onClick="getProfile()">
+	<img src="static/images/dock/profile-sm.png" alt="profile" title="Профиль" /></a></li>
     <li>
       <a class="dockItem" onClick="getClubs()">
 	<img src="static/images/dock/music-sm.png" alt="music" title="Клубы" /></a></li>

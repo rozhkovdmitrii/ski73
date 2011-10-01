@@ -23,6 +23,7 @@ function getCurrentUser() {
 
 
 function refreshUserDependencies(user) {
+    $("#adminMenuItem").css("display", (user && user.type <= 2)?"list-item":"none");
     refreshAuthPanel(user);
 }
 
@@ -45,7 +46,6 @@ function handleAuth(data) {
 
 /** Обработка юзера после авторизации */
 function processUser(cu) {
-    $("#adminMenuItem").css("display", cu.type <= 2?"list-item":"none");
     refreshAuthPanel();
     //$(".username").html(cu.)
 }

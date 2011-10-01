@@ -4,7 +4,17 @@
 (require 'cl-ppcre)
 (require 'cl-json)
 (require 'alexandria)
+
+(require 'ironclad)
+(require 'iolib)
+(require 'local-time)
+(require 'closer-mop)
+(require 'ieee-floats)
+(require 'iterate)
+
+
 (require 'mongo-cl-driver)
+
 (require 'cl-mime)
 (require 'cl-smtp)
 
@@ -15,6 +25,6 @@
 
 (in-package :webserver)
 
-(defparameter +root-path+ #p"/home/rds/devel/lisp/skisite/")
+(defparameter +root-path+ #p"/home/user/devel/ski73/")
 (defparameter +tmp-relative-path+ #p"tmp")
 (defparameter +tmp-path+ (merge-pathnames +tmp-relative-path+ +root-path+))

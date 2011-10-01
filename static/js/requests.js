@@ -32,6 +32,11 @@ function getRegistrationForm() {
     $("#mainframe").load("static/registration-form.html");
 }
 
+/**Запрос формы профиля*/
+function getProfile() {
+    $("#mainframe").load("static/edit-profile.html");
+}
+
 /** Запрашиваем список соревнований */
 function getCompetitions() {
     $.ajax({

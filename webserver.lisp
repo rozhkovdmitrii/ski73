@@ -110,7 +110,7 @@
   "Обработчик запроса авторизации"
   (let* ((login (post-parameter "login"))
 	 (password (post-parameter "password"))
-	 (user-in-db (find-one *users* (son "email" login) (son "email" 1 "password" 1)))
+	 (user-in-db (find-one *users* (son "email" login) (son "email" 1 "password" 1 "type" 1)))
 	 ) 
     (if (and user-in-db (string= (encrypt password) (gethash "password" user-in-db)))
 	(progn (setf (session-value 'user) user-in-db)

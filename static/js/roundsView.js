@@ -1,5 +1,5 @@
 
-$("head").append($("<link type='text/css' rel='stylesheet' href='css/rounds.css'/>"));
+$("head").append($("<link type='text/css' rel='stylesheet' href='static/css/rounds.css'/>"));
 
 var roundsHelp = "На странице реализована интеллектуальная печать. Распечатаны будут только развернутые группы";
 var expandHelp = "Развернуть все";
@@ -9,12 +9,12 @@ function roundsView(rounds) {
     var template = $('<div>'
 		     + "<table style='width:100%'><tr><td class='cmpTitle'></td>"
 			+"<td class='notPrint'>"
-				+ "<img class='tool-img' id='expandAllImg' src='img/expand_all.png' onClick='expandAll()'/>"
-				+ "<img class='tool-img' id='collapseAllImg' src='img/collapse_all.png' onClick='collapseAll()'/>"
-				+ "<img class='tool-img' id='rounds-print-help' src='img/question.png' >"
+				+ "<img class='tool-img' id='expandAllImg' src='static/img/expand_all.png' onClick='expandAll()'/>"
+				+ "<img class='tool-img' id='collapseAllImg' src='static/img/collapse_all.png' onClick='collapseAll()'/>"
+				+ "<img class='tool-img' id='rounds-print-help' src='static/img/question.png' >"
 		     + "</td></tr></table>"
 		     + "<div class='round'>"
-		     + "<div class='group-toggle notPrint'><img src='img/expand.png'></div>"
+		     + "<div class='group-toggle notPrint'><img src='static/img/expand.png'></div>"
 		     + "<table class='round-table' style='display:none'>"
 		       + "<tr class='capRow'><th></th></tr>"
 		       + "<tr class='dataRow'></tr>"
@@ -53,8 +53,8 @@ function roundsView(rounds) {
     return html;
 }
 
-const expandImg = "/img/expand.png";
-const collapseImg = "/img/undo.png";
+const expandImg = "static/img/expand.png";
+const collapseImg = "static/img/undo.png";
 
 function toggleRound (pos) {
     var tbl = $("#rnd" + pos);

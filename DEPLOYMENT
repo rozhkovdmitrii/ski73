@@ -1,0 +1,4 @@
+(push (truename #P"/home/rozhkovdmitriy/lisp-packets/mongo-cl-driver/") asdf:*central-registry*)
+(require 'mongo-cl-driver)
+
+(load "/home/rozhkovdmitriy/ski73/init.lisp")

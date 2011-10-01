@@ -14,14 +14,18 @@
 ;;Коллекция competitions - соревнования
 (defparameter *db* (make-instance 'database :name "ski73"))
 (defparameter *competitions* (collection *db* "competitions"))
+(defparameter *registrations* (collection *db* "registrations"))
 (defparameter *users* (collection *db* "users"))
 
 ;; Карта трансляции имен из xls в имена БД
 (defparameter namesmap nil)
 
-(load (merge-pathnames #p"competition.lisp" +root-path+))
 
 (setf *default-pathname-defaults* +root-path+)
+
+;;(load (merge-pathnames #p"competition.lisp" +root-path+))
+(load "common.lisp")
+(load "competition.lisp")
 
 (setf *tmp-directory* #P"tmp/")
 
@@ -32,21 +36,32 @@
 (setf *show-lisp-errors-p* t
 )
 
+(define-condition request-processing-error (error)
+  ((text :initarg :text :reader text)))
+
 (hunchentoot:define-easy-handler (say-yo :uri "/yo") (name patronimic)
   (setf (hunchentoot:content-type*) "text/html;charset=utf-8")
   (format nil "<h1>Привет~@[ ~A~]! ~a</h1>" name patronimic))
 
-(setf *dispatch-table*
-      (list (create-folder-dispatcher-and-handler
-             "/" +root-path+)))
+; привязка корня сайта
+(push (create-static-file-dispatcher-and-handler "/" "static/hello.html") *dispatch-table*)
+
+; привязка для всей статики на сайте
+(push (create-folder-dispatcher-and-handler "/static/" #p"static/") *dispatch-table*)
 
 
-;;Создание и регистрация функции обработчика в диспатчер
 (defmacro define-url-fn ((name) &body body)
+  "Создание и регистрация функции обработчика в диспатчер"
   `(progn (defun ,name ()
 	  (no-cache)
 	  (setf (hunchentoot:content-type*) "text/html; charset=utf-8")
-	  (with-html-output (*standard-output* nil :prologue nil) ,@body) )
+	  (handler-case
+	      (with-html-output (*standard-output* nil :prologue nil) ,@body)
+	    (request-processing-error (err)
+	      (with-html-output (*standard-output* nil :prologue nil)
+		(str (format nil "{status : \"error\", error : \"~a\"}" (text err)))))
+	      )
+	  )
 	  (push
 	  (create-prefix-dispatcher ,(format nil "/~(~a~)" name) ',name) *dispatch-table*)))
 
@@ -58,14 +73,16 @@
 	(loop for line = (read-line stream nil)
 	   while line do (format out "~a<br>~%" line))))))
 
-;; Вычленяет из строки все подряд идущие ^, после этого тримит строку
-(defun non-empty-cells-list (line) "This function remove excess commas from line from csv"
+;; 
+(defun non-empty-cells-list (line)
+  "This function remove excess commas from line from csv. Вычленяет из строки все подряд идущие ^, после этого тримит строку"
        (let ((result (concatenate 'string (string-trim " " (regex-replace-all "\\^+" line "" :preserve-case t)) ". ")))
 	 result
 	 ))
 
 
-(defun mypairlis (keys values) "Моя реализация pairlis, которая расширяет в случае необходимости список values"
+(defun mypairlis (keys values)
+  "Моя реализация pairlis, которая расширяет в случае необходимости список values"
 		  (let* ((kl (length keys)) (vl (length values)) (diff (- kl vl)))
 		    (if (> diff 0) (setf values (append values (make-list diff :initial-element 0))))
 		    (reverse (pairlis keys values))
@@ -74,27 +91,46 @@
 
 (load (merge-pathnames #p"parse-competition-xls.lisp" +root-path+))
 
-;Список троек {id, title, date} для передачи списка соревнований
 (define-url-fn (competitions-list)
+  "Список троек {id, title, date} для передачи списка соревнований"
   (str (encode-json-to-string (find-list *competitions* :query (son) :fields (son "title" 1 "date" 1))))
   )
 
-;Более подробная информацию по соревнованию
 (define-url-fn (competition-info)
+  "Более подробная информацию по соревнованию"
   (let ((id (post-parameter "id")) )
     (str
      (encode-json-to-string (find-one *competitions* 
 				      (son "_id" (make-instance 'object-id :raw (flexi-streams:string-to-octets id))) 
 				      (son "rounds" 1 "captions" 1 "title" 1)))
      )))
+
     
 (define-url-fn (process-auth)
-  (let* ((login (post-parameter "login")) (password (post-parameter "password"))
-	 (user-in-db (find-one *users* (son "name" login) (son)))) 
+  "Обработчик запроса авторизации"
+  (let* ((login (post-parameter "login"))
+	 (password (post-parameter "password"))
+	 (user-in-db (find-one *users* (son "email" login) (son "email" 1 "password" 1)))
+	 ) 
+    (if (and user-in-db (string= (encrypt password) (gethash "password" user-in-db)))
+	(progn (setf (session-value 'user) user-in-db)
+	       (str (format nil "{status : \"done\", user : ~a}" (encode-json-to-string user-in-db))) )
+	(error 'request-processing-error :text "Авторизация не удалась. Возможно вы что-то напутали"))
+   ))
 
-    (when (and user-in-db (string= password (gethash "password" user-in-db)))
-      (setf (session-value 'user) user-in-db)
-      
-      )
-    (format nil "name ~a" (gethash "name" (session-value 'user)))
-    ))
+(define-url-fn (logout-from-site)
+  "Обработчик запроса логаута"
+  (delete-session-value 'user)
+  (str "null")
+  )
+
+(define-url-fn (current-user)
+  "Возвращает сессию user"
+  (str (encode-json-to-string (session-value 'user)))
+  )
+
+;; Обработчики веб запросов
+(load "request-processing.lisp")
+
+
+

@@ -5,13 +5,13 @@
 (require 'cl-json)
 (require 'alexandria)
 (require 'mongo-cl-driver)
-;(require 'yason)
-;(require 'yason)
-*;(require 'hunchentoot-test)
+(require 'cl-mime)
+(require 'cl-smtp)
+
 (defpackage :webserver
   (:use :common-lisp :hunchentoot :cl-who
-	:mongo :mongo-cl-driver.son-sugar
-	:trivial-shell :cl-ppcre :json :alexandria))
+:mongo :mongo-cl-driver.son-sugar
+:trivial-shell :cl-ppcre :json :alexandria))
 
 (in-package :webserver)
 

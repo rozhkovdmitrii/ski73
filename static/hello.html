@@ -1,0 +1,84 @@
+<html>
+  <meta charset="utf-8">
+
+  <head>
+    <script type="text/javascript" src="static/js/jquery-1.5.2.js"></script>
+    <script type="text/javascript" src="static/js/jquery.form.js"></script>
+    <script type="text/javascript" src="static/js/pure/libs/pure.js"></script>
+    <script type="text/javascript" src="static/js/QueryData.js"></script>
+    <script type="text/javascript" src="static/js/ArrayReduce.js"></script>
+    <script type='text/javascript' src="static/js/roundsView.js"></script>
+    
+    <script type="text/javascript" src="static/js/requests.js"></script>
+    <script type="text/javascript" src="static/js/op-analyzer.js"></script>
+    <script type="text/javascript" src="static/js/registration.js"></script>
+    <script type="text/javascript" src="static/js/jquery.jqDock.min.js"></script>
+    <script type="text/javascript" src="static/js/auth.js"></script>
+    <link rel="stylesheet" type="text/css" media="screen" href="static/css/layout2.css"/>
+    <link rel="stylesheet" type="text/css" media="screen" href="static/css/dock-example2.css"/>
+
+
+    <link rel="stylesheet" type="text/css" href="static/css/title.css"/>
+    <link rel="icon" 
+      type="image/ico" 
+      href="favicon"/>
+    <style type="text/css">
+      #mainframe {
+	border-radius: 50px 50px / 50px 50px;
+	color: #222222;
+	background-color : #E3E4FA;
+	min-height : 450px;
+	//opacity: 0.95;
+	padding: 20;
+	left:160;
+	margin-left:50px;
+	margin-right:30px;
+      }
+      a {
+	color: #0066cc;
+	text-size:12pt;
+	margin-left:50;
+      }
+    </style>
+  <title>ulskiing</title>
+    <script type="text/javascript">
+    $(document).ready(function() {
+	getMain();
+	getMenu();
+	getAuthPanel();
+	analyzeGET();
+    	$("#toggleAuth").click(toggleAuthPanel);
+	toggleAuthPanel();
+    });
+  </script>
+  </head>
+
+  <body style="height:800;background-color:#c5d8e9;">
+  <table width="100%" heigth="50px">
+    <tr>
+      <td>    <h1 style="text-align:center;" class="notPrint"><a href="http://www.ski73.ru">
+	    Ресурс лыжного сообщества ульяновской области. Ski73.ru - test branch </a></h1>
+      <td>
+	<div id="topPanel" class="notPrint">
+	  <div id="topPanelContent" style="min-height:25"></div>
+	  <div id="toggleAuth"  class="notPrint">
+	    <img src="static/img/down.png"/><img src="static/img/down.png"/><img src="static/img/down.png"/>
+	    <img src="static/img/down.png"/><img src="static/img/down.png"/><img src="static/img/down.png"/>
+	    <img src="static/img/down.png"/><img src="static/img/down.png"/><img src="static/img/down.png"/>
+	    <img src="static/img/down.png"/><img src="static/img/down.png"/><img src="static/img/down.png"/>
+	    <img src="static/img/down.png"/><img src="static/img/down.png"/><img src="static/img/down.png"/>
+	    <img src="static/img/down.png"/><img src="static/img/down.png"/><img src="static/img/down.png"/>
+	    <img src="static/img/down.png"/><img src="static/img/down.png"/><img src="static/img/down.png"/>
+	    <img src="static/img/down.png"/><img src="static/img/down.png"/><img src="static/img/down.png"/>
+	  </div>
+
+	</div>
+    </tr>  
+  </table>
+  
+
+<div id="dock-menu"></div>
+  
+  <div id="mainframe">
+  </div>
+</html>

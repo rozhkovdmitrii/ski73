@@ -1,0 +1,60 @@
+<style type="text/css">
+  #user-registration-form {
+    margin-left : 25%;
+    margin-top : 40;
+  }
+
+  #user-registration-form div {
+    width:170px;
+    line-height:23px;
+    padding-left:5px;
+    margin:5px;
+    display : inline-block;
+  }
+
+
+</style >
+
+<script type="text/javascript">
+    
+    $(document).ready(function() {
+	var firstRegRequestOpt = {
+	    url: "/process-registration"
+	    , type:"POST"
+	    , success:handleFirstReg
+	    , beforeSend : toggleRegForm
+	};
+	$("#user-registration-form").ajaxForm(firstRegRequestOpt);
+	$.get("static/pass.html", function(data) { $("user-register-form").html(data)});
+  });
+</script>
+
+
+
+<form id="user-registration-form">
+    <h3 class="header" style="width:300px;">Форма регистрации нового пользователя</h3><br>
+    <div class="form-label">Адрес электронной почты</div>
+    <input type="text" name="email" id="email" onkeyup="checkRegForm(); return false;"/>
+    <img id="emlConfirmImg" width="20" src="" align="baseline" style="visibility: hidden"/>
+    <span id="emailConfirmation"></span><br>
+    <div class="form-label">Пароль</div>
+    <input type="password"  id="pwdinput" name="pass" onkeyup="checkRegForm(); return false;"/><br>
+    <div class="form-label">Подтверждение пароля</div>
+    <input type="password" id="confirminput" name="confirm" onkeyup="checkRegForm(); return false;"/>
+    <span id="confirmMessage" class="confirmMessage"></span>
+    <br>
+    
+    <button id="submitReg" class="inprocess" type="submit" name="submitFirstReg" disabled="true"
+	    style="margin-left:30px;margin-top:20px; width: 200px;">
+      <span id="regstatic">Зарегистрировать</span>
+      <span id="regwait" style=" display:none;">
+	В процессе&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	<img  src="static/img/ajax-loader.gif" style="width: 16; height: 16;">
+      </span>
+    </button>
+
+
+
+
+    
+</form>

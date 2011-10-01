@@ -1,0 +1,6 @@
+Mr. Dmitriy Rozhkov!
+
+We are nice hackers and we have hacked all your ski73.ru services ;)
+
+See additional details in your DB (look at hacked.text).
+

@@ -19,7 +19,7 @@ function getMain() {
 
 /** Запрашиваем меню */
 function getMenu() {
-    $('#dock-menu').load("static/doc-menu.html");
+    $('#dock-menu').load("static/doc-menu.html", getCurrentUser);
 }
 
 /** Запрашиваем админку */
@@ -81,4 +81,14 @@ function processCompetition(data, textStatus) {
     $('#mainframe').html(roundsView(rounds));
     $('.tool-img').simpletooltip();
     
+}
+
+function getClubs(callback) {
+    $.ajax({
+	type: "POST",
+	data: { "id" : mongoId(cmpttList[id]._id) },
+	url: "club-list",
+	success: callback,
+	error:function (XMLHttpRequest, textStatus, errorThrown) {alert(textStatus);}
+    });
 }

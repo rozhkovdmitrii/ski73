@@ -106,28 +106,6 @@
      )))
 
     
-(define-url-fn (process-auth)
-  "Обработчик запроса авторизации"
-  (let* ((login (post-parameter "login"))
-	 (password (post-parameter "password"))
-	 (user-in-db (find-one *users* (son "email" login) (son "email" 1 "password" 1 "type" 1)))
-	 ) 
-    (if (and user-in-db (string= (encrypt password) (gethash "password" user-in-db)))
-	(progn (setf (session-value 'user) user-in-db)
-	       (str (format nil "{status : \"done\", user : ~a}" (encode-json-to-string user-in-db))) )
-	(error 'request-processing-error :text "Авторизация не удалась. Возможно вы что-то напутали"))
-   ))
-
-(define-url-fn (logout-from-site)
-  "Обработчик запроса логаута"
-  (delete-session-value 'user)
-  (str "null")
-  )
-
-(define-url-fn (current-user)
-  "Возвращает сессию user"
-  (str (encode-json-to-string (session-value 'user)))
-  )
 
 ;; Обработчики веб запросов
 (load "request-processing.lisp")

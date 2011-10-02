@@ -6,27 +6,30 @@
 
 <script type="text/javascript">
     $(document).ready(function() {
-		new JsDatePick({
-			useMode:2,
-			cellColorScheme:"beige",
-			limitToToday:true,
-			target:"birthDate"
-			/*selectedDate:{				This is an example of what the full configuration offers.
-				day:5,						For full documentation about these settings please see the full version of the code.
-				month:9,
-				year:2006
-			},
-			yearsRange:[1978,2020],
-			dateFormat:"%m-%d-%Y",
-			imgPath:"img/",
-			weekStartDay:1*/
-		});
+	fillEditProfileForm(document.cu);
+    });
+    $(document).ready(function() {
+	new JsDatePick({
+	    useMode:2,
+	    cellColorScheme:"beige",
+	    limitToToday:true,
+	    dateFormat:"%d\.%m\.%Y",
+	    target:"birthDate"
+	    /*selectedDate:{         This is an example of what the full configuration offers.
+		    day:5,	     For full documentation about these settings please see the full version of the code.
+		    month:9,
+		    year:2006
+	    },
+	    yearsRange:[1978,2020],
+	    imgPath:"img/",
+	    weekStartDay:1*/
+	});
     });
 </script>
 
 <div id="editprofile">
-  <form id="edit-profile-form">
-    <h3 class="header" style="width:300px;">Профиль <span id="email"></span></h3><br>
+  <form id="edit-profile-form" enctype="multipart/form-data">
+    <h3 class="header" style="width:300px;">Профиль <span id="email"> - </span></h3><br>
 
     <table style="width : 70%">
       <tr>
@@ -48,16 +51,16 @@
 
 
 	  <div class="form-label">Разряд<br>
-	    <select id="rank" name="rank">
-	      <option value="1">1</option>
-	      <option value="2">2</option>
-	      <option value="3">3</option>
-	      <option value="КМС">КМС</option>
-	      <option value="МС">МС</option>
-	      <option value="МСМК">МСМК</option>
-	      <option value="Начинающий">Начинающий</option>
-	      <option value="Любитель">Любитель</option>
-	      <option value="Непракт">Не практикую</option>
+	    <select id="rank" name="rank" >
+	      <option value='1'>1</option>
+	      <option value='2'>2</option>
+	      <option value='3'>3</option>
+	      <option value='kms'>КМС</option>
+	      <option value='ms'>МС</option>
+	      <option value='msmk'>МСМК</option>
+	      <option value='beginer'>Начинающий</option>
+	      <option value='lower'>Любитель</option>
+	      <option value='notskier'>Не практикую</option>
 	    </select>
 	  </div>
 	  
@@ -67,14 +70,17 @@
 
 	  <div class="form-label">Клуб - город<br>
 	    <select id="club" name="club">
-	      <option value=""></option>
+	      <option value="sdfasdf1">УЛГТУ</option>
+	      <option value="sdfa2">УЛГУ</option>
+	      <option value="sdfa3">Синьер</option>
+	      <option value="sdfa4">УлГпу</option>
 	    </select>&nbsp;
 	    <input id="city" name="city">
 	    
 	  </div>
 
 	  <div class="form-label">Прочая информация (достижения, отличия и др.)<br>
-	    <textarea id="otherInfo" name="other" style="width:300px">
+	    <textarea id="userInfo" name="info" style="width:300px">
 	    </textarea>
 	  </div>
 
@@ -83,15 +89,15 @@
 	<td>
 	  <div style="margin-left: 20%">
 	    <img id="user-photo" src="static/img/no-photo.png" alt="Фотография" title="Фотография"/>
-	    <button style="margin-top:10px">Загрузить фотографию</button>
+	    <div class="form-label">Другая фотография :
+	      <input type="hidden" name="MAX_FILE_SIZE" value="5000" />
+	      <input type="file" name="photo" accept="image/gif,image/jpeg,image/png"/> 
+	    </div>
 	  <div>
 	</td>
       </tr>
       
     </table>
-    <div class="form-label"></div>
-    <div class="form-label"></div>
-    <div class="form-label"></div>
     
     
     <button id="submit-edit-profile" type="submit" name="submit-edit-profile" 

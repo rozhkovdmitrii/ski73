@@ -13,7 +13,7 @@
     <script type="text/javascript" src="static/js/op-analyzer.js"></script>
     <script type="text/javascript" src="static/js/registration.js"></script>
     <script type="text/javascript" src="static/js/jquery.jqDock.min.js"></script>
-    <script type="text/javascript" src="static/js/auth.js"></script>
+    <script type="text/javascript" src="static/js/user-operations.js"></script>
 
     <link rel="stylesheet" type="text/css" media="screen" href="static/css/layout2.css"/>
     <link rel="stylesheet" type="text/css" media="screen" href="static/css/dock-example2.css"/>
@@ -56,6 +56,7 @@
 	analyzeGET();
     	$("#toggleAuth").click(toggleAuthPanel);
 	toggleAuthPanel();
+        $(document).bind('userchanged', function(event){ document.cu = event.user; });
     });
   </script>
   </head>

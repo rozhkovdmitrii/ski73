@@ -25,6 +25,12 @@
 
 (in-package :webserver)
 
-(defparameter +root-path+ #p"/home/user/devel/ski73/")
-(defparameter +tmp-relative-path+ #p"tmp")
+(defparameter +root-path+ #p"/home/rds/devel/lisp/skisite/")
+(defparameter +tmp-relative-path+ #p"tmp/")
+(defparameter +static-relative-path+ #p"static/")
+(defparameter +static-path+ (merge-pathnames +static-relative-path+ +root-path+))
+
+(defparameter +photo-relative-path+ #p"photo/")
+(defparameter +photo-path+ (merge-pathnames +photo-relative-path+ +static-path+))
+
 (defparameter +tmp-path+ (merge-pathnames +tmp-relative-path+ +root-path+))

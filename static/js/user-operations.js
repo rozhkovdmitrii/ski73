@@ -1,10 +1,11 @@
 
+
 function refreshAuthPanel(cu) {
     if (!cu)
 	$("#topPanelContent").load("static/auth-form.html");
     else
 	$("#topPanelContent").html("<span id='email'>" + cu.email + "</span><span style='width:40px'></span>"
-		    + "<a id='logoutlink' onclick='logout()'>Выйти</a>");
+		    + "<a id='logoutlink' onclick='logout()' style='margin-left:50px'>Выйти</a>");
 }
 
 
@@ -21,6 +22,18 @@ function getCurrentUser() {
 
 }
 
+function revertUser() {
+    $.ajax({
+	    url : "revert-user",
+		type : "POST",
+		success: function(data) {
+		var cu = eval("(" + data + ")");
+		document.cu = cu;
+		$(document).trigger({type : 'userchanged', user : cu});
+		refreshUserDependencies(cu); },
+		error:function (XMLHttpRequest, textStatus, errorThrown) {alert(textStatus);}
+	});
+}
 
 function refreshUserDependencies(user) {
     $("#adminMenuItem").css("display", (user && user.type <= 2)?"list-item":"none");
@@ -38,6 +51,7 @@ function handleAuth(data) {
     //alert(data);return;
     var data = eval ('(' + data + ')');
     if (data.status == "done") {
+	document.cu = data.user;
 	refreshUserDependencies(data.user);
     } else {
 	alert(data.error);
@@ -48,7 +62,6 @@ function handleAuth(data) {
 /** Обработка юзера после авторизации */
 function processUser(cu) {
     refreshAuthPanel();
-    //$(".username").html(cu.)
 }
 
 var authPanelVisible = true;

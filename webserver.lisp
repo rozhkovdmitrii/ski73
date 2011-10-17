@@ -109,6 +109,8 @@
 
 ;; Обработчики веб запросов
 (load "request-processing.lisp")
+;; Обработка юзер-ориентированных запросов
+(load "user-operations.lisp")
 
 
 

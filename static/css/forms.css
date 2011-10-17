@@ -1,0 +1,11 @@
+
+#mainframe > * {
+    margin-left : 10%;
+    margin-right : 50;
+    margin-top : 40;
+}
+
+.form-label {
+    margin-top: 10px;
+}
+

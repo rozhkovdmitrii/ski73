@@ -113,6 +113,6 @@
 	      "city" (post-parameter "city")
        )))
     (update-op *users* (son "key" (gethash "key" (session-value 'user))) (son "$set" data))
-    (str (revert-user-f))
+    (str (format nil "{status : 'done', user : ~a}" (revert-user-f)))
    ))
 

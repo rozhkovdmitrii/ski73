@@ -51,3 +51,11 @@ div#toggleAuth img {
 #toggleAuth:hover {
     background-color : #ccccdd;
 }
+
+.error {
+    color : red;
+}
+
+.success {
+    color : green;
+}

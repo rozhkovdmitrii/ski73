@@ -72,6 +72,16 @@ function createUploader(){
 }
 
 function profileHandler(rawdata) {
+    $("#profile-status").removeClass("error").removeClass("success");
     var resp = eval("(" + rawdata + ")");
-    $("#prfl-event-source").trigger({type : "userchanged", user : resp});
+    var allright = resp.status == "done";
+    if (allright) {
+	$("#prfl-event-source").trigger({type : "userchanged", user : resp.user});
+	$("#profile-status").text("Изменения профиля успешно применены");
+    }else {
+	$("#profile-status").text("Во время обработки запроса произошла ошибка");
+    }
+    var color =  allright?"green":"red";
+    $("#profile-status").css("color", color);
+    $("#profile-status").fadeIn(3000).fadeOut(3000);
 }

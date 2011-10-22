@@ -24,7 +24,7 @@ function getMenu() {
 
 /** Запрашиваем админку */
 function getAdminPage() {
-    $('#mainframe').load('static/competitionUpload.html');
+    $('#mainframe').load('static/admin.html');
 }
 
 /** Запрос формы регистрации */

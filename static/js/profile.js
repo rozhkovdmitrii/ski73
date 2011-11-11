@@ -14,7 +14,8 @@ function fillEditProfileForm(user) {
     if (!user) return;
     var directive = {
 	'#email' : function(arg) {
-	    return "Профиль - " + arg.context.email;
+	    var type = arg.context.type; 
+	    return "Профиль - " + arg.context.email + ((type == 1)?" - суперюзер":(type == 2?" - администратор":""));
 	},
 	'#surname@value' : 'surname',
 	'#patronimic@value' : 'patronimic',
@@ -27,6 +28,8 @@ function fillEditProfileForm(user) {
     $('#editprofile').render(user, directive);
     $('#rank').val(user.rank);
     $('#club').val(user.club);
+    if (user.hasOwnProperty("moderBan") || user.type < 3)
+	$("#moder-form-label").hide();
     if (user.hasOwnProperty("photo"))
 	$('#user-photo').attr("src", "static/photo/" + user.photo + "?" + (new Date()).getTime());
    

@@ -40,7 +40,7 @@ function getProfile() {
 /** Запрашиваем список соревнований */
 function getCompetitions() {
     $.ajax({
-	type: "GET",
+	type: "POST",
 	url: "competitions-list",
 	success: processCompetitionsList,
 	error:function (XMLHttpRequest, textStatus, errorThrown) {alert(textStatus);}
@@ -91,4 +91,8 @@ function getClubs(callback) {
 	success: callback,
 	error:function (XMLHttpRequest, textStatus, errorThrown) {alert(textStatus);}
     });
+}
+
+function getVideo() {
+    $("#mainframe").load("static/video.html");
 }

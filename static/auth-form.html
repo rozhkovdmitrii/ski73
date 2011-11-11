@@ -3,7 +3,14 @@
 
 <div id=""><script type="text/javascript">
   $(document).ready(function() {
-	$("#auth-form").ajaxForm({url: "/process-auth", type:"POST", success:handleAuth});
+	$("#auth-form").ajaxForm({
+	      url: "/process-auth"
+	      , type:"POST"
+	      , success:handleAuth
+	      , error:function (xhr, ajaxOptions, thrownError) {
+                    alert(xhr.status + ":" + thrownError);
+              }
+	 });
   
   });
 

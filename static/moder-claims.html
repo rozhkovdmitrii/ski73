@@ -1,0 +1,21 @@
+<h3 class="header">Форма подтверждения заявок на повышенние полномочий</h3>
+
+<script>
+  $(document).ready(function(){
+    getModerRequestsList();
+    initModerTable();
+    initModerApprovePage();
+  });
+</script>
+
+<style type="text/css">
+  #moder-table th {
+	text-align:left;
+  }
+</style>
+<form id="moder-requests-approve">
+  <table  cellpadding="0" cellspacing="0" border="0" class="display" id="moders"></table>
+  <input id="approve-submit" type="submit" value="Применить">
+</form>
+<div id="moder-approve-status" class="status" style="margin-top:30px;margin-left:30px"></div>
+<div id="moder-approve-source"></div>

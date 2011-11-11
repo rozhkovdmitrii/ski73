@@ -25,6 +25,15 @@
     <!--TODO вынести в admin.html-->
     <script type="text/javascript" src="static/js/admin.js"></script>
 
+    <script type="text/javascript" src="static/js/common.js"></script>
+
+
+    <!--DATA TABLE-->
+    <script type="text/javascript" src="static/js/DataTables-1.8.2/media/js/jquery.dataTables.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="static/js/DataTables-1.8.2/media/css/demo_page.css"/>
+    <link rel="stylesheet" type="text/css" href="static/js/DataTables-1.8.2/media/css/demo_table.css"/>
+
+
     <script type="text/javascript" src="static/js/jquery-ui-1.8.16.custom/js/jquery-ui-1.8.16.custom.min.js"></script>
     <link rel="stylesheet" type="text/css" media="screen" href="static/js/jquery-ui-1.8.16.custom/css/cupertino/jquery-ui-1.8.16.custom.css"/>
 
@@ -34,17 +43,6 @@
       type="image/ico" 
       href="favicon"/>
     <style type="text/css">
-      #mainframe {
-	border-radius: 50px 50px / 50px 50px;
-	color: #222222;
-	background-color : #E3E4FA;
-	min-height : 450px;
-	//opacity: 0.95;
-	padding: 20;
-	left:160;
-	margin-left:50px;
-	margin-right:30px;
-      }
       a {
 	color: #0066cc;
 	text-size:12pt;
@@ -59,7 +57,7 @@
 	analyzeGET();
     	$("#toggleAuth").click(toggleAuthPanel);
 	toggleAuthPanel();
-        $(document).bind('userchanged', function(event){ document.cu = event.user; });
+        $(document).bind('userchanged', setUser);
     });
   </script>
   </head>

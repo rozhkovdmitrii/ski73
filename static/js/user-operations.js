@@ -15,8 +15,10 @@ function getCurrentUser() {
 	    type : "POST",
 	    success: function(data) {
 		var cu = eval("(" + data + ")");
+		// $(document).trigger({type : "userchanged", user : cu});
 		document.cu = cu;
-		refreshUserDependencies(cu); },
+		refreshUserDependencies(cu);
+	    },
 	    error:function (XMLHttpRequest, textStatus, errorThrown) {alert(textStatus);}
 	});
 

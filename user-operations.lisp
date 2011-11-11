@@ -114,5 +114,32 @@
        )))
     (update-op *users* (son "key" (gethash "key" (session-value 'user))) (son "$set" data))
     (str (format nil "{status : 'done', user : ~a}" (revert-user-f)))
-   ))
+    ))
 
+(defun moder-request-list-f ()
+    (encode-json-to-string (find-list *users* :query (son "moderRqst" "true") :fields (son)))
+  )
+(define-url-fn (moder-request-list)
+  "Вернет список заявок на повышение полномочий. Осуществляется проверка на суперюзерность текущего оператора"
+  (if (/= 1 (gethash "type" (session-value 'user)))
+      (error 'request-processing-error :text "Текущий пользователь не обладает необходимыми полномочиями"))
+  (let ((moder-requesters (moder-request-list-f)))
+    (str (format nil "{status : 'done', list : ~a }"
+		 moder-requesters))
+    )
+  )
+
+(define-url-fn (moders-approve)
+  (let ((rqsts (alist-hash-table (post-parameters*))))
+    (loop for k being the hash-keys in rqsts using (hash-value v)
+       if (= (parse-integer v) 0)
+       do (update-op *users* (son "key" k) (son "$set" (son "type" 2)))
+       end
+       if (= (parse-integer v) 2)
+       do (update-op *users* (son "key" k) (son "$set" (son "moderBan" T)))
+       end
+       do (update-op *users* (son "key" k) (son "$unset" (son "moderRqst" T)))
+    )
+    (format nil "{status : 'done', list : ~a, data : ~a}" (moder-request-list-f) (encode-json-to-string rqsts)) 
+
+  ))

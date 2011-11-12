@@ -73,13 +73,11 @@
 	 (newxlspath (concatenate 'string "tmp/" name ".csv"))
 	 (command  (concatenate 'string "cd " pfx  "; xls2csv -q0 -c^ -b\"!newsheet!" '(#\Newline ) "\" "  (namestring path) " 2>/dev/null | grep -vE \"^([0-9]+)?\\^+$\" >" newxlspath))
 	 )
-     
+    
 	(trivial-shell:shell-command command)
 	(secondary-analyse (analyse-competition newxlspath))
 	(with-html-output-to-string (*standard-output* nil :prologue nil :indent t)
-	  (cl-who:str (encode-json-to-string (find-list *competitions*  :query (son) :fields (son "title" 1)))
-		      )
-	  )))
+	  (cl-who:str (encode-json-to-string (find-list *competitions*  :query (son) :fields (son "title" 1)))))))
 
 
 (push (create-prefix-dispatcher "/handlexls" 'handlexls) *dispatch-table*)

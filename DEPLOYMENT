@@ -1,3 +1,9 @@
+
+1. SKI73_HOME should contain path to ski73 folder 
+
+
+
+
 (push (truename #P"/home/rozhkovdmitriy/lisp-packets/mongo-cl-driver/") asdf:*central-registry*)
 (require 'mongo-cl-driver)
 

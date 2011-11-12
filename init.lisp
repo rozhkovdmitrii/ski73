@@ -29,11 +29,14 @@
 (defpackage :webserver
   (:use :common-lisp :hunchentoot :cl-who
 :mongo :mongo-cl-driver.son-sugar
-:trivial-shell :cl-ppcre :json :alexandria))
+:trivial-shell :cl-ppcre :json :alexandria)
+  (:import-from :cl-user :posix-getenv)
+  )
 
 (in-package :webserver)
+(unless (posix-getenv "SKI73_HOME") (error 'error :text "SKI73_HOME has to been set"))
 
-(defparameter +root-path+ #p"/home/rds/devel/lisp/skisite/")
+(defparameter +root-path+ (truename (posix-getenv "SKI73_HOME")))
 (defparameter +tmp-relative-path+ #p"tmp/")
 (defparameter +static-relative-path+ #p"static/")
 (defparameter +static-path+ (merge-pathnames +static-relative-path+ +root-path+))

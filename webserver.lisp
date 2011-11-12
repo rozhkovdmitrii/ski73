@@ -23,9 +23,8 @@
 
 (setf *default-pathname-defaults* +root-path+)
 
-;;(load (merge-pathnames #p"competition.lisp" +root-path+))
-(load "common.lisp")
-(load "competition.lisp")
+(load (merge-pathnames #p"competition.lisp" +root-path+))
+(load (merge-pathnames #p"common.lisp" +root-path+))
 
 (setf *tmp-directory* #P"tmp/")
 

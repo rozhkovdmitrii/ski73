@@ -1,3 +1,3 @@
 $(document).ready(function(){
-	window.history.pushState(null, null, '?op=video');
+  pushHistoryState('?op=video');
     });

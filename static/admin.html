@@ -9,18 +9,19 @@
   }
 </style>
 <script type="text/javascript">
-  function onHandlexlsSuccess(response) {
-	getCompetitions();
-  }
+function onHandlexlsSuccess(response) {
+    getCompetitions();
+}
 
-  $(document).ready(function(){
+$(document).ready(function(){
 	$("#upload").ajaxForm({url: "/handlexls", success:onHandlexlsSuccess});
         var jqDockOpts = {align: 'right', duration: 200, labels: 'tc', size: 48, distance: 85};
         $("#admin-dock").jqDock(jqDockOpts);
-        //window.history.pushState(null, null, '?grp=adm&');
 	if (document.cu.type == 1) {$("#manage-moders").show();}else{$("#manage-moders").hide();}
-  });
-
+    });
+$(document).ready(function(){
+	pushHistoryState("/?op=admin");
+});
 </script>
 
 <div id="admin-content">
@@ -48,7 +49,7 @@
     </a>
   </li>
   <li id="manage-moders" style="display:none">
-    <a class="dockItem" onClick="alert('getPeople')" >
+    <a class="dockItem" onClick="getModerRequestsManage()" >
       <img src="static/images/dock/secure_search_unlock-sm.png" alt="ModerRequests" title="Замодерявки" />
     </a>
   </li>

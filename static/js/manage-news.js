@@ -1,12 +1,17 @@
+
+function handleNewsImgLoadSuccess(id, fileName, responseJSON) {
+     alert("my customed file upload action" + responseJSON);
+}
+
 $(document).ready(function() {
 	$("#add-peace-of-news").ajaxForm({
 		url: "add-peace-of-news",
 		    type:"POST",
 		    success:handleNewsAdding});
-
 	$('#sms-flag').change(function() {
 		$("#short-message").attr("disabled", $("#sms-flag").attr("checked") != "checked");
 	    });
+
 	tinyMCE.init({
 		// General options
 		mode : "textareas",

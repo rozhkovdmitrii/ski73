@@ -11,6 +11,10 @@ function getModerRequestsManage() {
     $("#admin-content").load("static/moder-claims.html");
 }
 
+function getNewsManage() {
+    $("#admin-content").load("static/manage-news.html");
+}
+
 function getModerRequestsList() {
     $.ajax({
 	type: "POST",
@@ -54,21 +58,21 @@ function initModerApprovePage() {
 
 function initModerTable() {
     document.dtbl = $('#moders').dataTable({
-	 "aoColumns": [
-	      {"sTitle": "Фамилия И. О.", "mDataProp" : "name"},
-	      {"sTitle": "Год рождения", "mDataProp" : "birthDate"},
-	      {"sTitle": "Клуб", "mDataProp": "club"},
-	      {"sTitle": "Город", "mDataProp": "city"},
-	      {"sTitle": "Подтверждение <br>(да/проигнорироавть/забанить запрос)"
-		   , "fnRender": function(obj){
+	    "aoColumns": [
+		{"sTitle": "Фамилия И. О.", "fnRender" : function(obj) { return obj.aData["surname"] + " " + obj.aData["name"] + " " + obj.aData["patronimic"];}},
+		{"sTitle": "Год рождения", "mDataProp" : "birthDate"},
+		{"sTitle": "Клуб", "mDataProp": "club"},
+		{"sTitle": "Город", "mDataProp": "city"},
+		{"sTitle": "Подтверждение <br>(да/проигнорироавть/забанить запрос)"
+		 , "fnRender": function(obj){
 			return "<input name='" + obj.aData["key"] + "' type='radio' value='0' checked>"
-			     + "<input name='" + obj.aData["key"] + "' type='radio' value='1'>"
-			     + "<input name='" + obj.aData["key"] + "' type='radio' value='2'>";
-		   }
-	      }
-	 ],
-	 "bAutoWidth" : true
-    });
+			+ "<input name='" + obj.aData["key"] + "' type='radio' value='1'>"
+			+ "<input name='" + obj.aData["key"] + "' type='radio' value='2'>";
+		    }
+		}
+			  ],
+	    "bAutoWidth" : true
+	});
 }
 
 function handleModerApprove(data) {

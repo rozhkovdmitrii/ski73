@@ -82,14 +82,9 @@
 	 (res-file (concatenate 'string "pht" key ))
 	 (out-file-path (merge-pathnames res-file +photo-path+))
 	 )
-    (with-open-file (out-stream out-file-path
-     				:direction :output :if-exists :overwrite
-     				:if-does-not-exist :create :element-type 'unsigned-byte )
-      ;; TODO remake it with read(write)-sequence
-      (dotimes (counter len)
-      	(write-byte (read-byte input-stream) out-stream)
-      	)
-      )
+
+    (cpBytesStreamToFile input-stream out-file-path len)
+
     (update-op *users*  (son "key" key) (son "$set" (son "photo" res-file)))
     (revert-user-f)
     (str (format nil "{success : true, user : ~a}"

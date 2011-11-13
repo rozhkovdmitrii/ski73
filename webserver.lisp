@@ -7,7 +7,7 @@
 
 ;;Инициализируем web сервис
 (defparameter *server-instance* (make-instance 'hunchentoot:acceptor :port 4242) "my web server")
-(hunchentoot:start *server-instance*)
+;(hunchentoot:start *server-instance*)
 
 ;;Создаем подключение к БД
 
@@ -23,8 +23,10 @@
 
 (setf *default-pathname-defaults* +root-path+)
 
-(load (merge-pathnames #p"competition.lisp" +root-path+))
 (load (merge-pathnames #p"common.lisp" +root-path+))
+
+(load (merge-pathnames #p"competition.lisp" +root-path+))
+(load (merge-pathnames #p"manage-news.lisp" +root-path+))
 
 (setf *tmp-directory* #P"tmp/")
 
@@ -49,20 +51,6 @@
 (push (create-folder-dispatcher-and-handler "/static/" #p"static/") *dispatch-table*)
 
 
-(defmacro define-url-fn ((name) &body body)
-  "Создание и регистрация функции обработчика в диспатчер"
-  `(progn (defun ,name ()
-	  (no-cache)
-	  (setf (hunchentoot:content-type*) "text/html; charset=utf-8")
-	  (handler-case
-	      (with-html-output (*standard-output* nil :prologue nil) ,@body)
-	    (request-processing-error (err)
-	      (with-html-output (*standard-output* nil :prologue nil)
-		(str (format nil "{status : \"error\", error : \"~a\"}" (text err)))))
-	      )
-	  )
-	  (push
-	  (create-prefix-dispatcher ,(format nil "/~(~a~)" name) ',name) *dispatch-table*)))
 
 (defun file-content (filepath)
   "Просто возращает строку с содержимым файла"

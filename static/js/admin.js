@@ -11,6 +11,10 @@ function getModerRequestsManage() {
     $("#admin-content").load("static/moder-claims.html");
 }
 
+function getNewsManage() {
+    $("#admin-content").load("static/manage-news.html");
+}
+
 function getModerRequestsList() {
     $.ajax({
 	type: "POST",

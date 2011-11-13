@@ -6,10 +6,6 @@
     )
 
 
-(defun .qprint-encode/utf-8 (string)
-  (qprint:encode (map 'string
-                      'code-char
-                      (trivial-utf-8:string-to-utf-8-bytes string))))
 
 (defun registration-mail-message (sym-key)
   "Сообщение отправляемой на адрес электронной почты для подтверждения регистрации"

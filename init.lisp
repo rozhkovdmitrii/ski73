@@ -37,11 +37,8 @@
 (unless (posix-getenv "SKI73_HOME") (error 'error :text "SKI73_HOME has to been set"))
 
 (defparameter +root-path+ (truename (posix-getenv "SKI73_HOME")))
-(defparameter +tmp-relative-path+ #p"tmp/")
-(defparameter +static-relative-path+ #p"static/")
-(defparameter +static-path+ (merge-pathnames +static-relative-path+ +root-path+))
 
-(defparameter +photo-relative-path+ #p"photo/")
-(defparameter +photo-path+ (merge-pathnames +photo-relative-path+ +static-path+))
-
-(defparameter +tmp-path+ (merge-pathnames +tmp-relative-path+ +root-path+))
+(defparameter +static-path+ (merge-pathnames #p"static/" +root-path+))
+(defparameter +photo-path+ (merge-pathnames #p"photo/" +static-path+))
+(defparameter +news-img-path+ (merge-pathnames #p"news" +static-path+)
+(defparameter +tmp-path+ (merge-pathnames #p"tmp/" +root-path+))

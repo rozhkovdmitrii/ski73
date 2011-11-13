@@ -1,6 +1,5 @@
-
-function handleNewsImgLoadSuccess(id, fileName, responseJSON) {
-     alert("my customed file upload action" + responseJSON);
+function handleNewsAdding(rawdata) {
+    alert("handle news adding\n" + rawdata);
 }
 
 $(document).ready(function() {

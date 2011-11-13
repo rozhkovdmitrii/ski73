@@ -40,5 +40,5 @@
 
 (defparameter +static-path+ (merge-pathnames #p"static/" +root-path+))
 (defparameter +photo-path+ (merge-pathnames #p"photo/" +static-path+))
-(defparameter +news-img-path+ (merge-pathnames #p"news" +static-path+)
+(defparameter +news-img-path+ (merge-pathnames #p"news/" +static-path+))
 (defparameter +tmp-path+ (merge-pathnames #p"tmp/" +root-path+))

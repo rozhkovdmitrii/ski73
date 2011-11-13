@@ -2,34 +2,36 @@
 
 
 <script type="text/javascript" src="static/js/manage-news.js"></script>
-<form id="add-peace-of-news" enctype="multipart/form-data">
+<style type="text/css">
+  th {
+	width:100px;
+  }
+  span.form-label {
+	display: inline-block;
+  }
+  .form-label {
+  	width:200px;
+	margin-bottom:20px;
+  }
+</style>
+
+<form id="add-peace-of-news" enctype="multipart/form-data" type="post" style="margin-top:30px;margin-left:30px;">
   <table style="width=90%">
     <tr>
       <td style="width:50%">
-	<div class="form-label">Заголовок : 
-	  <input type="text" name="title" id="titel"/>
-	</div>
-	<div class="form-label">Основной текст новости: <br>
-	  <textarea name="message" id="message" rows=10 cols=100/>
-	</div>
-	<div class="form-label">Смс: <br>
-	  Вкл :  <input type="checkbox" name="smsflag" id="smsflag"/>
-	  Текст сообщения: <input type="text" name="short-message" id="short-message"/>
-	</div>
+	<span class="form-label">Заголовок: </span><input type="text" name="title" id="title"/><br>
+	<div class="form-label" >Основной текст новости:</div>
+	<textarea name="message" id="message" rows=10 cols=100/>
+	<table style="margin: 20;text-align:center">
+	  <tr><th rowspan="2" class="form-label">Оповестить юзеров по:</th><th >Смс</th><th>Почте</th></tr>
+	  <tr><td><input type="checkbox" name="sms-flag" id="sms-flag"/></td><td><input type="checkbox" name="email-flag"/></td></tr>
+	</table>
+	<span class="form-label">Текст сообщения:</span><input disabled="true" type="text" name="short-message" id="short-message" maxlength="60" style="width:510px;"/><br>
+	<span class="form-label">Картинка новости: </span><input size="50" name="title-image" type="file" style="width:400px;"/><br>
 
-      </td>
-      <td style="text-align:center;">
-	<div class="form-label" style="color:black;width:400px;margin-left:auto;margin-right:auto" >
-	  <div id="news-file-uploader">		
-	    <noscript>			
-	      <p>Please enable JavaScript to use file uploader.</p>
-	      <!-- or put a simple form for upload here -->
-	    </noscript>         
-	  </div>
-	  
-	</div>
       </td>
     <tr>
   </table>
+  <button type="submit">Сабмит батон</button>
 </form>
 

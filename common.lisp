@@ -34,3 +34,7 @@
       (write-byte (read-byte input) output)
       ))
   )
+
+(defun make-utf8-string (input)
+    "Из строки внутреннего представления сделает настоящий utf8"
+  (flexi-streams:octets-to-string (trivial-utf-8:string-to-utf-8-bytes input)))

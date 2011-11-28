@@ -1,5 +1,7 @@
 function handleNewsAdding(rawdata) {
-    alert("handle news adding\n" + rawdata);
+    alert("handle news adding " + rawdata);
+    var data = eval( '(' + rawdata + ')');
+    alert ($.url.decode(data.message));
 }
 
 

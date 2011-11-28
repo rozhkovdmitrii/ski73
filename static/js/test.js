@@ -16,14 +16,12 @@ function checkNewsAddForm(formData, jqForm, options) {
 	$("#sms-label").addClass("ui-state-error");
 	res = false;
     }
-    var input = $("#title-image").get()[0];
-    alert(input.value);
-    if (input.files.length != 0
-	&& (input.files[0].size > 500000
-	    || !input.files[0].type.match(/image\/\(jpg|jpeg|png|gif\)/)
-	    )) {
+    var files = $("#title-image").get()[0].files;
+    if (files.length != 0
+	&& (files[0].size > 500000
+	    || !files[0].type.match(/image\/\(jpg|jpeg|png|gif\)/) )) {
 	$("#title-image-label").addClass("ui-state-error");
-	alert("Разрешены форматы jpeg, gif, png. Размер файла не должен превышать 500кБ")
+	alert("Разрешены форматы jpeg, gif, png. Размер файла не должен превышать 500кБ");
 	res = false;
     }
 

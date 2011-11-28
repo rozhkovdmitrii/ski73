@@ -42,4 +42,8 @@
 (defparameter +photo-path+ (merge-pathnames #p"photo/" +static-path+))
 (defparameter +news-img-path+ (merge-pathnames #p"news/" +static-path+))
 (defparameter +tmp-path+ (merge-pathnames #p"tmp/" +root-path+))
-(defparameter +news-images+ (merge-pathnames #p"news-images" +static-path+))
+
+(defparameter +static-tmp-relative-path+ #p"static/tmp/")
+(defparameter +static-tmp-path+ (merge-pathnames +static-tmp-relative-path+ +root-path+))
+
+(defparameter +news-images+ (merge-pathnames #p"/news-images" +static-path+))

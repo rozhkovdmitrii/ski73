@@ -7,7 +7,7 @@
 
 ;;Инициализируем web сервис
 (defparameter *server-instance* (make-instance 'hunchentoot:acceptor :port 4242) "my web server")
-(hunchentoot:start *server-instance*)
+;(hunchentoot:start *server-instance*)
 
 ;;Создаем подключение к БД
 
@@ -24,9 +24,7 @@
 (setf *default-pathname-defaults* +root-path+)
 
 (load (merge-pathnames #p"common.lisp" +root-path+))
-
 (load (merge-pathnames #p"competition.lisp" +root-path+))
-(load (merge-pathnames #p"manage-news.lisp" +root-path+))
 
 (setf *tmp-directory* #P"tmp/")
 
@@ -99,5 +97,6 @@
 ;; Обработка юзер-ориентированных запросов
 (load "user-operations.lisp")
 
+(load (merge-pathnames #p"manage-news.lisp" +root-path+))
 
 

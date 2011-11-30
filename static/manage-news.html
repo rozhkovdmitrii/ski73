@@ -14,13 +14,35 @@
   }
 </style>
 
+<style>
+    .newsPieceTitle {
+	margin-bottom:100px;
+	font-style: 15pt;
+	color: red;
+	text-align: center;
+    }
+    .newsPieceMessage {
+	padding-left:20px;
+	padding-right:20px;
+    }
+    .newsPieceImage {
+	max-width:200px;
+	max-height:300px;
+    }
+</style>
+
+
 <form id="add-peace-of-news" enctype="multipart/form-data" type="post" style="margin-top:30px;margin-left:30px;">
   <span class="form-label" id="title-label">Заголовок: </span><input type="text" name="title" id="title" size="50" maxchars="200"/><br>
   <div class="form-label" id="message-label">Основной текст новости:</div>
   <textarea name="message" id="message" rows=10 cols=100/>
   <table style="margin: 20;text-align:center">
-    <tr><td rowspan="2" class="form-label">Оповестить юзеров по:</td><th >Смс</th><th>Почте</th></tr>
-    <tr><td><input type="checkbox" name="sms-flag" id="sms-flag"/></td><td><input type="checkbox" name="email-flag"/></td></tr>
+    <tr><td rowspan="2" class="form-label">Оповестить юзеров по:</td><th >Смс</th><th>Почте</th><th>Пост на сайте</th></tr>
+    <tr>
+      <td><input type="checkbox" name="sms-flag" id="sms-flag"/></td>
+      <td><input type="checkbox" name="email-flag"/></td>
+      <td><input type="checkbox" name="site-post-flag"/></td>
+    </tr>
   </table>
   <span class="form-label">Это соревнование: </span>
 	<input type="checkbox" name="itscomp" id="itscomp"/>
@@ -31,8 +53,17 @@
     <input type="text" name="sms" id="short-message" maxlength="70" style="width:510px;"/></div><br>
   <span class="form-label" id="title-image-label">Картинка новости: </span>
   <input size="50" name="title-image" id="title-image" type="file" style="width:400px;"/><br>
-  
-  
   <button type="submit">Посмотреть и опубликовать</button>
 </form>
 
+<div style="width:100%;display:none" id="approvePostDiv">
+  <form id="approveNewsPiece" style="width:100%">
+    <hr style="margin-top:10px">
+    <div id="news-piece" style="width:100%"></div>
+    <hr style="margin-bottom:30px;margin-top:10px">
+    <div style="margin-left:100px;">
+      <button onClick="applyNewsPiece();" type="button">Запостить новость</button>
+      <button onClick="cancelNewsPieceApprove()" type="button">Отменить</button>
+    </div>
+  </form>
+</div>

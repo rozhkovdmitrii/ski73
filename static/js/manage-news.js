@@ -1,3 +1,4 @@
+
 function checkNewsAddForm(formData, jqForm, options) {
     $("#title-label, #sms-label, #message-label, #title-image-label").removeClass("ui-state-error");
     var res = true;
@@ -31,9 +32,9 @@ function checkNewsAddForm(formData, jqForm, options) {
 
 
 $(document).ready(function() {
-
+	$.get("static/tpt/newsPiece.html", function (template) { window.newsPieceTpt = template; });
 	$('#send').click(function(){   uploader._onInputChange(file_input);}); 
-
+	
 
 	$("#add-peace-of-news").ajaxForm({
 		url: "add-peace-of-news",

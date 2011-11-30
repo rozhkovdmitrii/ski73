@@ -11,7 +11,7 @@
     (when tmp-file
       (setf new-image-name (write-to-string (get-universal-time)))
       (let* ((source-path (merge-pathnames +tmp-path+ tmp-file))
-	     (dest-path (merge-pathnames +tmp-static-path+  new-image-name)))
+	     (dest-path (merge-pathnames +static-tmp-path+  new-image-name)))
 	
 	(rename-file source-path dest-path)
 	(defered-rm-file dest-path +remove-timeout+) 

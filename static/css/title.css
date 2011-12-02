@@ -4,6 +4,15 @@
     }
     
 }
+
+.block {
+    display:block;
+}
+
+.none {
+    display:none;
+}
+
 h3.header {
     margin-bottom:20px;
     margin-left:auto;

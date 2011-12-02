@@ -16,6 +16,7 @@
 (defparameter *competitions* (collection *db* "competitions"))
 (defparameter *registrations* (collection *db* "registrations"))
 (defparameter *users* (collection *db* "users"))
+(defparameter *news* (collection *db* "news"))
 
 ;; Карта трансляции имен из xls в имена БД
 (defparameter namesmap nil)

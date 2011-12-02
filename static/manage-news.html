@@ -32,7 +32,7 @@
 </style>
 
 
-<form id="add-peace-of-news" enctype="multipart/form-data" type="post" style="margin-top:30px;margin-left:30px;">
+<form id="add-piece-of-news" enctype="multipart/form-data" type="post" style="margin-top:30px;margin-left:30px;">
   <span class="form-label" id="title-label">Заголовок: </span><input type="text" name="title" id="title" size="50" maxchars="200"/><br>
   <div class="form-label" id="message-label">Основной текст новости:</div>
   <textarea name="message" id="message" rows=10 cols=100/>
@@ -60,6 +60,8 @@
   <form id="approveNewsPiece" style="width:100%">
     <hr style="margin-top:10px">
     <div id="news-piece" style="width:100%"></div>
+    <hr style="margin-bottom:30px;margin-top:10px">
+    <div id="news-piece-props" style="width:100%"></div>
     <hr style="margin-bottom:30px;margin-top:10px">
     <div style="margin-left:100px;">
       <button onClick="applyNewsPiece();" type="button">Запостить новость</button>

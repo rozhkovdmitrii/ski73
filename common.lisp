@@ -50,3 +50,10 @@
 	  )))
    (+ (get-universal-time) timeout))
   )
+
+(defun check-adm ()
+  (let ((type (gethash "type" (session-value 'user))))
+    (if (> type 2)
+	(error 'request-processing-error :text "Для выполнения оперции необходимы полномочия администратора"))
+    )))
+

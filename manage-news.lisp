@@ -33,19 +33,28 @@
     (encode-json-to-string post-hash)))
 
 
+(defun news-post-mail (news-post)
+  "Рассылка новости по списку"
+  
+ )
+
 (define-url-fn (approve-piece-of-news)
   "Добавление новости"
-  ;(check-adm)
+  (check-adm)
   (let* (
 	 (title-image (first (post-parameter "title-image")))
 	 (post-hash (news-piece-data))
 	 (new-image-name (write-to-string (get-universal-time)))
 	 (adm-key (gethash "key" (session-value 'user)))
+	 (email-flag (gethash "email-flag" post-hash))
 	 )
     (rename-file  title-image (merge-pathnames +news-img-path+ new-image-name))
     (setf (gethash "title-image" post-hash) new-image-name)
     (setf (gethash "adm-key" post-hash) adm-key)
     (insert-op *news* post-hash)
+    (when email-flag
+      (news-post-mail post-hash)
+      )
     (str (encode-json-to-string post-hash))
     )
 )

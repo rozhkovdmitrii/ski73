@@ -55,5 +55,24 @@
   (let ((type (gethash "type" (session-value 'user))))
     (if (> type 2)
 	(error 'request-processing-error :text "Для выполнения оперции необходимы полномочия администратора"))
-    )))
+    ))
 
+(defun mailing-list ()
+  "Вытаскиваем из базы список юзеров которые подписались на рассылку"
+  ;(find
+  (list "hvoy85@mail.ru" "rozhkovdmitriy@gmail.com")
+  )
+
+(defun mailing (theme html text)
+  "Рассылка чего бы-то по всему списку рассылки"
+  (cl-smtp:send-email
+   "smtp.gmail.com"  
+   "noreply@ski73.ru" 
+   "noreply@ski73.ru"
+   theme 
+   (make-utf8-string text) 
+   :bcc (mailing-list)
+   :ssl :tls
+   :authentication '("noreply@ski73.ru" "fjmb58vc")
+   :html-message (make-utf8-string html)
+   ))

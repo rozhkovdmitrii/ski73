@@ -1,9 +1,20 @@
 function resetProfileFormTools() {
-    $("#edit-profile-form").ajaxForm({url: "/apply-profile", type:"POST", success:profileHandler});
     createUploader();
 }
 
-
+function applyProfile() {
+    var applyProfileConfig  = {
+	url: "/apply-profile",
+	type:"POST", success:profileHandler,
+	data: {
+	    "sms-comp-flag":$("#sms-comp-flag").attr('checked')?"on":false,
+	    "sms-other-news-flag":$("#sms-other-news-flag").attr('checked')?"on":false,
+	    "email-comp-flag":$("#email-comp-flag").attr('checked')?"on":false,
+	    "email-other-news-flag":$("#email-other-news-flag").attr('checked')?"on":false,
+	}
+    };
+    $("#edit-profile-form").ajaxSubmit(applyProfileConfig);
+}
 function handleUserChangedInProfile(event) {
     if (event.hasOwnProperty("user"))
     	fillEditProfileForm(event.user);
@@ -28,6 +39,11 @@ function fillEditProfileForm(user) {
     $('#editprofile').render(user, directive);
     $('#rank').val(user.rank);
     $('#club').val(user.club);
+    $('#sms-comp-flag').attr('checked', user["sms-comp-flag"] == "false"?false:true);
+    $('#email-comp-flag').attr('checked', user['email-comp-flag'] == "false"?false:true);
+    $('#sms-other-news-flag').attr('checked', user['sms-other-news-flag'] == "false"?false:true);
+    $('#email-other-news-flag').attr('checked', user['email-other-news-flag'] == "false"?false:true);
+
     if (user.hasOwnProperty("moderBan") || user.type < 3)
 	$("#moder-form-label").hide();
     if (user.hasOwnProperty("photo"))
@@ -79,7 +95,7 @@ function profileHandler(rawdata) {
     var resp = eval("(" + rawdata + ")");
     var allright = resp.status == "done";
     if (allright) {
-	$("#prfl-event-source").trigger({type : "userchanged", user : resp.user});
+	revertUser();
 	$("#profile-status").text("Изменения профиля успешно применены");
     }else {
 	$("#profile-status").text("Во время обработки запроса произошла ошибка");

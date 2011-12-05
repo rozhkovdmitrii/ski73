@@ -59,11 +59,7 @@
 
 (defun revert-user-f ()
   "Перечитывает из базы поля текущего юзера"
-  (let* ((cu (session-value 'user)))
-    (when cu
-      (setf (session-value 'user) (find-one *users* (son "email" (gethash "email" cu)) (son)))
-      )
-    )
+  (setf (session-value 'user) (find-one *users* (son "email" (gethash "email" cu)) (son)))
   (current-user-f)
 )
 
@@ -95,20 +91,11 @@
 
 (define-url-fn (apply-profile)
   "Прием и сохранение данных профиля юзера"
-  (let
-      ((data (son
-	      "surname" (post-parameter "surname")
-	      "patronimic" (post-parameter "patronimic")
-	      "name" (post-parameter "name")
-	      "birthDate" (post-parameter "birthDate")
-	      "rank" (post-parameter "rank")
-	      "moderRqst" (post-parameter "moder")
-	      "club" (post-parameter "club")
-	      "info" (post-parameter "info")
-	      "city" (post-parameter "city")
-       )))
+  (let*
+      ((data (alist-hash-table (post-parameters*))))
+    ;;Неустановленные чекбоксы просто не передаются и не учитываются
     (update-op *users* (son "key" (gethash "key" (session-value 'user))) (son "$set" data))
-    (str (format nil "{status : 'done', user : ~a}" (revert-user-f)))
+    (str (format nil "{status : 'done', user : ~a, 'sms-comp-flag': '~a'}" (revert-user-f) (gethash "sms-comp-flag" data)))
     ))
 
 (defun moder-request-list-f ()

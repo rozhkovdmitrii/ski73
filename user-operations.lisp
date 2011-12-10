@@ -59,7 +59,7 @@
 
 (defun revert-user-f ()
   "Перечитывает из базы поля текущего юзера"
-  (setf (session-value 'user) (find-one *users* (son "email" (gethash "email" cu)) (son)))
+  (setf (session-value 'user) (find-one *users* (son "email" (gethash "email" (session-value 'user))) (son)))
   (current-user-f)
 )
 
@@ -93,9 +93,11 @@
   "Прием и сохранение данных профиля юзера"
   (let*
       ((data (alist-hash-table (post-parameters*))))
+    (when (gethash "type" data)
+      (error 'request-processing-error :text "Че за хуйня?"))
     ;;Неустановленные чекбоксы просто не передаются и не учитываются
     (update-op *users* (son "key" (gethash "key" (session-value 'user))) (son "$set" data))
-    (str (format nil "{status : 'done', user : ~a, 'sms-comp-flag': '~a'}" (revert-user-f) (gethash "sms-comp-flag" data)))
+    (str (format nil "{status : 'done', user : ~a}" (revert-user-f) ))
     ))
 
 (defun moder-request-list-f ()

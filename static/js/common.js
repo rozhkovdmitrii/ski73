@@ -4,8 +4,7 @@ function setUser(event) {
 
 
 function pushHistoryState(url) {
-    //    if (window.history.hasOwnProperty('pushState'))
-	history.pushState(null,null, url);
+    history.pushState(null,null, url);
 }
 
 

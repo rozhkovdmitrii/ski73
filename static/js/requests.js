@@ -23,8 +23,8 @@ function getMenu() {
 }
 
 /** Запрашиваем админку */
-function getAdminPage() {
-    $('#mainframe').load('static/admin.html');
+function getAdminPage(query) {
+    $('#mainframe').load('static/admin.html?op=manage-news');
 }
 
 /** Запрос формы регистрации */

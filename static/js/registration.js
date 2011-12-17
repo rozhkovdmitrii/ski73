@@ -9,7 +9,8 @@ function toggleRegForm(jqXHR, settings) {
 }
 
 /** Запрос на создание нового юзера по ключу */
-function setNewUser(key) {
+function setNewUser(GETquery) {
+    var key = GETquery.key;
     $.ajax({
 	type: "POST",
 	data: { "key" : key },

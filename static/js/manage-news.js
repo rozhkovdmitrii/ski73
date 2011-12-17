@@ -44,7 +44,6 @@ function showNewsPieceApprove(newsPiece) {
     $("#add-piece-of-news").hide();
 }
 
-
 function applyNewsPiece() {
     var applySubmitConfig = {
 	url: "approve-piece-of-news",
@@ -52,11 +51,13 @@ function applyNewsPiece() {
 	data: {
 	    "approved": "on"
 	},
-	success:function(responseText, statusText) { alert("Пост проведен" + responseText); }
+	success:function(responseText, statusText) {
+	    alert("Пост проведен");
+	    
+	}
     };
     $("#add-piece-of-news").ajaxSubmit(applySubmitConfig);
 }
-
 
 function cancelNewsPieceApprove() {
     $("#approvePostDiv").hide();
@@ -121,5 +122,6 @@ $(document).ready(function() {
 	$("#message").cleditor(
 		cleditorconfig
 	    );
+	pushHistoryState("?op=admin&admop=manage-news");
     });
 

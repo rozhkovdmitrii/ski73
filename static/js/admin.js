@@ -1,3 +1,26 @@
+$(document).ready(function(){
+	$("#upload").ajaxForm({url: "/handlexls", success:onHandlexlsSuccess});
+        var jqDockOpts = {align: 'right', duration: 200, labels: 'tc', size: 48, distance: 85};
+        $("#admin-dock").jqDock(jqDockOpts);
+	if (document.cu.type == 1) {$("#manage-moders").show();}else{$("#manage-moders").hide();}
+    });
+
+$(document).ready(dispatchAdmin);
+
+function dispatchAdmin() {
+    var dispatchTable = {
+	"manage-news": getNewsManage,
+	"manage-formularies": getFormulariesManage
+    };
+    var dispatched = analyzeGET(dispatchTable, "admop");
+    if (!dispatched)
+	pushHistoryState("/?op=admin");
+
+}
+
+function onHandlexlsSuccess(response) {
+    getCompetitions();
+}
 
 function getClubsManage() {
     alert('clabs managing form is in process')

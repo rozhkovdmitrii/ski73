@@ -36,29 +36,37 @@
 	)
     (let ((phones-hash (find-list *users* :query query :fields (son "phone" 1))))
       (map 'list #'(lambda (phones) (gethash "phone" phones)) phones-hash)
-      )
+      )))
+
+(defun smsc-mail-request (&key message recipients)
+  "Текст письма для смс рассылки"
+  (check-adm)
+  (format nil "ski73:~a:::1,1,ski73.ru:~{~a~^,~}:~a" +smsc-pass+ recipients message)
   )
-		     )
+
+		     
 (defun prepare-mailing-subject (subject)
     (let ((encoded-subj (cl-smtp:rfc2045-q-encode-string subject))) 
-	  
-	  (cl-ppcre:regex-replace-all "\\?=\\s+=\\?UTF-8\\?Q\\?" encoded-subj  "=20")
+      (cl-ppcre:regex-replace-all "\\?=\\s+=\\?UTF-8\\?Q\\?" encoded-subj  "=20")
 	  ))
 
 
 
 (defun sms-news-delivery (news-peace)
   "Рассылка новости по смс"
-  )
-
-
-
-
+  (let* ((sms-text (gethash "sms" news-peace))
+	 (smsc-mail-text (smsc-mail-request :message sms-text :recipients (news-sms-recipients news-peace))))
+    (mailing
+     :theme "sms-delivery"
+     :email "rozhkovdmitriy@gmail.com"
+     :text smsc-mail-text)
+    ))
 
 (defun email-news-delivery (news-peace)
   "Рассылка новости по email"
-  (mailing :theme (gethash "title" news-peace)
-	   :html (url-decode (gethash "message" news-peace)) :rcp (news-mailing-list news-peace))
+  (mailing
+   :theme (gethash "title" news-peace)
+   :html (url-decode (gethash "message" news-peace)) :bcc (news-mailing-list news-peace) :email "noreply@ski73.ru")
   )
 
 (define-url-fn (add-piece-of-news)
@@ -91,6 +99,7 @@
 	 (new-image-name (write-to-string (get-universal-time)))
 	 (adm-key (gethash "key" (session-value 'user)))
 	 (email-flag (gethash "email-flag" post-hash))
+	 (sms-flag (gethash "sms-flag" post-hash))
 	 )
     (when title-image
       (rename-file title-image (merge-pathnames +news-img-path+ new-image-name)))
@@ -98,8 +107,10 @@
     (setf (gethash "adm-key" post-hash) adm-key)
     (insert-op *news* post-hash)
     (when email-flag
-      (email-news-delivery post-hash)
-      )
+      (email-news-delivery post-hash))
+    (when sms-flag
+      (sms-news-delivery post-hash))
+      
     (str (encode-json-to-string post-hash))
     )
 )

@@ -18,7 +18,7 @@
                       'code-char
                       (trivial-utf-8:string-to-utf-8-bytes string))))
 
-(defun mailing (&key (theme "ski73 delivery") (html "default html") (text "default delivery text") (bcc nil) (cc nil) (email "noreply@ski73.ru"))
+(defun mailing (&key (theme "ski73 delivery") (html nil) (text "default delivery text") (bcc nil) (cc nil) (email "noreply@ski73.ru"))
   "Рассылка чего бы-то по всему списку рассылки"
   (cl-smtp:send-email
    "smtp.gmail.com"
@@ -30,7 +30,7 @@
    :cc cc
    :ssl :tls
    :authentication (list "noreply@ski73.ru" +mail-pass+)
-   :html-message (make-utf8-string html)
+   :html-message (if html (make-utf8-string html) nil)
    ))
 
 (defun encrypt (stuff)
@@ -67,8 +67,9 @@
   )
 
 (defun check-adm ()
-  (let ((type (gethash "type" (session-value 'user))))
-    (if (> type 2)
+  (let* ( (user (session-value 'user))
+	 (type (if user (gethash "type" user) nil)) )
+    (if (and type (> type 2))
 	(error 'request-processing-error :text "Для выполнения оперции необходимы полномочия администратора"))
     ))
 

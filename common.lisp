@@ -13,6 +13,10 @@
 	  (push
 	   (create-prefix-dispatcher ,(format nil "/~(~a~)" name) ',name) *dispatch-table*)))
 
+(defun make-utf8-string (input)
+    "Из строки внутреннего представления сделает настоящий utf8"
+  (flexi-streams:octets-to-string (trivial-utf-8:string-to-utf-8-bytes input)))
+
 (defun .qprint-encode/utf-8 (string)
   (qprint:encode (map 'string
                       'code-char
@@ -49,10 +53,6 @@
       (write-byte (read-byte input) output)
       ))
   )
-
-(defun make-utf8-string (input)
-    "Из строки внутреннего представления сделает настоящий utf8"
-  (flexi-streams:octets-to-string (trivial-utf-8:string-to-utf-8-bytes input)))
 
 
 (defun defered-rm-file (path timeout)

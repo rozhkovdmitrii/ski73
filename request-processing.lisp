@@ -1,5 +1,3 @@
-
-
 (defun gen-symbolic-key (email)
     "Генерация произвольной текстовой последовательности"
     (encrypt email) 
@@ -32,14 +30,12 @@
 	(error 'request-processing-error
 	       :text (concatenate 'string "Почта " email " уже занята.")))
     
-    (cl-smtp:send-email
-     "smtp.gmail.com" "noreply@ski73.ru"
-			email "Регистрация на ski73.ru"
-			(make-utf8-string (registration-mail-message key))
-			:ssl :tls
-			:authentication '("noreply@ski73.ru" "fjmb58vc")
-			:html-message (make-utf8-string (registration-mail-html-message key))
-    )
+    (mailing
+     :theme "Регистрация на ski73.ru"
+     :text (registration-mail-message key)
+     :html (registration-mail-html-message key)
+     :email email)
+
     (insert-op *registrations*
 	       (son "email" email "key" key "pwd" (encrypt pass))) 
 
@@ -49,14 +45,3 @@
 		 ))
     ))
 
-
-;(cl-smtp:send-email 
-;	  "smtp.gmail.com" 
-;	  "noreply@ski73.ru" 
-;	  "rozhkovdmitriy@gmail.com"
-;	  "registration"
-;	  (.qprint-encode/utf-8 "<h1>ПРИВЕТ С ЛЫЖНИ!!!</h1>")
-;	  :extra-headers '((:content-transfer-encoding "quoted-printable")
-;			   (:content-type "text/html; charset=utf-8"))
-;	  :ssl :tls
-;	  :authentication '("noreply@ski73.ru" "fjmb58vc"))

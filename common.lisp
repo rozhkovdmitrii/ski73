@@ -18,6 +18,21 @@
                       'code-char
                       (trivial-utf-8:string-to-utf-8-bytes string))))
 
+(defun mailing (&key (theme "ski73 delivery") (html "default html") (text "default delivery text") (bcc nil) (cc nil) (email "noreply@ski73.ru"))
+  "Рассылка чего бы-то по всему списку рассылки"
+  (cl-smtp:send-email
+   "smtp.gmail.com"
+   "noreply@ski73.ru"
+   email
+   (prepare-mailing-subject theme)
+   (make-utf8-string text)
+   :bcc bcc
+   :cc cc
+   :ssl :tls
+   :authentication (list "noreply@ski73.ru" +mail-pass+)
+   :html-message (make-utf8-string html)
+   ))
+
 (defun encrypt (stuff)
   "Возращает хеш переданной строки"
   (ironclad:byte-array-to-hex-string 

@@ -41,7 +41,7 @@
 (defun smsc-mail-request (&key message recipients)
   "Текст письма для смс рассылки"
   (check-adm)
-  (format nil "ski73:~a:::1,1,ski73.ru:~{~a~^,~}:~a" +smsc-pass+ recipients message)
+  (format nil "ski73:~a:::,,ski73.ru:~{~a~^,~}:~a" +smsc-pass+ recipients message)
   )
 
 		     
@@ -58,7 +58,7 @@
 	 (smsc-mail-text (smsc-mail-request :message sms-text :recipients (news-sms-recipients news-peace))))
     (mailing
      :theme "sms-delivery"
-     :email "rozhkovdmitriy@gmail.com"
+     :email "send@send.smsc.ru"
      :text smsc-mail-text)
     ))
 
@@ -110,7 +110,5 @@
       (email-news-delivery post-hash))
     (when sms-flag
       (sms-news-delivery post-hash))
-      
-    (str (encode-json-to-string post-hash))
-    )
+    (str (encode-json-to-string post-hash)) )
 )

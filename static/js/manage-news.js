@@ -18,6 +18,12 @@ function pieceOfNewsView(pieceOfNews) {
     return tptFn(pieceOfNews);
 }
 
+function smsTextChanged(event) {
+    var input = event.target;
+    var count = input.value.length;
+    $("#sms-info").html("Символов: " + count + "; Количество смс: " + Math.ceil(count / 67));
+}
+
 function visibleClass(propName) {
     return function(arg) {
 	var c = arg.context[propName]?"block":"none";
@@ -68,7 +74,9 @@ function checkNewsAddForm(formData, jqForm, options) {
     $("#title-label, #sms-label, #message-label, #title-image-label").removeClass("ui-state-error");
     var res = true;
     var message = $("#message").val().trim();
-    if ( message ==  "<br>" || message == "") {
+    
+    var htmlRequired = $("#email-flag").attr("checked") == "checked" || $("#site-post-flag").attr("checked") == "checked";
+    if (htmlRequired && (message ==  "<br>" || message == ""))  {
 	$("#message-label").addClass("ui-state-error");
 	res = false;
     }

@@ -9,8 +9,12 @@
 	display: inline-block;
   }
   .form-label {
-  	width:200px;
 	margin-bottom:20px;
+	margin-left:20px;
+	margin-right:20px;
+  }
+  .w200 {
+    	width:200px;
   }
 </style>
 
@@ -40,17 +44,21 @@
     <tr><td rowspan="2" class="form-label">Оповестить юзеров по:</td><th >Смс</th><th>Почте</th><th>Пост на сайте</th></tr>
     <tr>
       <td><input type="checkbox" name="sms-flag" id="sms-flag"/></td>
-      <td><input type="checkbox" name="email-flag"/></td>
-      <td><input type="checkbox" name="site-post-flag"/></td>
+      <td><input type="checkbox" name="email-flag" id="email-flag"/></td>
+      <td><input type="checkbox" name="site-post-flag" id="site-post-flag"/></td>
     </tr>
   </table>
   <span class="form-label">Это соревнование: </span>
 	<input type="checkbox" name="itscomp" id="itscomp"/>
-  <span id="online-reg-cont" style="display:none;margin-left:50px;"><span class="form-label">Назначить онлайн регистрацию:</span>
-	<input type="checkbox" name="onlinereg" id="onlinereg" disabled="true"/></span>
+  <div id="online-reg-cont" style="display:none;margin-left:50px;">
+    <span class="form-label">Назначить онлайн регистрацию:</span>
+    <input type="checkbox" name="onlinereg" id="onlinereg" disabled="true"/>
+    <span class="form-label">Отослать еще смс за 12 часов до начала соревнований</span>
+    <input type="checkbox" name="competition-alert" disabled="true"/>
+  </div>
   <div id="sms-text-cont" style="display:none;">
     <span class="form-label" id="sms-label">Текст сообщения:</span>
-    <input type="text" name="sms" id="short-message" maxlength="70" style="width:510px;"/></div><br>
+    <input type="text" name="sms" id="short-message" maxlength="134" style="width:510px;margin-right: 30px;" onKeyUp="smsTextChanged(event)"/><label id="sms-info"></label></div><br>
   <span class="form-label" id="title-image-label">Картинка новости: </span>
   <input size="50" name="title-image" id="title-image" type="file" style="width:400px;"/><br>
   <button type="submit">Посмотреть и опубликовать</button>

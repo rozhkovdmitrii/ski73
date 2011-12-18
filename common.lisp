@@ -68,7 +68,7 @@
 
 (defun check-adm ()
   (let* ( (user (session-value 'user))
-	 (type (if user (gethash "type" user) nil)) )
+	 (type (if user (gethash "type" user) nil)))
     (if (and type (> type 2))
 	(error 'request-processing-error :text "Для выполнения оперции необходимы полномочия администратора"))
     ))

@@ -2,16 +2,24 @@ function resetProfileFormTools() {
     createUploader();
 }
 
+
+function checkPhone(postdata, phonevalue) {
+    var phoneRexp = /\+7 (\d{3}) (\d{6})/;
+    postdata['phone'] = phonevalue.match(phoneRexp)?phonevalue.replace(phoneRexp, "7$1$2"):"";
+}
+
 function applyProfile() {
+    var additionData = {
+	"sms-comp-flag":$("#sms-comp-flag").attr('checked')?"on":false,
+	"sms-other-news-flag":$("#sms-other-news-flag").attr('checked')?"on":false,
+	"email-comp-flag":$("#email-comp-flag").attr('checked')?"on":false,
+	"email-other-news-flag":$("#email-other-news-flag").attr('checked')?"on":false,
+    };
+    checkPhone(additionData, $('#phone').val());
     var applyProfileConfig  = {
 	url: "/apply-profile",
 	type:"POST", success:profileHandler,
-	data: {
-	    "sms-comp-flag":$("#sms-comp-flag").attr('checked')?"on":false,
-	    "sms-other-news-flag":$("#sms-other-news-flag").attr('checked')?"on":false,
-	    "email-comp-flag":$("#email-comp-flag").attr('checked')?"on":false,
-	    "email-other-news-flag":$("#email-other-news-flag").attr('checked')?"on":false,
-	}
+	data: additionData
     };
     $("#edit-profile-form").ajaxSubmit(applyProfileConfig);
 }
@@ -23,6 +31,9 @@ function handleUserChangedInProfile(event) {
 
 function fillEditProfileForm(user) {
     if (!user) return;
+    user.propIsEql = function(prop, value) {
+	return this.hasOwnProperty(prop) && this[prop] == value;
+    };
     var directive = {
 	'#email' : function(arg) {
 	    var type = arg.context.type; 
@@ -34,16 +45,17 @@ function fillEditProfileForm(user) {
 	'#birthDate@value' : 'birthDate',
 	'#moder@checked' : 'moderRqst',
 	'#city@value' : 'city',
-	'#info' : 'info'
+	'#info' : 'info',
+	'#phone@value' : 'phone'
     };
     $('#editprofile').render(user, directive);
     $('#rank').val(user.rank);
     $('#club').val(user.club);
-    $('#sms-comp-flag').attr('checked', user["sms-comp-flag"] == "false"?false:true);
-    $('#email-comp-flag').attr('checked', user['email-comp-flag'] == "false"?false:true);
-    $('#sms-other-news-flag').attr('checked', user['sms-other-news-flag'] == "false"?false:true);
-    $('#email-other-news-flag').attr('checked', user['email-other-news-flag'] == "false"?false:true);
-
+    $('#sms-comp-flag').attr('checked', user.propIsEql("sms-comp-flag", "on"));
+    $('#email-comp-flag').attr('checked', user.propIsEql('email-comp-flag', "on"));
+    $('#sms-other-news-flag').attr('checked', user.propIsEql('sms-other-news-flag', "on"));
+    $('#email-other-news-flag').attr('checked', user.propIsEql('email-other-news-flag', "on"));
+    $('#phone').mask("+7 999 9999999");
     if (user.hasOwnProperty("moderBan") || user.type < 3)
 	$("#moder-form-label").hide();
     if (user.hasOwnProperty("photo"))

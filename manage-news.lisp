@@ -20,33 +20,31 @@
       (setf (gethash "email-comp-flag" query) "on")
       (setf (gethash "email-other-news-flag" query) "on")
       )
-    (let ((users-hash (find-list *users* :query query :fields (son "email" 1)))
-	  )
+    (let ((users-hash (find-list *users* :query query :fields (son "email" 1))))
       (map 'list #'(lambda (htable) (gethash "email" htable)) users-hash)
       )
     )
-  ;(find
   )
 
+(defun news-sms-recipients (news-peace)
+  "Извлечение списка получателей смс"
+  (let ((comp (gethash "its-comp" news-peace))
+	(query (son "phone" (son "$ne" ""))))
+    (if comp
+	(setf (gethash "sms-comp-flag" query) "on")
+	(setf (gethash "sms-other-news-flag" query) "on")
+	)
+    (let ((phones-hash (find-list *users* :query query :fields (son "phone" 1))))
+      (map 'list #'(lambda (phones) (gethash "phone" phones)) phones-hash)
+      )
+  )
+		     )
 (defun prepare-mailing-subject (subject)
     (let ((encoded-subj (cl-smtp:rfc2045-q-encode-string subject))) 
 	  
 	  (cl-ppcre:regex-replace-all "\\?=\\s+=\\?UTF-8\\?Q\\?" encoded-subj  "=20")
 	  ))
 
-(defun mailing (&key (theme "ski73 delivery") html (text "default delivery text") rcp )
-  "Рассылка чего бы-то по всему списку рассылки"
-  (cl-smtp:send-email
-   "smtp.gmail.com"  
-   "noreply@ski73.ru" 
-   "noreply@ski73.ru"
-   (prepare-mailing-subject theme)
-   (make-utf8-string text) 
-   :bcc rcp
-   :ssl :tls
-   :authentication '("noreply@ski73.ru" "fjmb58vc")
-   :html-message (make-utf8-string html)
-   ))
 
 
 (defun sms-news-delivery (news-peace)

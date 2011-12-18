@@ -38,6 +38,9 @@
 
 (defparameter +root-path+ (truename (posix-getenv "SKI73_HOME")))
 
+(unless (posix-getenv "MAIL_PASS") (error 'error :text "MAIL_PASS has to been set"))
+(defparameter +mail-pass+ (posix-getenv "MAIL_PASS"))
+
 (defparameter +static-path+ (merge-pathnames #p"static/" +root-path+))
 (defparameter +photo-path+ (merge-pathnames #p"photo/" +static-path+))
 (defparameter +news-img-path+ (merge-pathnames #p"news-images/" +static-path+))

@@ -1,6 +1,5 @@
 <h3>Управление новостной лентой</h3>
 
-<script type="text/javascript" src="static/js/manage-news.js"></script>
 <style type="text/css">
   th {
 	width:100px;
@@ -35,6 +34,9 @@
     }
 </style>
 
+<script type="text/javascript" >
+  $(document).ready(initManageNews);
+</script>
 
 <form id="add-piece-of-news" enctype="multipart/form-data" type="post" style="margin-top:30px;margin-left:30px;">
   <span class="form-label" id="title-label">Заголовок: </span><input type="text" name="title" id="title" size="50" maxchars="200"/><br>

@@ -1,3 +1,7 @@
+function initAll() {
+    getServerContext();
+    window.TF = new TemplatesFactory();
+}
 
 function setUser(event) {
     document.cu = event.user;
@@ -8,6 +12,21 @@ function pushHistoryState(url) {
     history.pushState(null,null, url);
 }
 
+function getServerContext() {
+    var options = {
+	type: "POST",
+	url: "context",
+	async : false,
+	success: handleServerContext,
+	error:function (XMLHttpRequest, textStatus, errorThrown) {alert(textStatus);}
+    };
+    $.ajax(options);
+}
+
+function handleServerContext(data, textStatus, jqXHR) {
+    var parsed = eval("(" + data + ")");
+    window.context = parsed;
+}
 
 function createFileUploader(id, action, conf){
     if (!conf) conf = {};

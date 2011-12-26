@@ -13,6 +13,7 @@
     
 
     <script type="text/javascript" src="static/js/requests.js"></script>
+    <script type="text/javascript" src="static/js/TemplatesFactory.js"></script>
     <script type="text/javascript" src="static/js/op-analyzer.js"></script>
     <script type="text/javascript" src="static/js/registration.js"></script>
     <script type="text/javascript" src="static/js/jquery.jqDock.min.js"></script>
@@ -28,31 +29,19 @@
     <!--TODO вынести в admin.html-->
     <script type="text/javascript" src="static/js/test.js"></script>
     <script type="text/javascript" src="static/js/common.js"></script>
-
+    <!--TODO вынести в main.html-->
+    <script type="text/javascript" src="static/js/manage-news.js"></script>
+    <script type="text/javascript" src="static/js/news-line.js"></script>
 
     <!--DATA TABLE-->
     <script type="text/javascript" src="static/js/DataTables-1.8.2/media/js/jquery.dataTables.min.js"></script>
     <link rel="stylesheet" type="text/css" href="static/js/DataTables-1.8.2/media/css/demo_page.css"/>
     <link rel="stylesheet" type="text/css" href="static/js/DataTables-1.8.2/media/css/demo_table.css"/>
 
-
-
-<!--    <script src="static/js/akzhan-jwysiwyg/jquery.wysiwyg.js" type="text/javascript" charset="utf-8"></script>
-    <script src="static/js/akzhan-jwysiwyg/src/dialogs/default.js" type="text/javascript" charset="utf-8"></script>
-    <script type="text/javascript" src="static/js/akzhan-jwysiwyg/controls/wysiwyg.image.js"></script> 
-    <link rel="stylesheet" href="static/js/akzhan-jwysiwyg/jquery.wysiwyg.css" type="text/css" media="screen" charset="utf-8" />
-    <link rel="stylesheet" href="static/js/akzhan-jwysiwyg/src/dialogs/default.css" type="text/css" media="screen" charset="utf-8" />-->
-
-
-
     <link rel="stylesheet" type="text/css" href="static/js/CLEditor_1_3_0/jquery.cleditor.css"/>
     <script type="text/javascript" src="static/js/CLEditor_1_3_0/jquery.cleditor.min.js"></script>
 
-
-
-
-
-   <link rel="stylesheet" type="text/css" href="static/js/DataTables-1.8.2/media/css/demo_page.css"/>
+    <link rel="stylesheet" type="text/css" href="static/js/DataTables-1.8.2/media/css/demo_page.css"/>
 
 
     <script type="text/javascript" src="static/js/jquery-ui-1.8.16.custom/js/jquery-ui-1.8.16.custom.min.js"></script>
@@ -70,6 +59,9 @@
     <script type="text/javascript" src="static/js/colorbox/colorbox/jquery.colorbox-min.js"></script>
 
 
+    <!-- Datejs from http://www.datejs.com/ -->
+    <script type="text/javascript" src="static/js/lib/date.js"></script>
+    
     <link rel="icon" 
       type="image/ico" 
       href="favicon"/>
@@ -82,6 +74,7 @@
   <title>ulskiing</title>
     <script type="text/javascript">
     $(document).ready(function() {
+	initAll();
 	getMain();
 	getMenu();
 	getAuthPanel();

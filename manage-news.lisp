@@ -9,6 +9,7 @@
    "its-comp" (post-parameter "itscomp")
    "message" (url-encode (post-parameter "message"))
    "site-post-flag" (post-parameter "site-post-flag")
+   "date" (get-universal-time)
    )
   )
 
@@ -112,3 +113,12 @@
       (sms-news-delivery post-hash))
     (str (encode-json-to-string post-hash)) )
 )
+
+
+(define-url-fn (news-banch)
+    "Возвращает в поток пачку новостей размещенных в промежутке времени между from и to"
+  (let* ((from (post-parameter "from"))
+	 (to (post-parameter "to"))
+	 (news (find-list *news* :query (son) :fields (son))))
+    (str (encode-json-to-string news))
+  ))

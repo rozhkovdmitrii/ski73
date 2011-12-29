@@ -1,3 +1,32 @@
+<style type="text/css">
+  .newsPiece:nth-child(even) {background: #e0e0e0}
+  .newsPiece:nth-child(odd) {background: #e5e5ff}
+</style>
+
+<script id="news-line-tpt" type="text/x-jquery-tmpl">
+  <div style="width: 100%;text-align:center" class="newsPiece">
+    <table style="width:90%;margin-left:3%;margin-right:2%">
+      <tr>
+	<th colspan="2" class="newsPieceTitle" style=
+	    "text-align:center;color:#191970;padding-bottom:30px;font-size:14pt;">${title}</th>
+      </tr>
+      <tr>
+	<td class="newsPieceMessage">{{html $.url.decode(message)}}</td>
+	{{if titleimage}}
+	<td class="newsPieceImageCell" style="padding-left:5px;width:200px;">
+	  <img class="newsPieceImage" src="static/news-images/${titleimage}"
+	       style="width:200px;">
+	</td>
+	{{/if}}
+      </tr>
+    </table>
+  <hr style="margin-bottom:5px;margin-top:5px">
+  <label>Дата размещения: ${lispTimestampToJS(date)}</label>
+  <a onClick="removeNewsPiece('${mongoId(_id)}')" style="margin-left:40px;display:{{if (document.cu && document.cu.type < 3)}}block-inline{{else}}none{{/if}}">Удалить</a>
+  <hr style="margin-bottom:50px;margin-top:5px">
+  </div>
+</script>
+
 <script type="text/javascript">
 $(document).ready(
 function() {
@@ -5,7 +34,10 @@ function() {
 }
 );
 </script>
+<div id="news" style="text-align:center">
+  <h1 style="marigin-top:30px;margin-bottom:60px;">Последние новости</h1>
 
-<div id="news">
+<div id="news-render-target">
   
+</div>
 </div>

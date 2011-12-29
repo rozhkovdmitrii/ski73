@@ -2,7 +2,6 @@ function resetProfileFormTools() {
     createUploader();
 }
 
-
 function checkPhone(postdata, phonevalue) {
     var phoneRexp = /\+7 (\d{3}) (\d{6})/;
     postdata['phone'] = phonevalue.match(phoneRexp)?phonevalue.replace(phoneRexp, "7$1$2"):"";

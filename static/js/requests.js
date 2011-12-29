@@ -1,17 +1,6 @@
 
 var cmpttList = new Array();
 
-
-/** Получаем строку из в которой хранятся 12 байт mongo id-шника для передачи в запросе */
-function mongoId(mid) {
-    var strId = new String();
-    var plusByCode = function(el, index, arr) {
-	return strId += String.fromCharCode(el);
-    };
-    mid.raw.forEach(plusByCode);
-    return strId;
-}
-
 /** Запрашиваем главную страничку */
 function getMain() {
     $('#mainframe').load("static/main.html");

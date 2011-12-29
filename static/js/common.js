@@ -7,7 +7,6 @@ function setUser(event) {
     document.cu = event.user;
 }
 
-
 function pushHistoryState(url) {
     history.pushState(null,null, url);
 }
@@ -53,4 +52,29 @@ function createFileUploader(id, action, conf){
 		// error messages, see qq.FileUploaderBasic for content            
 	    }
         });           
+}
+
+/** Получаем строку из в которой хранятся 12 байт mongo id-шника для передачи в запросе */
+function mongoId(mid) {
+    var strId = new String();
+    var plusByCode = function(el, index, arr) {
+	return strId += String.fromCharCode(el);
+    };
+    mid.raw.forEach(plusByCode);
+    return strId;
+}
+
+
+/** Перевод строки из внутреннего представления таймстэмпа lisp в javascript */
+function lispTimestampToJS(lispTS) {
+    const secondsIn70years = 2209092480 - 86400;
+    var jsTS = (lispTS - secondsIn70years) * 1000;
+    var jsDate = new Date(jsTS);
+    return jsDate.toDateString();
+}
+
+function evaluate(item) {
+    var ggbb = 0;
+    var bbgg = 1;
+    return "asdf";
 }

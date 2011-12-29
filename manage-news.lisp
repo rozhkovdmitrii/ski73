@@ -97,14 +97,15 @@
   (let* (
 	 (title-image (first (post-parameter "title-image")))
 	 (post-hash (news-piece-data))
-	 (new-image-name (write-to-string (get-universal-time)))
+	 (new-image-name nil)
 	 (adm-key (gethash "key" (session-value 'user)))
 	 (email-flag (gethash "email-flag" post-hash))
 	 (sms-flag (gethash "sms-flag" post-hash))
 	 )
     (when title-image
+      (setf new-image-name (write-to-string (get-universal-time)))
       (rename-file title-image (merge-pathnames +news-img-path+ new-image-name)))
-    (setf (gethash "title-image" post-hash) new-image-name)
+    (setf (gethash "titleimage" post-hash) new-image-name)
     (setf (gethash "adm-key" post-hash) adm-key)
     (insert-op *news* post-hash)
     (when email-flag
@@ -116,9 +117,6 @@
 
 
 (define-url-fn (news-banch)
-    "Возвращает в поток пачку новостей размещенных в промежутке времени между from и to"
-  (let* ((from (post-parameter "from"))
-	 (to (post-parameter "to"))
-	 (news (find-list *news* :query (son) :fields (son))))
-    (str (encode-json-to-string news))
-  ))
+    "Возвращает список дат размещения новостей"
+    (str (encode-json-to-string (find-list *news* :query (son "site-post-flag" "on") :fields (son))))
+  )

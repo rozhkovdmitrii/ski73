@@ -7,7 +7,6 @@ function initNewsLine() {
     var nowstamp = now.valueOf();
     var monthAgoStamp = monthAgo.valueOf();
     getNews(monthAgoStamp, nowstamp);
-
 }
 
 function getNews(from, to) {
@@ -22,41 +21,9 @@ function getNews(from, to) {
     $.ajax(newsBunchOptions);
 }
 
-function newsLineView(initialBunch) {
-
-    var template = $(window.TF.get("news-line"));
-    var directive = {
-	".news-bunch" : function (arg) {
-	    return newsBunchView({"news" : arg.context});
-	}
-    };
-    var compiled = template.compile(directive);
-    return compiled(initialBunch);
-
-}
-
-
-function newsBunchView(bunch) {
-    var template = $(window.TF.get("news-bunch"));
-    var directive = {
-    	"." :  {
-	    "newsPiece<-news" : {
-		".news-piece" : function(arg) {
-		    var content = newsPieceView(arg.item);
-		    return content;
-		}
-	    }
-	}
-    };
-    var compiled = template.compile(directive);
-    return compiled(bunch);
-}
-
 function handleInitialNewsBanch(data, textStatus, jqXHR) {
-    var parsed = eval('(' + data + ')');
-    var newsContainer = $("#news");
-    var size = Object.keys(parsed).length;
-    newsContainer.html(newsLineView(parsed));
+    var parsed = eval('(' + data + ')').reverse();
+    $( "#news-line-tpt" ).tmpl( parsed ).appendTo( "#news-render-target" );
 }
 
 function newsPieceView(piece) {

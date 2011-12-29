@@ -134,4 +134,6 @@ function initManageNews() {
 }
 
 
-
+function removeNewsPiece(mid) {
+    alert("Админская заглушка для удаления новости с идентификатором " + mid);
+}

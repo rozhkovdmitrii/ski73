@@ -2,7 +2,16 @@
     #headpoints, .notPrint {
 	display : none;
     }
+    .page-break {
+	height:0; page-break-before:always; margin:0; border-top:none;
+    }
     
+}
+
+@media screen {
+    .page-break	{
+	height:10px; background:url(page-break.gif) 0 center repeat-x; border-top:1px dotted #999; margin-bottom:13px;
+    }
 }
 
 .block {
@@ -88,3 +97,4 @@ div#toggleAuth img {
 .success {
     color : green;
 }
+

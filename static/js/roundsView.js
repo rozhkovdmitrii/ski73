@@ -19,7 +19,8 @@ function roundsView(rounds) {
 		       + "<tr class='capRow'><th></th></tr>"
 		       + "<tr class='dataRow'></tr>"
 		     + "</table>"
-		     + "</div> </div>");
+		     + "<div class='page-break'></div>"
+		     + "</div> ");
     var directive = {
 	'+.cmpTitle': 'title',
 	'#rounds-print-help@title' : function (arg) { return roundsHelp;},

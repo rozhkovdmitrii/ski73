@@ -92,7 +92,7 @@ function checkNewsAddForm(formData, jqForm, options) {
     }
     var files = $("#title-image").get()[0].files;
     if (files.length != 0
-	&& (files[0].size > 1000000 || files[0].size < 100000
+	&& (files[0].size > 1000000 || files[0].size < 50000
 	    || !files[0].type.match(/image\/\(jpg|jpeg|png|gif\)/) )) {
 	$("#title-image-label").addClass("ui-state-error");
 	alert("Разрешены форматы jpeg, gif, png. Размер файла не должен превышать 500кБ и быть меньше 100кБ");

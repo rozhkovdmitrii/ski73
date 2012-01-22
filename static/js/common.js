@@ -8,7 +8,7 @@ function setUser(event) {
 }
 
 function pushHistoryState(url) {
-    history.pushState(null,null, url);
+    history.pushState(null, null, url);
 }
 
 function getServerContext() {
@@ -24,7 +24,7 @@ function getServerContext() {
 
 function handleServerContext(data, textStatus, jqXHR) {
     var parsed = eval("(" + data + ")");
-    window.context = parsed;
+    window.now = parsed.now;
 }
 
 function createFileUploader(id, action, conf){

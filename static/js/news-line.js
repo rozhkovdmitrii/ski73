@@ -1,6 +1,6 @@
 function initNewsLine() {
     const secondsIn70years = 2209092480 - 86400;
-    var secondsFrom1_1_1970 = window.context.now - secondsIn70years;
+    var secondsFrom1_1_1970 = window.now - secondsIn70years;
     var now = new Date(secondsFrom1_1_1970 * 1000);
     var monthAgo = new Date(now);
     monthAgo.addMonths(-1);

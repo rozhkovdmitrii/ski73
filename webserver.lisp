@@ -6,6 +6,7 @@
 ;(setf *default-content-type* "text/html;charset=utf-8")
 
 ;;Инициализируем web сервис
+;;(setf *session-max-time* 2)
 (defparameter *server-instance* (make-instance 'hunchentoot:acceptor :port 4242) "my web server")
 (hunchentoot:start *server-instance*)
 

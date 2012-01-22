@@ -29,7 +29,7 @@ function TemplatesFactory () {
     };
     
     this.get = function(name) {
-	return this.storage.hasOwnProperty(name)?storage[name]:this.getFromServer(name);
+	return this.storage.hasOwnProperty(name)?this.storage[name]:this.getFromServer(name);
     };
 
     this.doWithTemplate = function(name, callback) {

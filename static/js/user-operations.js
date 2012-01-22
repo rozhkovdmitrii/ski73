@@ -19,6 +19,7 @@ function getCurrentUser() {
 		document.cu = cu;
 		refreshUserDependencies(cu);
 	    },
+            async: false,
 	    error:function (XMLHttpRequest, textStatus, errorThrown) {alert(textStatus);}
 	});
 

@@ -46,10 +46,6 @@
   )
 
 		     
-(defun prepare-mailing-subject (subject)
-    (let ((encoded-subj (cl-smtp:rfc2045-q-encode-string subject))) 
-      (cl-ppcre:regex-replace-all "\\?=\\s+=\\?UTF-8\\?Q\\?" encoded-subj  "=20")
-	  ))
 
 
 

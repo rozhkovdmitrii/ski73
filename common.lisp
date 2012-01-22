@@ -22,6 +22,12 @@
                       'code-char
                       (trivial-utf-8:string-to-utf-8-bytes string))))
 
+(defun prepare-mailing-subject (subject)
+    (let ((encoded-subj (cl-smtp:rfc2045-q-encode-string subject))) 
+      (cl-ppcre:regex-replace-all "\\?=\\s+=\\?UTF-8\\?Q\\?" encoded-subj  "=20")
+	  ))
+
+
 (defun mailing (&key (theme "ski73 delivery") (html nil) (text "default delivery text") (bcc nil) (cc nil) (email "noreply@ski73.ru"))
   "Рассылка чего бы-то по всему списку рассылки"
   (cl-smtp:send-email

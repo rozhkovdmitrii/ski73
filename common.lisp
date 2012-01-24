@@ -1,3 +1,10 @@
+
+(defun mongo-id (string-container)
+  "Завернутый в строку идентификатор"
+  (make-instance 'object-id :raw (flexi-streams:string-to-octets string-container))
+)
+
+
 (defmacro define-url-fn ((name) &body body)
   "Создание и регистрация функции обработчика в диспатчер"
   `(progn (defun ,name ()

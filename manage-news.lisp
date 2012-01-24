@@ -103,16 +103,24 @@
       (rename-file title-image (merge-pathnames +news-img-path+ new-image-name)))
     (setf (gethash "titleimage" post-hash) new-image-name)
     (setf (gethash "adm-key" post-hash) adm-key)
+    (setf (gethash "archive" post-hash) nil)
     (insert-op *news* post-hash)
     (when email-flag
       (email-news-delivery post-hash))
     (when sms-flag
       (sms-news-delivery post-hash))
-    (str (encode-json-to-string post-hash)) )
+    
+    (str "{status : 'done'}"))
 )
 
 
 (define-url-fn (news-banch)
     "Возвращает список дат размещения новостей"
-    (str (encode-json-to-string (find-list *news* :query (son "site-post-flag" "on") :fields (son))))
+    (str (encode-json-to-string (find-list *news* :query (son "site-post-flag" "on" "archive" nil) :fields (son))))
+  )
+
+(define-url-fn (remove-piece-of-news)
+    "Удалить новость"
+    (update-op *news* (son "_id" (mongo-id (post-parameter "key"))) (son "$set" (son "archive" t)))
+    (str (format nil "{status : 'done'}"))
   )

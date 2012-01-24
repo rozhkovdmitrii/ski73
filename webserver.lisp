@@ -34,15 +34,10 @@
 (push (namestring *default-pathname-defaults*) trivial-shell:*shell-search-paths*)
 (trivial-shell:shell-command (concatenate 'string "cd " (namestring *default-pathname-defaults*)))
 
-(setf *show-lisp-errors-p* t
-)
+(setf *show-lisp-errors-p* t)
 
 (define-condition request-processing-error (error)
   ((text :initarg :text :reader text)))
-
-(hunchentoot:define-easy-handler (say-yo :uri "/yo") (name patronimic)
-  (setf (hunchentoot:content-type*) "text/html;charset=utf-8")
-  (format nil "<h1>Привет~@[ ~A~]! ~a</h1>" name patronimic))
 
 ; привязка корня сайта
 (push (create-static-file-dispatcher-and-handler "/" "static/hello.html") *dispatch-table*)
@@ -88,7 +83,7 @@
   (let ((id (post-parameter "id")) )
     (str
      (encode-json-to-string (find-one *competitions* 
-				      (son "_id" (make-instance 'object-id :raw (flexi-streams:string-to-octets id))) 
+				      (son "_id" (mongo-id id)) 
 				      (son "rounds" 1 "captions" 1 "title" 1)))
      )))
 

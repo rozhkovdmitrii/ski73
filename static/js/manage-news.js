@@ -58,8 +58,9 @@ function applyNewsPiece() {
 	    "approved": "on"
 	},
 	success:function(responseText, statusText) {
-	    alert("Пост проведен");
-	    
+	    var response = eval("(" + responseText + ")")
+	    if (response.hasOwnProperty("status") && response.status == "done")
+		getMain();
 	}
     };
     $("#add-piece-of-news").ajaxSubmit(applySubmitConfig);
@@ -135,5 +136,23 @@ function initManageNews() {
 
 
 function removeNewsPiece(mid) {
-    alert("Админская заглушка для удаления новости с идентификатором " + mid);
+    var options = {
+	url : "remove-piece-of-news",
+	type : "POST",
+	data : {
+	    key : mid
+	}, 
+	success: handleNewsPieceRemoving,
+	error:function (XMLHttpRequest, textStatus, errorThrown) {alert(textStatus);}
+    };
+    $.ajax(options);
+    
+}
+
+function handleNewsPieceRemoving(data) {
+    var response = eval ('(' + data + ')');
+    if (response.hasOwnProperty("status") && response.status == "done")
+	getMain();
+    else
+	alert('Произошла ошибка \n' + data);
 }

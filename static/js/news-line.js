@@ -21,8 +21,19 @@ function getNews(from, to) {
     $.ajax(newsBunchOptions);
 }
 
+function objectToArray(object) {
+    var arr = new Array();
+    for(var k in object) {
+	arr.push(object[k]);
+    }
+    return arr;
+
+}
+
 function handleInitialNewsBanch(data, textStatus, jqXHR) {
-    var parsed = eval('(' + data + ')').reverse();
+    var parsed = eval('(' + data + ')');
+    var arr = objectToArray(parsed);
+    arr = arr.sort(function(a, b) { return a.date < b.date; });
     $( "#news-line-tpt" ).tmpl( parsed ).appendTo( "#news-render-target" );
 }
 

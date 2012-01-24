@@ -34,7 +34,7 @@ function handleInitialNewsBanch(data, textStatus, jqXHR) {
     var parsed = eval('(' + data + ')');
     var arr = objectToArray(parsed);
     arr = arr.sort(function(a, b) { return a.date < b.date; });
-    $( "#news-line-tpt" ).tmpl( parsed ).appendTo( "#news-render-target" );
+    $( "#news-line-tpt" ).tmpl( arr ).appendTo( "#news-render-target" );
 }
 
 function newsPieceView(piece) {

@@ -63,9 +63,3 @@
       "round-type" (round-type object)
       "results" (map 'list #'(lambda (res) (alist-hash-table res)) (results object))
   ))
-
-;(defmethod mongo-doc ((reshash hash-table))
-;  (apply #'son (loop for k being the hash-keys in reshash using (hash-value v)
-;	 collect (son k v))
-;    )
-;  )

@@ -5,7 +5,7 @@
 
 :link,:visited { text-decoration:none } :focus,:active { outline: 0 } ul,ol { list-style:none } h1,h2,h3,h4,h5,h6,pre,code { font-size:1em; } ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,body,html,p,blockquote,fieldset,input { margin:0; padding:0 } a img,:link img,:visited img, fieldset { border:none } address { font-style:normal }
 
-body { font: .8em "Trebuchet MS", Verdana, Helvetica, sans-serif; color: #666;  background: #F7FCFF url(../images/bg.png) repeat-x 0 -40px; }
+body { font: .8em "Trebuchet MS", Verdana, Helvetica, sans-serif; color: #666;  background: #F7FCFF repeat-x 0 -40px; }
 a { color: #AF1515; cursor: pointer; }
 a:hover { color: #7D1919; }
 h1 { font-size: 1.9em; font-weight: normal; clear: both; margin: 0 0 5px; }
@@ -13,9 +13,9 @@ h2 { font: normal 1.6em Arial; color: #3D3C3B; margin: 0 0 15px; }
 p  { margin: 0 0 15px; line-height: 1.7em; }
 .clear { clear: both; }
 .wrap { margin: 0 auto; width: 900px; }
-.background { background: url(../images/bg.jpg) no-repeat left 277px; }
+/*.background { background: url(../images/bg.jpg) no-repeat left 277px; }*/
 
-#header { height: 238px; margin-bottom: 9px; background: url(../images/bg-header.png) no-repeat center bottom; }
+#header { height: 238px; margin-bottom: 9px; background: /*url(../images/bg-header.png)*/ no-repeat center bottom; }
 #logo { float: left; margin-top: 55px; }
 #logo a { color: #AF1515; font-size: 3em; font-weight: bold; }
 h2#slogan { font-size: 1.3em; color: #808080; }

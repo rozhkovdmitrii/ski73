@@ -11,6 +11,11 @@
 	      )
   )
 
+(defgeneric mongo-doc (object) (:documentation "Генерирует kv структуру для записи в БД mongo"))
+
+
+
+
 
 (defclass roundc ()
   (
@@ -46,7 +51,6 @@
 
 
 
-(defgeneric mongo-doc (object) (:documentation "Генерирует kv структуру для записи в БД mongo"))
 
 (defmethod mongo-doc ((object competition))
   (son "title" (title object)

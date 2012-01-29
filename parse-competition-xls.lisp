@@ -43,12 +43,18 @@
 		      finally (return-from file-walk results)
 		 ))))
 
+(defun competition-date-from-string (value)
+  
+  )
+
+
+
 
 (defun secondary-analyse (rounds) "Вторичная обработка данных полученных при чтении xls файла с результатми соревнований на этом этапе должна производиться запись в БД, создание объектов CLOS"
        (loop for round in rounds
 	  for cmpt = (make-instance 'competition
 				    :title (cdr (assoc "cc-title" round :test #'string=))
-				    :date (cdr (assoc "date" round  :test #'string=))
+				    :date (competition-date-from-string (cdr (assoc "date" round  :test #'string=)))
 				    :begin-time (cdr (assoc "begining-time" round  :test #'string=))
 				    :end-time (cdr (assoc "end-time" round  :test #'string=))
 				    :captions (cdr (assoc "captions" round :test #'string=))

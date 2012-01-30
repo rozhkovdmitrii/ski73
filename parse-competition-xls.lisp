@@ -28,6 +28,7 @@
 					      ("judge" . ,judge)
 					      ("secretary" . ,secretary)
 					      ) line)) )))
+
 (defun analyse-competition (csvfilename) "Функция получает на вход специализированный csv файл с результами соревнований. На выходе получаем соотв. списочную структуру"
 	     (let ((path (pathname csvfilename)) 
 		   
@@ -43,12 +44,38 @@
 		      finally (return-from file-walk results)
 		 ))))
 
+(defun int-stringp (intstring)
+  "проверяет является ли переданная строка представлением числа от 0 до 99"
+  (if (cl-ppcre:scan "^\\d{1,2}$" intstring) t nil))
+
+(defparameter monthes-numbers '(("января" . 1) ("февраля" . 2) ("марта" . 3) ("апреля" . 4)
+				("мая" . 5) ("июня" . 6) ("июля" . 7) ("августа" . 8)
+				("сентября" . 9) ("октября" . 10) ("ноября" . 11) ("декабря" . 12)))
+
+(defun string-to-month-num (month-string)
+  "Строковое представления месяца в его номер"
+  (if (int-stringp month-string)
+      (parse-integer month-string)
+      (let ((month-num (assoc month-string  monthes-numbers :test #'string=)))
+	(unless month-num 
+	  (error 'request-processing-error :text "Нельзя распарсить дату"))
+	(cdr month-num))
+      ))
+ 
+(defun date-string-to-universal-datetime (datestring)
+  (register-groups-bind ((#'parse-integer day) nil (#'string-to-month-num month) nil (#'parse-integer year))
+      ("(\\d{1,2})(\\s|\.)(\\w+)(\\s|\.)(\\d{4})\\s*(г\.?)?"
+       datestring) 
+    (encode-universal-time 0 0 0 day month year))
+  )
+
+
 
 (defun secondary-analyse (rounds) "Вторичная обработка данных полученных при чтении xls файла с результатми соревнований на этом этапе должна производиться запись в БД, создание объектов CLOS"
        (loop for round in rounds
 	  for cmpt = (make-instance 'competition
 				    :title (cdr (assoc "cc-title" round :test #'string=))
-				    :date (cdr (assoc "date" round  :test #'string=))
+				    :date (date-string-to-universal-datetime (cdr (assoc "date" round  :test #'string=)))
 				    :begin-time (cdr (assoc "begining-time" round  :test #'string=))
 				    :end-time (cdr (assoc "end-time" round  :test #'string=))
 				    :captions (cdr (assoc "captions" round :test #'string=))

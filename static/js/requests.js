@@ -68,7 +68,6 @@ function getCompetition(id) {
 function processCompetition(data, textStatus) {
     var rounds = eval ("(" + data + ")");
     $('#mainframe').html(roundsView(rounds));
-    $('.tool-img').simpletooltip();
     
 }
 

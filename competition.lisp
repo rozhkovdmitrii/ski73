@@ -11,6 +11,11 @@
 	      )
   )
 
+(defgeneric mongo-doc (object) (:documentation "Генерирует kv структуру для записи в БД mongo"))
+
+
+
+
 
 (defclass roundc ()
   (
@@ -46,7 +51,6 @@
 
 
 
-(defgeneric mongo-doc (object) (:documentation "Генерирует kv структуру для записи в БД mongo"))
 
 (defmethod mongo-doc ((object competition))
   (son "title" (title object)
@@ -63,9 +67,3 @@
       "round-type" (round-type object)
       "results" (map 'list #'(lambda (res) (alist-hash-table res)) (results object))
   ))
-
-;(defmethod mongo-doc ((reshash hash-table))
-;  (apply #'son (loop for k being the hash-keys in reshash using (hash-value v)
-;	 collect (son k v))
-;    )
-;  )

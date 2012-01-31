@@ -56,9 +56,14 @@ function createFileUploader(id, action, conf){
 
 /** Получаем строку из в которой хранятся 12 байт mongo id-шника для передачи в запросе */
 function mongoId(mid) {
+    var excludes = {"'" : "\\'", "\n" : "\\n", "\t" : "\\t", "\r" : "\\r"};
+
     var strId = new String();
     var plusByCode = function(el, index, arr) {
-	return strId += String.fromCharCode(el);
+	var curCh = String.fromCharCode(el);
+	if (excludes.hasOwnProperty(curCh)) 
+	    curCh = excludes[curCh];
+	return strId += curCh;
     };
     mid.raw.forEach(plusByCode);
     return strId;

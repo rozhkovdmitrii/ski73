@@ -69,8 +69,6 @@
     (encode-universal-time 0 0 0 day month year))
   )
 
-
-
 (defun secondary-analyse (rounds) "Вторичная обработка данных полученных при чтении xls файла с результатми соревнований на этом этапе должна производиться запись в БД, создание объектов CLOS"
        (loop for round in rounds
 	  for cmpt = (make-instance 'competition

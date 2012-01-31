@@ -42,8 +42,10 @@ function processCompetitionsList(data, textStatus) {
     var d1 = {
 	'li':{
 	   "curr<-competitions": {
-	      'a':"curr.title"
-	       ,'a@onClick':function(arg) { cmpttList[arg.pos] = arg.item; return "getCompetition(" + arg.pos + ");" }
+	       'a': function(arg) {
+		   return arg.item.title + " - " + arg.item.date
+	       },
+	       'a@onClick':function(arg) { cmpttList[arg.pos] = arg.item; return "getCompetition(" + arg.pos + ");" }
 	    }
      	}
     };

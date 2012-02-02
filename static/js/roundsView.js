@@ -7,13 +7,13 @@ var collapseHelp = "Свернуть все";
 
 function roundsView(rounds) {
     var template = $('<div>'
-		     + "<table style='width:100%'><tr><td class='cmpTitle'></td>"
+		     + "<table style='width:100%'><tr><td class='pageTitle'></td>"
 			+"<td class='notPrint'>"
 				+ "<img class='tool-img' id='expandAllImg' src='static/img/expand_all.png' onClick='expandAll()'/>"
 				+ "<img class='tool-img' id='collapseAllImg' src='static/img/collapse_all.png' onClick='collapseAll()'/>"
 				+ "<img class='tool-img' id='rounds-print-help' src='static/img/question.png' >"
 		     + "</td></tr></table>"
-		     + "<div class='round'>"
+		     + "<div class='round toggle-group-container'>"
 		     + "<div class='group-toggle notPrint'><img src='static/img/expand.png'></div>"
 		     + "<table class='round-table' style='display:none'>"
 		       + "<tr class='capRow'><th></th></tr>"
@@ -22,7 +22,7 @@ function roundsView(rounds) {
 		     + "<div class='page-break'></div>"
 		     + "</div> ");
     var directive = {
-	'+.cmpTitle': 'title',
+	'+.pageTitle': 'title',
 	'#rounds-print-help@title' : function (arg) { return roundsHelp;},
 	'#expandAllImg@title' : function (arg) { return expandHelp;},
 	'#collapseAllImg@title' : function (arg) { return collapseHelp; },
@@ -53,9 +53,6 @@ function roundsView(rounds) {
     var html = rfn(rounds);
     return html;
 }
-
-const expandImg = "static/img/expand.png";
-const collapseImg = "static/img/undo.png";
 
 function toggleRound (pos) {
     var tbl = $("#rnd" + pos);

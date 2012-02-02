@@ -28,38 +28,32 @@ function getProfile() {
 
 /** Запрашиваем список соревнований */
 function getCompetitions() {
-    $.ajax({
-	type: "POST",
-	url: "competitions-list",
-	success: processCompetitionsList,
-	error:function (XMLHttpRequest, textStatus, errorThrown) {alert(textStatus);}
-    });
+    $('#mainframe').load("static/competitions-list-view.html");
 };
 
 /** Принимаем и обрабатываем список соревнований в виде троек [_id, title, date] */
 function processCompetitionsList(data, textStatus) {
     data = eval("({competitions:" + data + "})");
-    var d1 = {
-	'li':{
-	   "curr<-competitions": {
-	       'a': function(arg) {
-		   return arg.item.title + " - " + arg.item.date
-	       },
-	       'a@onClick':function(arg) { cmpttList[arg.pos] = arg.item; return "getCompetition(" + arg.pos + ");" }
-	    }
-     	}
-    };
-    var rfn = $('<ul><li><a style="cursor: pointer;" class="competitionLink"></a></li></ul>').compile(d1);
-    $('#mainframe').html("<div id='competitions-list'></div>");
-    $('#competitions-list').render(data, rfn);
-
-    
+    data.competitions = data.competitions.sort(function(a, b) { return a.date < b.date; });
+    var yearRanged = new Object();
+    for (var key in data.competitions) {
+    	var comp = data.competitions[key];
+    	var compDate = lispTimestampToJS(comp.date);
+    	var year = compDate.getFullYear();
+    	if (!yearRanged.hasOwnProperty(year))
+    	    yearRanged[year] = {year : year, competitions : []};
+    	yearRanged[year].competitions.push(comp);
+       
+    }
+    yearRanged = objectToArray(yearRanged);
+    $( "#competitions-list-tpt" ).tmpl(  yearRanged ).prependTo("#competitionsList");
+    //$("#competitionsList").accordion({collapsible:"i"});
 }
 /** Запрашиваем соревнование по его идентификатору */
 function getCompetition(id) {
     $.ajax({
 	type: "POST",
-	data: { "id" : mongoId(cmpttList[id]._id) },
+	data: { "id" : $.url.decode(id) },
 	url: "competition-info",
 	success: processCompetition,
 	error:function (XMLHttpRequest, textStatus, errorThrown) {alert(textStatus);}

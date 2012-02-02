@@ -21,14 +21,6 @@ function getNews(from, to) {
     $.ajax(newsBunchOptions);
 }
 
-function objectToArray(object) {
-    var arr = new Array();
-    for(var k in object) {
-	arr.push(object[k]);
-    }
-    return arr;
-
-}
 
 function handleInitialNewsBanch(data, textStatus, jqXHR) {
     var parsed = eval('(' + data + ')');
@@ -37,17 +29,3 @@ function handleInitialNewsBanch(data, textStatus, jqXHR) {
     $( "#news-line-tpt" ).tmpl( arr ).appendTo( "#news-render-target" );
 }
 
-function newsPieceView(piece) {
-    var template = $(window.TF.get("news-piece"));
-    var directive = {
-	".newsPieceTitle" : "title",
-	".newsPieceMessage" : function (arg) { return $.url.decode(arg.context.message);},
-	".newsPieceImageCell@style": function(arg) {
-	    var display =  "width:200px;display:" + (arg.context.image != null?"table-cell":"none");
-	    return display;
-	},
-	".newsPieceImage@src" : function(arg) { return "static/tmp/" + arg.context.image; }
-    };
-    var compiled = template.compile(directive);
-    return compiled(piece);
-}

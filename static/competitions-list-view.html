@@ -1,0 +1,30 @@
+
+<script id="competitions-list-tpt" type="text/x-jquery-tmpl">
+
+  <div class='toggle-group-container'>
+    <div class="group-toggle notPrint" onClick="toggleYear(${year});" id="tgl${year}">
+      ${year} <img src='static/img/expand.png'>
+    </div>
+    <table id="cmptts${year}" class="toggle-group-content" style='display:none'>
+      {{each competitions}}
+      <tr >
+	<td>
+	  <a class="competition" onclick="getCompetition('${ mongoHexId($value._id) }')">
+	    ${lispTimestampToJS($value.date).toLocaleDateString() + " - " + $value.title}</a>
+	</td>
+      </tr>
+      {{/each}}
+    </table>
+  </div>
+</script>
+
+<script type="text/javascript">
+$(document).ready(function() {
+    initCompetitionsView();
+});
+</script>
+
+<div class="pageTitle">Список соревнований</div>
+
+<div id='competitionsList'>
+</div>

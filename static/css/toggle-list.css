@@ -1,0 +1,15 @@
+.group-toggle {
+    padding: 10px 5px 10px 5px;
+    color : #333300;
+    cursor : pointer;
+    font-size : 13pt;
+    font-weight : bold;
+}
+
+.toggle-group-container {
+    margin-left : 50px;
+}
+
+.toggle-group-content {
+    margin-left : 30px;
+}

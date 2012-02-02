@@ -61,6 +61,7 @@ function mongoId(mid) {
     var strId = new String();
     var plusByCode = function(el, index, arr) {
 	var curCh = String.fromCharCode(el);
+	var otherCh = "%" + el.toString(16);
 	if (excludes.hasOwnProperty(curCh)) 
 	    curCh = excludes[curCh];
 	return strId += curCh;
@@ -69,17 +70,36 @@ function mongoId(mid) {
     return strId;
 }
 
+function mongoHexId(mid) {
+    var strId = new String();
+    var plusByCode = function(el, index, arr) {
+	var curCh = String.fromCharCode(el);
+	return strId += curCh;
+    };
+    mid.raw.forEach(plusByCode);
+    return $.url.encode(strId);
+}
+
 
 /** Перевод строки из внутреннего представления таймстэмпа lisp в javascript */
 function lispTimestampToJS(lispTS) {
     const secondsIn70years = 2209092480 - 86400;
     var jsTS = (lispTS - secondsIn70years) * 1000;
     var jsDate = new Date(jsTS);
-    return jsDate.toDateString();
+    return jsDate;
 }
 
-function evaluate(item) {
-    var ggbb = 0;
-    var bbgg = 1;
-    return "asdf";
+/** Очень полезно когда что-то приходит как объект который надо преобразовать в массив
+    , например, для сортировки при помощи sort */
+function objectToArray(object) {
+    var arr = new Array();
+    for(var k in object) {
+	arr.push(object[k]);
+    }
+    return arr;
 }
+
+
+const expandImg = "static/img/expand.png";
+const collapseImg = "static/img/undo.png";
+

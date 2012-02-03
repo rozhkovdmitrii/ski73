@@ -101,7 +101,7 @@
     ))
 
 (defun moder-request-list-f ()
-    (encode-json-to-string (find-list *users* :query (son "moderRqst" "true") :fields (son)))
+    (encode-json-to-string (find-list *users* :query (son "moder" "true" "type" 3) :fields (son)))
   )
 (define-url-fn (moder-request-list)
   "Вернет список заявок на повышение полномочий. Осуществляется проверка на суперюзерность текущего оператора"

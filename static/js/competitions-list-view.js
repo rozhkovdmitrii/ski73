@@ -1,3 +1,4 @@
+
 function initCompetitionsView() {
     var options = {
 	type: "POST",
@@ -8,26 +9,47 @@ function initCompetitionsView() {
     $.ajax(options);
 }
 
+/** Принимаем и обрабатываем список соревнований в виде троек [_id, title, date] */
+function processCompetitionsList(data, textStatus) {
+    data = eval("({competitions:" + data + "})");
+    $("#competitionsList").html("");
+    if (data.competitions == null) {
+	return ;
+    }
+    data.competitions = data.competitions.sort(function(a, b) { return a.date < b.date; });
+    var yearRanged = new Object();
+    for (var key in data.competitions) {
+    	var comp = data.competitions[key];
+    	var compDate = lispTimestampToJS(comp.date);
+    	var year = compDate.getFullYear();
+    	if (!yearRanged.hasOwnProperty(year))
+    	    yearRanged[year] = {year : year, competitions : []};
+    	yearRanged[year].competitions.push(comp);
+       
+    }
+    yearRanged = objectToArray(yearRanged).sort(function(a, b) { return a.year < b.year; });
+    $( "#competitions-list-tpt" ).tmpl(  yearRanged ).prependTo("#competitionsList");
+    $(".group-toggle:first").attr("collapsed", false);
+}
+
+
 function toggleYear(year) {
-
-    var id = $("#year" + year);
-    var tbl = $("#cmptts" + year);
-    var tglImg = $("#tgl" + year + " > img");
-
-    var proc = tbl.css("display") == "none"?expandYear:collapseYear;
-    proc(tbl, tglImg, year);
+    var tgl = $("#tgl" + year);
+    tgl.attr("collapsed", tgl.attr("collapsed") != "true");
 }
 
-function expandYear(tbl, tglImg, year) {
-    tbl.show();
-    tglImg.attr("src", collapseImg);
-    $("#tgl" + year).removeClass("notPrint");
+function removeCompetition(id) {
+    var options = {
+	type: "POST",
+	url: "remove-competition",
+	data: { id : $.url.decode(id)},
+	success: handleCompRemoving,
+	error:function (XMLHttpRequest, textStatus, errorThrown) {alert(textStatus);}
+    };
+    $.ajax(options);
 
 }
 
-function collapseYear(tbl, tglImg, year) {
-    tbl.hide();
-    tglImg.attr("src", expandImg);
-    $("#tgl" + year).addClass("notPrint");
-
+function handleCompRemoving(data, textStatus) {
+    getCompetitions();
 }

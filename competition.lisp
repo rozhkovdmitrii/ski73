@@ -58,6 +58,7 @@
        "begin-time" (begin-time object)
        "end-time" (end-time object)
        "captions" (captions object)
+       "utime" (get-universal-time)
        )
   )
 
@@ -66,4 +67,19 @@
   (son "group" (group object)
       "round-type" (round-type object)
       "results" (map 'list #'(lambda (res) (alist-hash-table res)) (results object))
+       "utime" (concatenate 'string (write-to-string (get-universal-time)) (group object))
   ))
+
+
+(defun remove-round-f (comp-id utime)
+  "Удаляем раунд с группой round-group из соревнования идентифицируемого по id"
+  (update-op *competitions*
+	     (son "_id" comp-id)
+	     (son "$pull" (son "rounds" (son "utime" utime)))
+	     )
+  )
+
+(defun remove-competition-f (comp-id)
+  "Удаляем соревнование по comp-id"
+  (delete-op *competitions* (son "_id" comp-id))
+  )

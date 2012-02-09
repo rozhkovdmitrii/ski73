@@ -14,12 +14,13 @@ function roundsView(rounds) {
 				+ "<img class='tool-img' id='rounds-print-help' src='static/img/question.png' >"
 		     + "</td></tr></table>"
 		     + "<div class='round toggle-group-container'>"
-		     + "<div class='group-toggle notPrint'><img src='static/img/expand.png'></div>"
-		     + "<table class='round-table' style='display:none'>"
+		     + "<div class='group-toggle' collapsed=true><div></div>"
+		     + "<a class='remove-link' style='margin-left:30px;font-size:10pt;'>Удалить</a></div>"
+		     + "<table class='round-table'>"
 		       + "<tr class='capRow'><th></th></tr>"
 		       + "<tr class='dataRow'></tr>"
 		     + "</table>"
-		     + "<div class='page-break'></div>"
+		     //+ "<div class='page-break'></div>"
 		     + "</div> ");
     var directive = {
 	'+.pageTitle': 'title',
@@ -29,10 +30,15 @@ function roundsView(rounds) {
 	 '.round': {
 	     'round<-rounds':{
 	 	 '+.group-toggle':'round.group',
+		 // '.removeLink@onClick' : function(arg) { return (document.cu && document.cu.type < 3)?"":""}, 
 	 	 '.group-toggle@id': function (arg) { return "tgl" + arg.pos;},
 	 	 '.group-toggle@onClick' : function (arg) { return "toggleRound(" + arg.pos + ");"; },
 		 'table.round-table@id' : function (arg) { return "rnd" + arg.pos;},
-		 
+		 '.remove-link@onClick' :
+			function (arg) {
+				return "removeRound('" + mongoHexId(arg.context._id) + "', '" + arg.item.group + "', '"
+				+ arg.item.utime + "', event);"; },
+		 '.remove-link@style+' : function (arg) { return (document.cu && document.cu.type < 3)?";display:block-inline":";display:none"},
 		 
 		 'th' : {
 		     "caption<-captions" : {
@@ -55,31 +61,10 @@ function roundsView(rounds) {
 }
 
 function toggleRound (pos) {
-    var tbl = $("#rnd" + pos);
-    if (tbl.css("display") == "none") 
-	expandByIndex(pos);
-    else 
-	collapseByIndex(pos);
-	
+    var tgl = $("#tgl" + pos);
+    tgl.attr("collapsed", tgl.attr("collapsed") != "true");
 }
 
-function expandByIndex(pos) {
-    var tbl = $("#rnd" + pos);
-    var tglImg = $("#tgl" + pos + "> img");
-    tbl.show();
-    tglImg.attr("src", collapseImg);
-    $("#tgl" + pos).removeClass("notPrint");
-
-}
-
-function collapseByIndex(pos) {
-    var tbl = $("#rnd" + pos);
-    var tglImg = $("#tgl" + pos + "> img");
-    tbl.hide();
-    tglImg.attr("src", expandImg);
-    $("#tgl" + pos).addClass("notPrint");
-
-}
 function rowFromResult(result) {
     var res = "";
     for (var i in result) {
@@ -87,21 +72,33 @@ function rowFromResult(result) {
     }
     return res;
 }
-function roundView(round) {
-    var template
-}
 
 function expandAll() {
-    $(".group-toggle").each(
-			    function(index, element) {
-				expandByIndex(index);
-			    });
-    //toggles.foreach(function(gg) {alert(gg);});
+    $(".group-toggle").attr("collapsed", false);
 }
 
 function collapseAll() {
-    $(".group-toggle").each(
-			    function(index, element) {
-				collapseByIndex(index);
-			    });
+    $(".group-toggle").attr("collapsed", true);
 }
+
+function removeRound(compId, group, utime, event) {
+   var options = {
+	type: "POST",
+	url: "remove-round",
+	data: { id : $.url.decode(compId),
+		group : group,
+		utime: utime },
+       	success: function (data) {
+	   data = eval('(' + data + ')');
+	   //alert(data.group + "\n" + data.utime + "\n" + data.id);
+	   getCompetition(compId);
+       } ,
+	error:function (XMLHttpRequest, textStatus, errorThrown) {alert(textStatus);}
+    };
+    $.ajax(options);
+    event.stopPropagation();
+}
+
+// function handleRoundRemove() {
+//     getCompetition('${ mongoHexId($value._id) }'
+// }

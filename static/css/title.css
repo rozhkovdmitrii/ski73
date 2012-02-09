@@ -25,8 +25,8 @@
 
 .page-break	{
 	height:10px; background:/*url(page-break.gif)*/ 0 center repeat-x; border-top:1px dotted #999; margin-bottom:13px;
-    }
 }
+
 
 .block {
     display:block;
@@ -112,3 +112,10 @@ div#toggleAuth img {
     color : green;
 }
 
+
+.removeLink {
+    font-size : 10pt;
+    margin-left: 15px
+}
+
+}

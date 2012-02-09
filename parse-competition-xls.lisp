@@ -29,20 +29,20 @@
 					      ("secretary" . ,secretary)
 					      ) line)) )))
 
-(defun analyse-competition (csvfilename) "Функция получает на вход специализированный csv файл с результами соревнований. На выходе получаем соотв. списочную структуру"
-	     (let ((path (pathname csvfilename)) 
-		   
-		   ) ;;current competition title
-	       (with-open-file (stream path)
-		 
-		   (loop named file-walk 
-		      for line = (multiple-value-bind (comp-round-result line) (read-till-break stream) 
+(defun analyse-competition (csvfilename)
+  "Функция получает на вход специализированный csv файл с результами соревнований. На выходе получаем соотв. списочную структуру"
+  (let ((path (pathname csvfilename)) 
+	
+	) ;;current competition title
+    (with-open-file (stream path)
+		    
+		    (loop named file-walk 
+			  for line = (multiple-value-bind (comp-round-result line) (read-till-break stream) 
 				   (when line (setf result comp-round-result ) ) line)
-		      with result = '()
-		      while line
-		      collect result into results
-		      finally (return-from file-walk results)
-		 ))))
+			  with result = '()
+			  while line
+			  collect result into results
+			  finally (return-from file-walk results) ))))
 
 (defun int-stringp (intstring)
   "проверяет является ли переданная строка представлением числа от 0 до 99"
@@ -69,24 +69,25 @@
     (encode-universal-time 0 0 0 day month year))
   )
 
-(defun secondary-analyse (rounds) "Вторичная обработка данных полученных при чтении xls файла с результатми соревнований на этом этапе должна производиться запись в БД, создание объектов CLOS"
-       (loop for round in rounds
-	  for cmpt = (make-instance 'competition
-				    :title (cdr (assoc "cc-title" round :test #'string=))
-				    :date (date-string-to-universal-datetime (cdr (assoc "date" round  :test #'string=)))
-				    :begin-time (cdr (assoc "begining-time" round  :test #'string=))
-				    :end-time (cdr (assoc "end-time" round  :test #'string=))
-				    :captions (cdr (assoc "captions" round :test #'string=))
-				    )
-	  for roundcls = (make-instance 'roundc :group (cdr (assoc "group" round  :test #'string=))
-					:round-type (cdr (assoc "round-type" round :test #'string=))
-					:results  (cdr (assoc "results" round :test #'string=)))
-	    
-	  if (= (collection-count *competitions* (son "title" (title cmpt))) 0)
-	  do (insert-op *competitions* (mongo-doc cmpt))
-	  do (update-op *competitions* (son "title" (title cmpt)) (son "$push" (son "rounds" (mongo-doc roundcls))))
-	 )
-)
+(defun secondary-analyse (rounds)
+  "Вторичная обработка данных полученных при чтении xls файла с результатми соревнований на этом этапе должна производиться запись в БД, создание объектов CLOS"
+  (loop for round in rounds
+	for cmpt = (make-instance 'competition
+				  :title (cdr (assoc "cc-title" round :test #'string=))
+				  :date (date-string-to-universal-datetime (cdr (assoc "date" round  :test #'string=)))
+				  :begin-time (cdr (assoc "begining-time" round  :test #'string=))
+				  :end-time (cdr (assoc "end-time" round  :test #'string=))
+				  :captions (cdr (assoc "captions" round :test #'string=))
+				  )
+	for roundcls = (make-instance 'roundc :group (cdr (assoc "group" round  :test #'string=))
+				      :round-type (cdr (assoc "round-type" round :test #'string=))
+				      :results  (cdr (assoc "results" round :test #'string=)))
+	
+	if (= (collection-count *competitions* (son "title" (title cmpt) "date" (date cmpt))) 0)
+	do (insert-op *competitions* (mongo-doc cmpt))
+	do (update-op *competitions*
+		      (son "title" (title cmpt) "date" (date cmpt))
+		      (son "$push" (son "rounds" (mongo-doc roundcls)))) ))
 
 (defun handlexls ()
   (no-cache)
@@ -103,6 +104,5 @@
 	(secondary-analyse (analyse-competition newxlspath))
 	(with-html-output-to-string (*standard-output* nil :prologue nil :indent t)
 	  (cl-who:str (encode-json-to-string (find-list *competitions*  :query (son) :fields (son "title" 1)))))))
-
 
 (push (create-prefix-dispatcher "/handlexls" 'handlexls) *dispatch-table*)

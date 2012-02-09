@@ -1,7 +1,10 @@
 $(document).ready(initManageCompetitions);
 
 function initManageCompetitions() {
-    $("#upload").ajaxForm({url: "/handlexls", success:onHandlexlsSuccess});
+    var options = {
+	url: "/handlexls"
+	, success:onHandlexlsSuccess};
+    $("#upload").ajaxForm(options);
 }
 
 function onHandlexlsSuccess(response) {

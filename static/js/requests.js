@@ -31,24 +31,6 @@ function getCompetitions() {
     $('#mainframe').load("static/competitions-list-view.html");
 };
 
-/** Принимаем и обрабатываем список соревнований в виде троек [_id, title, date] */
-function processCompetitionsList(data, textStatus) {
-    data = eval("({competitions:" + data + "})");
-    data.competitions = data.competitions.sort(function(a, b) { return a.date < b.date; });
-    var yearRanged = new Object();
-    for (var key in data.competitions) {
-    	var comp = data.competitions[key];
-    	var compDate = lispTimestampToJS(comp.date);
-    	var year = compDate.getFullYear();
-    	if (!yearRanged.hasOwnProperty(year))
-    	    yearRanged[year] = {year : year, competitions : []};
-    	yearRanged[year].competitions.push(comp);
-       
-    }
-    yearRanged = objectToArray(yearRanged);
-    $( "#competitions-list-tpt" ).tmpl(  yearRanged ).prependTo("#competitionsList");
-    //$("#competitionsList").accordion({collapsible:"i"});
-}
 /** Запрашиваем соревнование по его идентификатору */
 function getCompetition(id) {
     $.ajax({

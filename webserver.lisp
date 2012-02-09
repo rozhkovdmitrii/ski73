@@ -19,6 +19,14 @@
 (defparameter *users* (collection *db* "users"))
 (defparameter *news* (collection *db* "news"))
 
+(defun init-db-entities ()
+  (setf *db* (make-instance 'database :name "ski73"))
+  (setf *competitions* (collection *db* "competitions"))
+  (setf *registrations* (collection *db* "registrations"))
+  (setf *users* (collection *db* "users"))
+  (setf *news* (collection *db* "news"))
+)
+
 ;; Карта трансляции имен из xls в имена БД
 (defparameter namesmap nil)
 
@@ -71,12 +79,27 @@
 		    ))
 
 
-(load (merge-pathnames #p"parse-competition-xls.lisp" +root-path+))
 
 (define-url-fn (competitions-list)
   "Список троек {id, title, date} для передачи списка соревнований"
   (str (encode-json-to-string (find-list *competitions* :query (son) :fields (son "title" 1 "date" 1))))
   )
+
+(define-url-fn (remove-competition)
+    "Удалить соревнование по id-шнику"
+    (check-adm)
+    (remove-competition-f (mongo-id (post-parameter "id")))
+    (str (format nil "{status : 'done', id : '~a'}" (url-encode (post-parameter "id")))))
+
+(define-url-fn (remove-round)
+    "Удалить раунд"
+    (check-adm)
+    (let ( (id (post-parameter "id"))
+	  (utime (post-parameter "utime")) )
+ 	
+    (remove-round-f (mongo-id id) utime)
+    (str (format nil "{status : 'done', id : '~a', utime :'~a'}" id utime))
+    ))
 
 (define-url-fn (competition-info)
   "Более подробная информацию по соревнованию"
@@ -89,11 +112,9 @@
 
     
 
-;; Обработчики веб запросов
+(load "parse-competition-xls.lisp")
 (load "request-processing.lisp")
-;; Обработка юзер-ориентированных запросов
 (load "user-operations.lisp")
-
-(load (merge-pathnames #p"manage-news.lisp" +root-path+))
+(load "manage-news.lisp")
 
 

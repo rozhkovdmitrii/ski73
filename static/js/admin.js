@@ -17,7 +17,6 @@ function dispatchAdmin() {
 
 }
 
-
 function getClubsManage() {
     alert('clabs managing form is in process')
 }

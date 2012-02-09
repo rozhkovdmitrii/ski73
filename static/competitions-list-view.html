@@ -1,16 +1,17 @@
-
 <script id="competitions-list-tpt" type="text/x-jquery-tmpl">
-
   <div class='toggle-group-container'>
-    <div class="group-toggle notPrint" onClick="toggleYear(${year});" id="tgl${year}">
-      ${year} <img src='static/img/expand.png'>
+    <div class="group-toggle notPrint"  collapsed=true onClick="toggleYear(${year});" id="tgl${year}">
+      ${year} <div></div>
     </div>
-    <table id="cmptts${year}" class="toggle-group-content" style='display:none'>
+    <table id="cmptts${year}" class="toggle-group-content">
       {{each competitions}}
-      <tr >
+      <tr id="comptr_${mongoHexId($value._id)}">
 	<td>
-	  <a class="competition" onclick="getCompetition('${ mongoHexId($value._id) }')">
+	  <a class="competition" style="font-size:11pt;" onclick="getCompetition('${ mongoHexId($value._id) }')">
 	    ${lispTimestampToJS($value.date).toLocaleDateString() + " - " + $value.title}</a>
+	  {{if document.cu && document.cu.type < 3}}
+	   <a class="removeLink" style="margin-left:10px;" onClick="removeCompetition('${mongoHexId($value._id)}')">Удалить</a>
+	  {{/if}}
 	</td>
       </tr>
       {{/each}}

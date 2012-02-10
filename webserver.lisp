@@ -98,7 +98,7 @@
 	  (utime (post-parameter "utime")) )
  	
     (remove-round-f (mongo-id id) utime)
-    (str (format nil "{status : 'done', id : '~a', utime :'~a'}" id utime))
+    (str (format nil "{status : 'done', id : '~a', utime :'~a'}" (url-encode id) utime))
     ))
 
 (define-url-fn (competition-info)

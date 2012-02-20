@@ -20,7 +20,6 @@ function roundsView(rounds) {
 		       + "<tr class='capRow'><th></th></tr>"
 		       + "<tr class='dataRow'></tr>"
 		     + "</table>"
-		     //+ "<div class='page-break'></div>"
 		     + "</div> ");
     var directive = {
 	'+.pageTitle': 'title',
@@ -30,7 +29,6 @@ function roundsView(rounds) {
 	 '.round': {
 	     'round<-rounds':{
 	 	 '+.group-toggle':'round.group',
-		 // '.removeLink@onClick' : function(arg) { return (document.cu && document.cu.type < 3)?"":""}, 
 	 	 '.group-toggle@id': function (arg) { return "tgl" + arg.pos;},
 	 	 '.group-toggle@onClick' : function (arg) { return "toggleRound(" + arg.pos + ");"; },
 		 'table.round-table@id' : function (arg) { return "rnd" + arg.pos;},
@@ -40,11 +38,7 @@ function roundsView(rounds) {
 				+ arg.item.utime + "', event);"; },
 		 '.remove-link@style+' : function (arg) { return (document.cu && document.cu.type < 3)?";display:block-inline":";display:none"},
 		 
-		 'th' : {
-		     "caption<-captions" : {
-			 '.':'caption'
-		     }
-		 },
+		 'tr.capRow' : roundCaptions,
 		 'tr.dataRow': {
 	 	     "result<-round.results": {
 	 		 '.' : function(arg) { return rowFromResult(arg.item); }
@@ -58,6 +52,16 @@ function roundsView(rounds) {
     var rfn = template.compile(directive);
     var html = rfn(rounds);
     return html;
+}
+
+
+function roundCaptions(pureArg) {
+    var captions = pureArg.item.captions;
+    var result = new String();
+    for (var k in captions) {
+	result += "<th>" + captions[k] + "</th>"; 
+    }
+    return result;
 }
 
 function toggleRound (pos) {
@@ -90,7 +94,6 @@ function removeRound(compId, group, utime, event) {
 		utime: utime },
        	success: function (data) {
 	   data = eval('(' + data + ')');
-	   //alert(data.group + "\n" + data.utime + "\n" + data.id);
 	   getCompetition(compId);
        } ,
 	error:function (XMLHttpRequest, textStatus, errorThrown) {alert(textStatus);}
@@ -98,7 +101,3 @@ function removeRound(compId, group, utime, event) {
     $.ajax(options);
     event.stopPropagation();
 }
-
-// function handleRoundRemove() {
-//     getCompetition('${ mongoHexId($value._id) }'
-// }

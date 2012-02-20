@@ -81,6 +81,7 @@
 				  )
 	for roundcls = (make-instance 'roundc :group (cdr (assoc "group" round  :test #'string=))
 				      :round-type (cdr (assoc "round-type" round :test #'string=))
+				      :captions (cdr (assoc "captions" round :test #'string=))
 				      :results  (cdr (assoc "results" round :test #'string=)))
 	
 	if (= (collection-count *competitions* (son "title" (title cmpt) "date" (date cmpt))) 0)

@@ -22,6 +22,7 @@
    (group :initarg :group :initform "undefined" :accessor group)
    (round-type :initarg :round-type :initform "undefined" :accessor round-type)
    (results :initarg :results :initform '() :accessor results)
+   (captions :initarg :captions :initform "undefined" :accessor captions)
    )
   
 )
@@ -48,10 +49,6 @@
 )
 
 
-
-
-
-
 (defmethod mongo-doc ((object competition))
   (son "title" (title object)
        "date" (date object)
@@ -68,6 +65,7 @@
       "round-type" (round-type object)
       "results" (map 'list #'(lambda (res) (alist-hash-table res)) (results object))
        "utime" (concatenate 'string (write-to-string (get-universal-time)) (group object))
+       "captions" (captions object)
   ))
 
 

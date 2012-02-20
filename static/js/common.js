@@ -83,7 +83,7 @@ function mongoHexId(mid) {
 
 /** Перевод строки из внутреннего представления таймстэмпа lisp в javascript */
 function lispTimestampToJS(lispTS) {
-    const secondsIn70years = 2209092480 - 86400;
+    const secondsIn70years = 2209092480 - 172800;
     var jsTS = (lispTS - secondsIn70years) * 1000;
     var jsDate = new Date(jsTS);
     return jsDate;

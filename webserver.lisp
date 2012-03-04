@@ -25,7 +25,12 @@
   (setf *registrations* (collection *db* "registrations"))
   (setf *users* (collection *db* "users"))
   (setf *news* (collection *db* "news"))
+  (format t "All db discriptors have been reinitialized~%")
 )
+
+(defvar *db-reinit-timer* (timer:make-timer #'init-db-entities))
+
+(timer:schedule-timer-relative db-reinit-timer 0 120)
 
 ;; Карта трансляции имен из xls в имена БД
 (defparameter namesmap nil)

@@ -11,6 +11,21 @@
 @media screen {
 
 
+.green {
+    color:green;
+}
+
+.red {
+    color:red;
+}
+
+.blue {
+    color:blue;
+}
+
+.brown {
+    color:brown;
+}
 
 .pageTitle {
     text-align : center;

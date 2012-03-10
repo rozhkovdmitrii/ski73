@@ -95,28 +95,10 @@ body {
     position: fixed;
     top : 0px;
     left : 0px;
-    background-color : #aaaaaa;
+    background-color : #c0d0e0;/*#C5D8E9 - фон*/
     width : 100%;
     text-align : center;
-    padding-top : 10px;
-    //z-index:1000;
-}
-
-
-
-div#toggleAuth img {
-    margin-left : 10px;
-    margin-right : 10px;
-}
-
-#toggleAuth {
-    cursor : pointer;
-    width : 100%;
-    padding-top : 3px;
-}
-
-#toggleAuth:hover {
-    background-color : #ccccdd;
+    padding : 2 30 2 30;
 }
 
 .error {

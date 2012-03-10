@@ -1,5 +1,3 @@
-
-
 function refreshAuthPanel(cu) {
     if (!cu)
 	$("#topPanelContent").load("static/auth-form.html");
@@ -65,15 +63,6 @@ function handleAuth(data) {
 /** Обработка юзера после авторизации */
 function processUser(cu) {
     refreshAuthPanel();
-}
-
-var authPanelVisible = true;
-function toggleAuthPanel() {
-    $("#topPanel").animate({ top: (authPanelVisible?"-=42px":"+=42px"), }, 'slow' );
-    authPanelVisible = !authPanelVisible;
-    $("body").css("padding-top", authPanelVisible?"55px":"10px");
-    $("div#toggleAuth img").attr("src", authPanelVisible?"static/img/up.png":"static/img/down.png");
-    
 }
 
 function logout() {

@@ -8,7 +8,7 @@
 ;;Инициализируем web сервис
 ;;(setf *session-max-time* 2)
 (defparameter *server-instance* (make-instance 'hunchentoot:acceptor :port 4242) "my web server")
-(hunchentoot:start *server-instance*)
+;(hunchentoot:start *server-instance*)
 
 ;;Создаем подключение к БД
 

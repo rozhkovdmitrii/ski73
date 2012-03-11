@@ -62,11 +62,17 @@
 	(cdr month-num))
       ))
  
+(defun excel-date-to-universal-datetime (excel-date)
+  (- (* excel-date 86400) 183600)
+  )
+
 (defun date-string-to-universal-datetime (datestring)
   (register-groups-bind ((#'parse-integer day) nil (#'string-to-month-num month) nil (#'parse-integer year))
-      ("(\\d{1,2})(\\s|\.)(\\w+)(\\s|\.)(\\d{4})\\s*(г\.?)?"
-       datestring) 
-    (encode-universal-time 0 0 0 day month year))
+      ("(\\d{1,2})(\\s|\.)(\\w+)(\\s|\.)(\\d{4})\\s*(г\.?)?" datestring) 
+    (return-from date-string-to-universal-datetime (encode-universal-time 0 0 0 day month year)))
+  (register-groups-bind ((#'parse-integer from-1900)) ("(\\d+)" datestring)
+    (format t "~%~a~%" datestring)
+    (when from-1900 (return-from date-string-to-universal-datetime (excel-date-to-universal-datetime from-1900))))
   )
 
 (defun secondary-analyse (rounds)
@@ -97,7 +103,7 @@
 	 (path (pathname (first relatedxls)))
 	 (pfx (directory-namestring *default-pathname-defaults*))
 	 (newxlspath (concatenate 'string "tmp/cmpt.csv"))
-	 (command  (concatenate 'string "cd " pfx  "; xls2csv -q0 -c^ -b\"!newsheet!" '(#\Newline ) "\" "  (namestring path) " 2>/dev/null | grep -vE \"^([0-9]+)?\\^+$\" >" newxlspath))
+	 (command  (concatenate 'string "cd " pfx  "; xls2csv -q0 -c^ -b\"!newsheet!" '(#\Newline ) "\" "  (namestring path) " 2>/dev/null >" newxlspath))
 	 )
     (trivial-shell:shell-command command)
     (secondary-analyse (analyse-competition newxlspath))

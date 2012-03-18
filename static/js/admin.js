@@ -7,8 +7,8 @@ function dispatchAdmin() {
 	"manage-competitions": getFormulariesManage
     };
     var dispatched = analyzeGET(dispatchTable, "admop");
-    if (!dispatched)
-	pushHistoryState("/?op=admin");
+    //if (!dispatched)
+	//pushHistoryState("/?op=admin");
 
 }
 

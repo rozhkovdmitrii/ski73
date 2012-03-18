@@ -1,5 +1,10 @@
 @media screen {
     #dockContainer { position: fixed; top: 60px; left: -50px; z-index:1000 }
     #jqDock { position: absolute; }
-    .jqDockLabel { background: #333; color: #fff; padding: 0px 0px; -webkit-border-radius: 10px; -moz-border-radius: 10px; }
+    .jqDockLabel {
+	/*background: #333;*/
+	color: #fff;
+	padding: 0px 0px;
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 10px; }
 }

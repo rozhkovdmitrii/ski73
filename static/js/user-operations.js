@@ -1,9 +1,12 @@
 function refreshAuthPanel(cu) {
     if (!cu)
 	$("#topPanelContent").load("static/auth-form.html");
-    else
+    else {
 	$("#topPanelContent").html("<span id='email'>" + cu.email + "</span><span style='width:40px'></span>"
-		    + "<a id='logoutlink' onclick='logout()' style='margin-left:50px'>Выйти</a>");
+				   + "<a id='logoutlink' onclick='logout()' style='margin-left:50px'>Выйти</a>");
+	
+    }
+    
 }
 
 
@@ -39,6 +42,7 @@ function revertUser() {
 function refreshUserDependencies(user) {
     $("#adminMenuItem").css("display", (user && user.type <= 2)?"list-item":"none");
     $("#profileMenuItem").css("display", user != null?"list-item":"none");
+    $("#admin-dock").css("visibility", (user && user.type <= 2)?"visible":"hidden");
     refreshAuthPanel(user);
 }
 

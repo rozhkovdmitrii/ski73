@@ -1,6 +1,4 @@
 $(document).ready(function(){
-        var jqDockOpts = {align: 'right', duration: 200, labels: 'tc', size: 48, distance: 85};
-        $("#admin-dock").jqDock(jqDockOpts);
 	if (document.cu.type == 1) {$("#manage-moders").show();}else{$("#manage-moders").hide();}
     });
 

@@ -1,6 +1,3 @@
-$(document).ready(function(){
-	if (document.cu.type == 1) {$("#manage-moders").show();}else{$("#manage-moders").hide();}
-    });
 
 $(document).ready(dispatchAdmin);
 
@@ -20,15 +17,15 @@ function getClubsManage() {
 }
 
 function getFormulariesManage() {
-    $("#admin-content").load("static/manage-competitions.html");
+    $("#mainframe").load("static/manage-competitions.html");
 }
 
 function getModerRequestsManage() {
-    $("#admin-content").load("static/moder-claims.html");
+    $("#mainframe").load("static/moder-claims.html");
 }
 
 function getNewsManage() {
-    $("#admin-content").load("static/manage-news.html");
+    $("#mainframe").load("static/manage-news.html");
 }
 
 function getModerRequestsList() {

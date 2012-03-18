@@ -20,7 +20,7 @@
   }
 
   #admin-dock {
-	margin-left:350;
+	margin-left:400;
   }
 
   #jqDock {
@@ -37,6 +37,9 @@
     <li>
       <a class="dockItem" onClick="getCompetitions()">
 	<img src="static/images/dock/competitions-sm.png" alt="Contact" title="Соревнования" /></a></li>
+    <li id="adminMenuItem" style="display:none">
+      <a class="dockItem" onClick="getAdminPage()">
+	<img src="static/images/dock/gear-sm.png" alt="portfolio" title="Админка" /></a></li>
     <li id="profileMenuItem" style="display:none">
       <a class="dockItem" onClick="getProfile()">
 	<img src="static/images/dock/profile-sm.png" alt="profile" title="Профиль" /></a></li>
@@ -46,7 +49,7 @@
   </ul>
 
 
-  <ul id="admin-dock" style="visibility:hidden">
+  <ul id="admin-dock" style="display:none">
     <li>
       <a class="dockItem" onClick="getFormulariesManage()">
 	<img src="static/images/dock/formulary-sm.png" alt="Formularies" title="Протоколы" />

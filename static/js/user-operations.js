@@ -43,6 +43,8 @@ function refreshUserDependencies(user) {
     $("#adminMenuItem").css("display", (user && user.type <= 2)?"list-item":"none");
     $("#profileMenuItem").css("display", user != null?"list-item":"none");
     $("#admin-dock").css("visibility", (user && user.type <= 2)?"visible":"hidden");
+    $("#manage-moders").css("display", (user && 1 == user.type)?"list-item":"none");
+
     refreshAuthPanel(user);
 }
 

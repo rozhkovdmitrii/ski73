@@ -1,8 +1,32 @@
-<!-- BEGIN DOCK 2 ============================================================ -->
 <style type="text/css">
-  a.dockItem {
-    margin-left:50;
+  #dockContainer {
+    top: 0; width:100%;
   }
+
+  
+  #jqDock img, #admin-dock img {
+	padding:3 10 15 10;
+	padding-left
+  }
+
+
+  #jqDock .jqDockLabel, #admin-dock .jqDockLabel {
+        font-weight:bold;
+        font-style:italic;
+        white-space:nowrap;
+        cursor:pointer;
+	color: #0066cc;
+	font-size:10pt;
+  }
+
+  #admin-dock {
+	margin-left:350;
+  }
+
+  #jqDock {
+    left:60;
+  }
+
 </style>
 
 <div id="dockContainer" class="notPrint">
@@ -13,28 +37,52 @@
     <li>
       <a class="dockItem" onClick="getCompetitions()">
 	<img src="static/images/dock/competitions-sm.png" alt="Contact" title="Соревнования" /></a></li>
-    <li id="adminMenuItem" style="display:none">
-      <a class="dockItem" onClick="getAdminPage()">
-	<img src="static/images/dock/gear-sm.png" alt="portfolio" title="Админка" /></a></li>
     <li id="profileMenuItem" style="display:none">
       <a class="dockItem" onClick="getProfile()">
 	<img src="static/images/dock/profile-sm.png" alt="profile" title="Профиль" /></a></li>
-<!--    <li>
-      <a class="dockItem" onClick="getClubs()">
-	<img src="static/images/dock/red-flag-sm.png" alt="music" title="Клубы" /></a></li>
-    <li>
-      <a class="dockItem" onClick="getPhotos()">
-	<img src="static/images/dock/photo-album-sm.png" alt="video" title="Фоты" /></a></li>-->
     <li>
       <a class="dockItem" onClick="getVideo()">
 	<img src="static/images/dock/film-sm.png" alt="history" title="Видео" /></a></li>
   </ul>
+
+
+  <ul id="admin-dock" style="visibility:hidden">
+    <li>
+      <a class="dockItem" onClick="getFormulariesManage()">
+	<img src="static/images/dock/formulary-sm.png" alt="Formularies" title="Протоколы" />
+      </a>
+    </li>
+    <li id="manage-news-mi">
+      <a class="dockItem" onClick="getNewsManage()">
+	<img src="static/images/dock/edit-news.png" alt="News" title="Новостная&nbsp;лента" />
+      </a>
+    </li>
+    <!--  <li id="managePeople">
+	  <a class="dockItem" onClick="alert('getPeople')">
+	    <img src="static/images/dock/people-gear-sm.png" alt="People" title="Люди" />
+	  </a>
+    </li>-->
+    <li id="manage-moders" style="display:none">
+      <a class="dockItem" onClick="getModerRequestsManage()" >
+	<img src="static/images/dock/secure_search_unlock-sm.png" alt="ModerRequests" title="Замодерявки" />
+      </a>
+    </li>
+
+  </ul>
+
+
+
 </div>
 
-<!-- end div #dockContainer -->
 
-<!-- END DOCK 2 ============================================================ -->
+
+
+
+
 <script type="text/javascript">
-  var jqDockOpts = {align: 'left', duration: 200, labels: 'tc', size: 48, distance: 85};
+  var jqDockOpts = {align: 'top', duration: 200, labels: 'br', size: 40, coefficient:0};
   $('#jqDock').jqDock(jqDockOpts);
+  $("#admin-dock").jqDock(jqDockOpts);
+
 </script>
+

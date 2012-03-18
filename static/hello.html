@@ -97,9 +97,10 @@
     $(document).ready(function() {
 	initAll();
 	getMain();
-	getMenu();
+    	getMenu();
+
+
 	getAuthPanel();
-    	$("#toggleAuth").click(toggleAuthPanel);
         $(document).bind('userchanged', setUser);
 	analyzeGET({"video": getVideo, "aprove": setNewUser, "admin" : getAdminPage }, "op");
     });
@@ -111,7 +112,8 @@
 
   <body style="height:800;background-color:#c5d8e9;">
     <div id="topPanel" class="notPrint">
-      <div id="topPanelContent" ></div>
+      <div id="dock-menu"></div>
+      <div id="topPanelContent"></div>
     </div>
 
     <table width="100%" heigth="50px">
@@ -122,7 +124,6 @@
     </table>
     
 
-    <div id="dock-menu"></div>
     
     <div id="mainframe">
     </div>

@@ -28,7 +28,7 @@ function roundsView(rounds) {
 	'#collapseAllImg@title' : function (arg) { return collapseHelp; },
 	 '.round': {
 	     'round<-rounds':{
-	 	 '+.group-toggle': function (arg) { return arg.item.group + " - " + arg.item["round-type"];},
+	 	 '+.group-toggle': function (arg) { return arg.item.group + " (" + arg.item["round-type"] + ")";},
 	 	 '.group-toggle@id': function (arg) { return "tgl" + arg.pos;},
 	 	 '.group-toggle@onClick' : function (arg) { return "toggleRound(" + arg.pos + ");"; },
 		 'table.round-table@id' : function (arg) { return "rnd" + arg.pos;},

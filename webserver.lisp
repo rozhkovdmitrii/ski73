@@ -30,7 +30,7 @@
 
 (defvar *db-reinit-timer* (timer:make-timer #'init-db-entities))
 
-(timer:schedule-timer-relative *db-reinit-timer* 0 1000)
+(timer:schedule-timer-relative *db-reinit-timer* 0 600)
 
 ;; Карта трансляции имен из xls в имена БД
 (defparameter namesmap nil)

@@ -1,3 +1,6 @@
+
+#|
+;should be dumped in sbcl-core
 (require 'hunchentoot)
 (require 'cl-who)
 (require 'trivial-shell)
@@ -18,7 +21,7 @@
 (require 'trivial-utf-8)
 (require 'cl-mime)
 (require 'cl-smtp)
-(require 'timer)
+(require 'timer)|#
 
 
 

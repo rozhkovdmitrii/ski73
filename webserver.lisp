@@ -20,6 +20,7 @@
 (defparameter *news* (collection *db* "news"))
 
 (defun init-db-entities ()
+  (close-database *db*)
   (setf *db* (make-instance 'database :name "ski73"))
   (setf *competitions* (collection *db* "competitions"))
   (setf *registrations* (collection *db* "registrations"))
